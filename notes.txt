@@ -1,0 +1,43 @@
+R is a programming language and computing environment designed for statistics and data analysis. 
+https://en.wikipedia.org/wiki/R_(programming_language)
+
+
+so far the list of ppl who wanna participate is:
+
+	1. ryan bingham
+	2. stuart michaels
+	3. gwen rugg
+	4. maria zamudio
+	5. seth nathan
+	6. christy leung
+
+and maybe a few more, but not sure:
+
+	7. ben schapiro(?)
+	8. rebecca duvoisin(?)
+	9. ryan beuchel(?)
+
+Dear all -- 
+
+As some of you might have heard, there is going to be a four-week mini-course on using R this spring at the Hyde Park NORC office. 
+
+I'll be teaching the course, so I wanted to reach out to those I've heard might be interested in participating (if you are not such a person, let me know and I'll remove you from future emails!). 
+
+Our specific agenda will depend upon: which of you will be attending; what (if any) your existing experience is with R, data analysis software, and programming; and -- most importantly -- what you would like to get out of the course. 
+
+We'll start from the very basics, so if you don't have any experience with R or with programming, then this will be an ideal way for you to start learning! At the same time, if you *do* have a bunch of experience but would like to brush up your skills, learn some new techniques, get some concepts clarified, etc., then you should consider coming to (at least) the last two sessions, where we'll work through some actual examples of problems that frequently arise in social science research.
+
+I'd like to begin the course mid-May at the latest. For that to happen, I'll need the following information from everyone who plans on attending (if you don't plan on attending, I'd appreciated knowing that too!):
+
+1. have you ever used R? If so, for what and how extensively?
+2. have you ever used commercial statistical software (e.g. Stata, SAS, SPSS)? If so, for what and how extensively?
+3. have you ever learned how to use a programming language of any kind? If so, for what and how extensively?
+4. why are you interested in learning how to use R/improving your R skills?
+5. are there specific tasks/things that you'd like to learn how to do using R? If so, what are a couple of examples?
+6. have you ever taken a statistics class? Do you use statistics or quantitative data in your daily work? 
+
+Looking forward to hearing from yall, and please send along any questions that might come up!
+
+-tim
+
+p.s. If you haven't already, you should check in with Michael Reynolds about hours/charge code-related stuff for the course. 
