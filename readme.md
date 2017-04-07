@@ -28,5 +28,3 @@ until then, here's a description of how the stuff will be organized:
 
   - `_clutter/` is where i put files that might be useful but aren't central to the goal of this repo (try this strategy out -- i bet you will like).
   
-
-
