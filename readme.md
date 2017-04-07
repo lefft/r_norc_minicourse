@@ -1,6 +1,7 @@
 
 
 
+
 #### R mini-course at NORC (hyde park office)
 ###### tim leffel, may/2017 
 <hr>
@@ -28,3 +29,43 @@ until then, here's a description of how the stuff will be organized:
 
   - `_clutter/` is where i put files that might be useful but aren't central to the goal of this repo (try this strategy out -- i bet you will like).
   
+
+<hr><hr><hr>
+
+##### checklist for getting stuff ready
+
+week 1:
+- [ ] goals/objectives
+- [ ] lesson plans
+- [ ] datasets/sim funcs
+- [ ] script/rmd for session
+- [ ] exercises
+- [ ] slides
+
+week 2:
+- [ ] goals/objectives
+- [ ] lesson plans
+- [ ] datasets/sim funcs
+- [ ] script/rmd for session
+- [ ] exercises
+- [ ] slides
+
+week 3:
+- [ ] goals/objectives
+- [ ] lesson plans
+- [ ] datasets/sim funcs
+- [ ] script/rmd for session
+- [ ] exercises
+- [ ] slides
+
+week 4:
+- [ ] goals/objectives
+- [ ] lesson plans
+- [ ] datasets/sim funcs
+- [ ] script/rmd for session
+- [ ] exercises
+- [ ] slides
+
+
+
+
