@@ -25,14 +25,53 @@ until then, here's a description of how the stuff will be organized:
 
   - `datasets/` contains data files that we will use throughout the course. since we will use individual data files in more than one session, they are not filed into one of the `rmc_week*/` folders.
   
-  - `homework/` is where you will find exercises i'll periodically post. obviously this isn't school so feel free to do them or not do them. if you did an exercise and want some feedback on your code/answer, just lemme know and i/we can go over it.
+  - `exercises/` is where you will find "homework" exercises i'll periodically post. obviously this isn't school so feel free to do them or not do them. if you did an exercise and want some feedback on your code/answer, just lemme know and i/we can go over it.
+
+  - `readings/` is where you will find stuff i suggest you should read. there will be pdf's and also a text file called `links.txt`, which will have -- you guessed it -- links to web-based readings.
 
   - `_clutter/` is where i put files that might be useful but aren't central to the goal of this repo (try this strategy out -- i bet you will like).
-  
 
+<br>
 <hr><hr><hr>
 
-##### checklist for getting stuff ready
+#### determining course content
+
+
+###### topics to def hit:
+
+	- setup/installation (1st, brief -- have ppl install before 1st)
+	- intro to the language (1st, brief)
+	- the rstudio ecosystem (1st, brief)
+	- plotting/data viz (?th, most or all of a session)
+	- document authoring/rmd (4th, 30min?)
+	- data wrangling (?th, most of a session)
+	- summarizing data (?th, most of a session)
+	- command line (1st, brief)
+	- libraries/packages (1st, brief)
+	- working directories (1st, brief)
+	- file i/o (1st, brief)
+
+###### topics to maybe hit:
+
+	- working with url's/scraping 
+	- building interactive plots 
+	- statistical analysis 
+	- the concept of tidy data
+	- reproducibility
+	- github?
+
+<br>
+<hr><hr><hr>
+
+#### checklist for getting stuff ready
+
+general: 
+- [ ] look thru ppl's background surveys
+- [ ] settle on slides/pres format
+- [ ] settle on sessions format
+- [ ] settle on exercises format
+- [ ] circulate syllabus
+- [ ] schedule classes
 
 week 1:
 - [ ] goals/objectives
