@@ -67,7 +67,13 @@ p.s. If you haven't already, you should check in with Michael Reynolds about hou
 
 ###### lc
 
-[***NO RESPONSE AS OF APRIL 7***]
+1. No
+2. SPSS (proficient), Mplus (proficient but not using it as often as I used to), SAS (learned this a while ago)
+3. Nothing other than my answer to #2
+4. Statistic assistants in my lab are primarily using R (so far) and data are processed in R 
+5. Be familiar with how data are processed, how to read scripts and outputs
+6. Yes and Yes!
+
 
 ###### sb
 
