@@ -1,0 +1,48 @@
+
+apr27/2017
+~~~~~~~~~~~~~~~
+
+course outline: 
+
+week 0
+~~~~~~~~~
+	- software check
+	- send out exercises
+	- getting help
+
+week 1
+~~~~~~~~~
+	- go over exercises
+	- course overview
+	- CORE LESSON 1
+	- terminology
+	- assign exercises
+
+week 2
+~~~~~~~~~
+	- go over exercises
+	- CORE LESSON 2
+	- assign exercises
+
+week 3
+~~~~~~~~~
+	- go over exercises
+	- CORE LESSON 3
+	- assign exercises
+
+week 4
+~~~~~~~~~
+	- go over exercises
+	- CORE LESSON 4
+	- assign exercises
+
+
+
+
+note diff btwn
+	swirl:::swirl_courses_dir()
+	swirl::swirl_courses_dir()
+
+consider looking at datasets:
+	- anscombe
+	- ?!meth
