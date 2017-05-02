@@ -158,3 +158,18 @@ p.s. If you haven't already, you should check in with Michael Reynolds about hou
 6. Yes to stats courses (a few in grad school), no to regular quant work but yes to sporadic quant work (on a project-by-project basis…lately have been doing mostly qual, and only very simple analyses [often in excel[!!]] when doing quant…but will likely have more heavy-duty quant in future)
 
 
+#### p9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1. Yes, for analyses. Not much. Have to relearn and re-use commands that I sometimes don’t fully understand. Meh.
+2. Yes, SPSS: for analyses, SAS: NORC course
+3. SAS, minimal.
+4. Data cleaning and analyses, please.
+5. Clean large data files.
+6. Yes and yes.
+
+
+#### p10
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[WAITING FOR RESPONSE, MAY2/2017]
+
+
