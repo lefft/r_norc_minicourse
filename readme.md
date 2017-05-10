@@ -108,3 +108,17 @@ week 4:
 
 
 
+<br>
+<hr><hr><hr>
+
+#### misc notes to self
+
+- for some info/thoughts on slides from rmd source: [demo](http://data-analytics.net/cep/Schedule_files/presentations_demo.html)
+
+- some stat teaching resources [here](http://www.science.smith.edu/~amcnamara/)
+
+- note on 32/64 bit versions (not sent): 
+
+	If installing on NORC machine, check whether you have 32 or 64 bit Windows via Control Panel\System and Security\System (mine is 64, so I assume everyone else's is too) before installing, because it will ask you whether you want to install 32 or 64 bit version (what this means is totally not important for our purposes, just a heads-up! If you're interested in the difference, see here). 
+
+

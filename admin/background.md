@@ -170,6 +170,12 @@ p.s. If you haven't already, you should check in with Michael Reynolds about hou
 
 #### p10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-[WAITING FOR RESPONSE, MAY2/2017]
+1. I have completed most of the Swirl exercises and half of a Coursera course. I have not applied it to any specific projects though.
+2. I used the SPSS GUI to complete my undergraduate thesis for linear regression, but have not used it beyond this.
+3. R is the only language I have used. 
+4. I want to learn how to apply R in terms of project building. I currently possess some of the basic commands but lack a grasp of R’s capabilities to creativity apply it to real-world examples.
+5. No specific tasks in mind yet. I hope to change this!
+6. I have taken introductory statistics and econometrics courses. I do not currently work with quantitative data on a daily basis.
+
 
 
