@@ -1,29 +1,32 @@
 ### R mini-course: blahh title
 <hr>
 
-#### NORC, ARC (hyde park office)
+###### NORC, ARC (hyde park office)
 ###### tim leffel, spring2017 
-<hr><hr>
+<hr>
 
 ##### summary of course goals
 
+[insert blurb here]
+
 ##### summary of course content
 
-
+[insert blurb here]
 
 ##### summary of course format
 
 We'll meet once a week for four consecutive weeks. Each session will be 90min long. There will be on-screen demos and exercises throughout every session, *but* this will only work if everyone actively participates. Bring your computer to class every week. We won't be able to stop mid-class to troubleshoot configuration issues (e.g. "why won't R Studio work?"). These are of course totally normal and expected problems, but we need to get them figured out ahead of time. So *please* make sure you have recent versions of R and R Studio installed, and confirm that you've run the `setup_test.r` script *before* the day of the first session. 
 
-
 ##### schedule + course agenda
 
 ###### week 1 
 
+- session topics: programming level 1; overview
+
 topics covered:
 
 	- outline/agenda/goals of course 
-	- fundamentals of (R) programming, part 1
+	- fundamentals of programming with R, part 1
 
 materials: 
 
@@ -34,7 +37,6 @@ homework:
 
 	- link to exercises
 	- link to reading
-
 
 ###### week 2
 
@@ -98,13 +100,7 @@ here's a list of "next steps" topics:
 	- interactive visualization
 	- vectorization and the `*apply` family
 
-
-
-
-
-
-
-###### non-technical/philosophical topics [handout/post in week 1]
+###### non-technical/philosophical topics [pre-course post]
 	- the process of learning
 	- the science of the future
 	- the notion of "data" and "big data"
@@ -125,8 +121,7 @@ here's a list of "next steps" topics:
 	- directories and files (incl wd)
 	- keyboard shortcuts
 
-
-###### fundamentals of (R) programming, part 1 [week 1 + 2a]
+###### fundamentals of programming with R, part 1 [week 1 + 2a]
 	- data types
 	- variables
 	- functions + arguments
@@ -135,15 +130,13 @@ here's a list of "next steps" topics:
 	- errors and warnings
 	- packages (and libraries)
 
-
-###### fundamentals of (R) programming, part 2 [week 2b]
+###### fundamentals of programming with R, part 2 [week 2b]
 	- environments (v basic)
 	- data structures (esp df)
 	- control flow
 	- coding style
 	- more than one way to skin a cat
 	- writing functions
-
 
 ###### working with data in R, part 1 [week 3a]
 	- reading data + file i/o
@@ -154,7 +147,6 @@ here's a list of "next steps" topics:
 	- regex
 	- summarizing data
 
-
 ###### working with data in R, part 2 [week 3b + 4a]
 	- dplyr
 	- pipechains via magrittr
@@ -164,50 +156,29 @@ here's a list of "next steps" topics:
 	- plotting
 	- the concept of tidy data
 
-
 ###### authoring and rmarkdown [week 4b]
+	- aka making nice clean documents really easily
 	- calling stuff from other scripts
 	- plain-text workflow
 	- knitr, rmd to latex
 	- (r)markdown
 	- reprex/mwe
-	- reproducibility and replicability
+	- reproducibility and 21st century science
 	- git/github
 
 
 
-
-
-<hr><hr><hr>
-
-#### exercise ideas
-
-1. We toss a fair coin 16 times, how to calculate probability of getting 7 or less tails
-
-```
-rbinom(7,prob=0.5,size=16)
-dbinom(7,prob=0.5,size=16)
-qbinom(7,prob=0.5,size=16)
-pbinom(7,prob=0.5,size=16)
-```
-
-2. blah
-
-3. ...
-
-
-<br>
 <hr><hr><hr>
 
 #### checklist for getting stuff ready
 
 general: 
-- [ ] look thru ppl's background surveys
+- [x] look thru ppl's background surveys
 - [ ] settle on slides/pres format
 - [ ] settle on sessions format
 - [ ] settle on exercises format
 - [ ] circulate syllabus
-- [ ] schedule classes
+- [x] schedule classes
 
 week 1:
 - [x] goals/objectives
@@ -243,8 +214,25 @@ week 4:
 
 
 
+<hr><hr><hr>
 
-<br>
+#### exercise ideas
+
+1. We toss a fair coin 16 times, how to calculate probability of getting 7 or less tails
+
+```
+rbinom(7,prob=0.5,size=16)
+dbinom(7,prob=0.5,size=16)
+qbinom(7,prob=0.5,size=16)
+pbinom(7,prob=0.5,size=16)
+```
+
+2. blah
+
+3. ...
+
+
+
 <hr><hr><hr>
 
 #### misc notes to self
@@ -289,5 +277,5 @@ fit <- lm(V1 ~ . - 1, data = dat); plot(predict(fit), resid(fit), pch = '.')
 
 - at first its like a foreign language, then its like legos, and eventually it becomes like clay that you can morph into legos on command
 
-- 
+- excellent class notes format (dude even had my heart idea!) [algorithms etc. notes here](http://jeffe.cs.illinois.edu/teaching/algorithms/)
 
