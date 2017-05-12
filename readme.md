@@ -1,7 +1,5 @@
 
 
-
-
 #### R mini-course at NORC (hyde park office)
 ###### tim leffel, may/2017 
 <hr>
@@ -121,4 +119,29 @@ week 4:
 
 	If installing on NORC machine, check whether you have 32 or 64 bit Windows via Control Panel\System and Security\System (mine is 64, so I assume everyone else's is too) before installing, because it will ask you whether you want to install 32 or 64 bit version (what this means is totally not important for our purposes, just a heads-up! If you're interested in the difference, see here). 
 
+- nice concept from m clark book: "embracing uncertainty but avoiding relativism"
+
+- list of things to hit from m clark's book:
+	
+	R, Python, Other
+
+	IDEs; customize it; coding style
+
+	errors as calls for help
+
+	I/O
+
+	basic object types; boolean; numeric of a kind; factor/categorical; data structures; vectors; matrices/arrays; data frames; indexing
+
+	iterative programming; loops/while; aggregation
+
+	Other; Naming things; files; variables; data; objects; Documents; Latex or markdown; Version control basics
+
+
+- nice quote from [guardian](https://www.theguardian.com/environment/climate-consensus-97-per-cent/2014/mar/25/fivethirtyeight-misrepresents-climate-change-research): 
+	"Nate Silver's approach works well with politics and sports, but scientists do it better. Photograph: Graeme Robertson"
+
+- nice quote from norman nie about SPSS: 
+
+	"It is all in the rearview mirror. “R is an absolutely massive advancement on the kind of analytics I invented,” he says. “It’s an opportunity to change the game in the fastest-growing field in software.”" [source](https://www.forbes.com/forbes/2010/0524/opinions-software-norman-nie-spss-ideas-opinions.html)
 
