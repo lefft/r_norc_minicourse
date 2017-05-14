@@ -1,0 +1,731 @@
+---
+output: html_notebook
+---
+
+
+<br><br>
+
+# A gentle intro to programming and data analysis using R
+
+
+<!-- Welcome to your first R script! An R script is just a text file with extension ".R" or ".r". Roughly speaking, a "script" is basically just a "program."  -->
+
+This is a browser-friendly version of the R script we used during the tutorial session. You can download the R Markdown file that contains all the code in this document by selecting "download Rmd" in the dropdown at the top right of this page. Or, you can follow along by typing the commands into a .R file from within a GUI like R Studio (the one I'd recommend).
+
+## Section 1: 
+
+R works with an interpreter, which means that you can **run**, aka **execute**, 
+a single **command** at a time (e.g. from within R Studio). A command is just a **line** or **block** of actual code -- in other words, 
+a command is just a line or block of a script that doesn't start with the character `#`. 
+To run a command is to send it to the interpreter.
+
+Lines that start with `#` are called **comments**, and are intended to be 
+interpreted by other humans (or yourself at a later time) -- comments are 
+ignored by the interperter if you run the entire script all at once.
+
+<!-- You'll notice that I start a new line before the text reaches 80 characters -->
+<!-- that is just for good coding etiquette -- we could continue a line indefinitely and nothing bad would happen, except that the line starts wrapping and the script is not as easy to navigate. this is the only line that we will allow to extend beyond 80 characters (even this is making me *shudder*) -->
+
+When you run a command, the output (if there's any) will appear in the **console**, aka **command line**, which you can see below in RStudio.
+
+Now we'll start a new **section**, which is not necessary but is good practice.
+<!-- we just visually separate it using a bunch of meaningless characters like '=' -->
+
+
+## Section 1: our first commands, and loading/installing packages
+
+Let's start with some basic commands. 
+
+Here is our first command -- execute it with **cmd+Enter** on Mac, or 
+**ctrl+Enter** on PC. In the web-version, the output will appear in a separate box just below the command.
+
+```{r}
+3 + 5
+```
+
+The output box line indicates that the first (and only) element `"[1]"` of the output is `8`, 
+so the interpreter **returned** the number `8` given the command `5+3`. That seems basically right. Nice.
+
+We can do all kinds of mathematical calculations, e.g.
+
+```{r}
+3 + ((1 - (5 * 2)) / (3 ^ 2))
+```
+
+
+In R, `+`, `-`, `/`, `*`, and `^` are **functions** (operators, technically) -- these functions take
+two **arguments** which are numbers, and return a third number -- the **value** of the function applied to the two arguments.
+
+But most functions in R have a different syntax -- they take their arguments in
+a more function-y notation ('member "f(x)" from high school math?). for example `sqrt()` takes one argument (a number) and 
+returns the square root of that argument:
+
+```{r}
+sqrt(9) 
+```
+
+
+The functions `max()` and `min()` can take any number of arguments, and return the highest/lowest of them:
+
+```{r}
+max(1, 2, 3, 5, 4, 5, 6, 6, -10)
+min(1, 2, 3, 5, 4, 5, 6, 6, -10)
+```
+
+
+You can always pull up the help page for a function by saying `?<function-name>()`. you can search help pages with `??<topic>`
+
+```{r}
+?max()
+??linguistics
+```
+
+
+One of the best things about R is that anyone can contribute helfpul, 
+New user-defined functions and methods are bundled in **packages** --  collections of functions and other stuff that aren't part 
+of what automatically comes with R when you install it (aka **base R**).
+
+You should check out the `languageR` package, which is a companion to the 
+excellent 2007 textbook by Harald Baayen,
+*Analyzing Linguistic Data: A Practical Introduction to Statistics*. 
+(psa: you juuuust might be able to find a bootleg version if you look online)
+
+
+If you are using a particular package for the first time, you will
+have to install it, which can be done with `install.packages("<package name>")`
+note quotes around the name, which are necessary when installing
+
+```{r}
+# install.packages("languageR")
+```
+
+
+After a package is installed, you load it with `library()`
+
+```{r}
+library("languageR") 
+```
+
+
+You can see your library -- a list of your **installed** packages -- by saying
+`library()`, *without* an argument. You can see which packages are currently **loaded** with
+`search()`, again with no argument. We will use some functions from non-base packages in section 6 below
+
+
+## Section 2: variables and assignments
+
+
+Most of the time we don't just want to calculate something, but we want to 
+calculate something and **store** the result for later use. We do this by **assigning** the result of a command to a **variable**
+such as `x` by using the **assignment** operator `=` or `<-`
+
+```{r}
+x = 5 + 3
+```
+
+It is safer to use `<-` for assignment than `=`, but I think `=` is more
+intuitive, so we will use it here (see sec 7 for discussion).
+
+
+Notice in the upper right pane of RStudio, you can now see `x` is saved. We can look at the **value** of the variable `x` 
+by simply sending `x` to the interpreter
+
+```{r}
+x
+```
+
+
+We can store the results of basically anything in a variable, and 
+we can (*and should*) use useful names for variables 
+
+```{r}
+biggest <- max(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+biggest
+```
+
+
+Make sure your variable names don't contain math operators like `-` or `+`, 
+and make sure they don't start with a number: we can name a var 'var1'
+
+```{r}
+var1 = 1 + 1
+```
+
+
+But not `1stVar`, bc it starts with a number:
+
+```{r}
+# if we try:    1stVar = 1 + 1
+# we will get:  Error: unexpected symbol in "1stVar"
+```
+
+Errors and error messages are annoying but extremely important + useful! 
+
+To avoid clutter, we can remove vars from the workspace when we are done working w them
+
+```{r}
+rm(var1)
+rm(biggest)
+rm(x)
+```
+
+
+
+A common pitfall is to confuse `=` (assignment, argument binding) with `==` (equals).
+
+```{r, echo=TRUE}
+##if we try:    5 + 3 = 8
+##we will get:  
+## Error in 5 + 3 = 8 : target of assignment expands to non-language object
+# 1 <- 1
+```
+
+
+To say what we meant, we would use `==`
+
+```{r}
+5 + 3 == 8
+```
+
+
+
+
+## Section 3: data types and data structures 
+
+
+We've done some basic math, which is basically manipulating **numbers**. But usually we want to do a lot more than that -- 
+we want to manipulate character strings (e.g. words) too. 
+This is made possible by the existence of different **data types**. We can see the type of an object by using
+
+```{r}
+x = 5
+class(x)
+```
+
+let's give x a new value + see its type (character string)
+
+```{r}
+x = "boosh"
+class(x)
+```
+
+
+`logical` (true/false; binary) is also a basic data type:
+
+```{r}
+x = TRUE
+class(x)
+```
+
+
+Usually we work with more complicated **data structures** than strings or numbers.
+
+```{r}
+# like vectors
+vec1 = c("boosh1","boosh2","boosh3")
+vec1
+```
+
+```{r}
+# and lists
+lis1 = list("boosh1","boosh2","boosh3")
+lis1
+```
+
+```{r}
+# which are *not* the same thing
+identical(vec1,lis1)
+```
+
+
+
+But the most important data structure in R is the **data frame**
+
+```{r}
+df = data.frame(
+  col1=letters[1:6],                      # gives us c("a","b","c","d","e","f")
+  col2=1:6,                               # same as c(1,2,3,4,5,6)
+  col3=rep(c("group1","group2"), times=3) # repeat "group1","group2" thrice
+)
+```
+
+
+Note that argument places have **names**, e.g. the function `rep()` has an argument called `times`, which indicates the number of times that the first argument to `rep()` should be repeated. We saturated `times` with `3` above, yielding a vector of length `6`.
+
+A `data.frame()` is for the most part just a list of vectors `v1`,`v2`,...,`vn` such that
+`length(v1)==length(v2)==`...`==length(vn)`
+
+```{r}
+is.list(df)
+is.data.frame(df)
+```
+
+
+But you should think of a dataframe as a spreadsheet that contains **data**,
+usually where each row is a sequence of facts about a single thing
+
+```{r}
+df
+```
+
+
+
+Now let's clean up the workspace before moving on 
+(doing this saves memory + can help keep your agenda clear). Instead of starting a new line, we can indicate the end of a command with `;`
+
+```{r}
+rm(df); rm(lis1); rm(vec1); rm(x)
+```
+
+
+
+## Section 4: Data frames and reading files 
+
+Let's check out the frequency list we used for homework #4. We'll read it in with `read.csv()` and store it in a var called `words`.
+
+```{r}
+words <- read.csv(file="top5k-word-frequency-dot-info.csv",
+                  sep=",", header=TRUE)
+```
+
+`read.csv()` gives us a data frame (henceforth df).
+
+```{r}
+class(words)
+```
+
+
+The first thing we should do when reading in a new df is check it out
+
+```{r}
+# see the structure of the df -- info on each column
+str(words)
+# get a summary of each col of the df
+summary(words) 
+```
+
+
+we can also look at the first n rows by calling head() and specifying n
+
+```{r}
+head(words, n=5)
+```
+
+
+*in RStudio only* we can use `View()` to see the whole thing in a window
+(can also click on the df in the upper righthand pane)
+
+```{r}
+View(words)
+```
+
+
+
+## Section 5: Basic operations on data frames 
+
+The individual cols of a df are referred to "variables" (confusing, ik!)
+and they can be accessed by name with the `$` operator
+
+```{r}
+wordCol <- words$Word
+```
+
+
+Just view the first 10 elements of a vector with `<vec-name>[1:10]`
+
+```{r}
+wordCol[1:10]
+rm(wordCol)
+```
+
+We can access a row or range of rows using the `[ , ]` operator (for rows, before the comma)
+
+```{r}
+words[1:2,]
+```
+
+
+Also works for cols (after the comma)
+
+```{r}
+head(words[,1:2], n=5)
+```
+
+
+We can add new cols by combining `$` with the assignment operator
+
+```{r}
+words$newCol <- words$Frequency / words$Rank
+head(words, n=5)
+
+```
+
+
+
+we can remove cols we no longer need or don't want by assigning them to `NULL`
+
+
+```{r}
+words$newCol <- NULL
+```
+
+
+We can also change the data type of a given col. 
+`words$PartOfSpeech` is a **factor**, meaning a discrete category with 
+a specified set of possible values -- i.e. **levels**
+
+```{r}
+class(words$PartOfSpeech)
+levels(words$PartOfSpeech)
+```
+
+
+We could change p.o.s. to character type with
+
+```{r}
+words$PartOfSpeech <- as.character(words$PartOfSpeech)
+```
+
+
+```{r}
+class(words$PartOfSpeech)
+```
+
+
+But we should change it back because p.o.s. actually is a factor
+```{r}
+words$PartOfSpeech <- as.factor(words$PartOfSpeech) 
+```
+
+
+
+It is often useful to **subset** a df if we are interested in only 
+some part of it -- usually some subset of the rows. Suppose we only want to look at info about the 100 most frequent words. We could carve out the top 100 by saying any of the following:
+
+```{r}
+frequentWords <- subset(words, Rank %in% 1:100)
+frequentWords <- subset(words, Rank < 101)
+frequentWords <- subset(words, Rank <= 100)
+```
+
+
+There are several functions that can be used for subsetting
+we can also use a more primitive (but safer + ultimately better) way:
+
+```{r}
+frequentWords <- words[words$Rank %in% 1:100, ]
+frequentWords <- words[words$Rank < 101, ]
+frequentWords <- words[words$Rank <= 100, ]
+rm(frequentWords)
+
+```
+
+
+You can see that these methods yield the same result:
+
+```{r}
+identical(subset(words, Rank < 101), words[words$Rank < 101, ])
+```
+
+
+Now suppose we only want to look at nouns. then we could define `nouns` as
+
+```{r}
+nouns <- subset(words, PartOfSpeech=="n")
+```
+
+
+Here is a **tricky** fact: when you subset a df, you retain all
+original factor levels, even if they aren't instantiated in the subset
+
+```{r}
+levels(nouns$PartOfSpeech)
+levels(nouns$Word)[1:10]
+```
+
+
+We usually want to eliminate factor levels that do not occur in the subset:
+
+```{r}
+nouns <- droplevels(nouns)
+```
+
+
+You can also wrap `subset()` with `droplevels()` in the subsetting call itself:
+
+```{r}
+nouns <- droplevels(subset(words, PartOfSpeech=="n"))
+```
+
+
+
+
+## Section 6: summary statistics and visualizing data
+
+We can get the average of a numeric vector (incl. a df column) using `mean()`
+
+```{r}
+mean(words$Rank)
+```
+
+
+Sometimes df's will have **missing values**, indicated with `NA`
+if we try to take the mean of a vector containing `NA`, we get `NA` as a result, even if 99% of the vector has legitimate numbers in it.
+
+```{r}
+mean(c(1,2,3,NA))
+```
+
+
+So it is often safest to set the na.rm argument to `TRUE`, as in:
+
+```{r}
+mean(c(1,2,3,NA), na.rm=TRUE)
+```
+
+
+We can also see more detailed info of a col with `summary()`
+
+```{r}
+summary(words$Frequency)
+```
+
+
+
+We can look at a table of a factor col or see a summary
+
+```{r}
+table(words$PartOfSpeech)
+```
+
+
+
+We can look at the distribution of a numeric var with a histogram:
+
+```{r}
+hist(log(words$Frequency)) # easier to see dist if we take log first
+```
+
+
+We can make a scatterplot of two numeric variables.
+
+
+```{r}
+# (easier to see w a subset)
+nounsFreq <- subset(nouns, Rank < 500)
+
+plot(nounsFreq$Rank, nounsFreq$Frequency)
+```
+
+
+Waow looks like a strong relationship...Actually, we are looking at a visual example of **Zipf's Law**!!!
+
+```{r}
+plot(log(nounsFreq$Rank), log(nounsFreq$Frequency))
+```
+
+Zipf's Law states that word-frequency is inversely related to frequency rank -- we can see that the linear correlation between frequency and rank is very strong; if we apply a log transformation, the relationship is about as perfect as you will ever see in an empirical domain.
+
+```{r}
+cor(nounsFreq$Rank, nounsFreq$Frequency)
+cor(log(nounsFreq$Rank), log(nounsFreq$Frequency))
+```
+
+End tangent into Zipf's law.
+
+We can also plot subsets of a numeric variable for each level of a factor
+
+```{r}
+plot(words$PartOfSpeech, words$Rank)
+```
+
+This plot is very informative but not very intuitive to read. What about something easier to understand, like a bar graph? Specifically, what would be nice is if for each part of speech, we had a bar whose 
+height is equal to the average rank of words with that part of
+speech, within our dataset.
+
+To make the visualization more meaningful, let's cut the df so that
+it contains only: nouns, verbs, adjectives, prepositions, articles, and pronouns.
+
+
+```{r}
+nvap <- subset(words, PartOfSpeech %in% c("n","v","j","i","a","p"))
+```
+
+There are a number of ways to make the plot we are aiming for. We will do it in a way that will illustrate how to execute another important and common task in R: aggregation. We can use the function `aggregate()` to calculate the mean rank for each subset of the data defined by a level of `nvap$PartOfSpeech` (there are other ways to do this as well). The result of this `aggregate()` call will be a df containing the group means:
+
+```{r}
+meanRanks <- aggregate(Rank ~ PartOfSpeech, FUN="mean", data=nvap)
+meanRanks
+```
+
+
+Now that we have our means, we can make a plot of them. If you ever get more into R, you will want to use 
+the amazing visualization library `ggplot2::` (for "grammar of graphics")
+
+```{r, include=FALSE}
+# install it if you haven't already
+# install.packages("ggplot2")
+library(ggplot2)
+```
+
+And here's the plot (I won't explain `ggplot2` syntax here, it is a bit less intuitive than the base graphics capabilities, but well-worth learning).
+
+```{r}
+ggplot(data=meanRanks, aes(x=PartOfSpeech,y=Rank)) +
+  geom_bar(stat="identity") +
+  ggtitle("average frequency rank by part of speech")
+```
+
+
+Interesting...What does the plot tell us about frequency and parts of speech?
+
+
+```{r}
+# sec 6 cleanup
+rm(nvap); rm(meanRanks); rm(nounsFreq); rm(nouns)
+```
+
+## Section 7: stuff to know about R syntax
+
+
+Using `=` for var assignment is actually not a good practice (for reasons you
+don't need to understand at this point -- ask me if you're interested)
+
+We *should* be using `<-`, which is unfortunate bc it less obvious + intuitive. The reason is that, while `=` and `<-` have some common uses, both have uses such that, if we use the other one instead, things will break. Ask me more if you are interested.
+
+```{r}
+x <- 5 + 3
+```
+
+*However*, you should still use `=` when you are specifying
+an argument in a function call, e.g. in the following say `n=10`, not `n<-10`
+
+```{r}
+head(words, n=3)
+```
+
+Generally speaking, spaces and brackets are optional in R, but make code more readable
+
+```{r}
+5+3/2^2-4 == 5 + (3 / 2^2) - 4
+
+identical(x<-5+3, x <- 5 + 3)
+
+identical(max(1, 2, 3), max(1,2,3))
+```
+
+But be careful -- the assignment operator `<-` is a unit + can't be split up!
+The first line will be interpreted as the (false) statement that the value of the variable 'x' is less than the sum of -5 an 3 (i.e. -2), but the second one won't...
+
+```{r}
+x <- -5+3   # stores -2 in var x
+x< -5+3     # gives FALSE!
+```
+
+
+You can start new lines in the middle of commands too, which sometimes makes
+for cleaner + easier to read code (note the auto-indenting of RStudio)
+
+
+```{r}
+theWords <-
+  c("theFirstWord","theSecondWord","theThirdWord","theFourthWord",
+    "theFifthWord","theSixthWord","theSeventhWord")
+```
+
+
+But again, be careful! If we try the following, we will get an error.
+
+```{r}
+## theWords
+##   <-   c("theFirstWord","theSecondWord","theThirdWord","theFourthWord",
+##        "theFifthWord","theSixthWord","theSeventhWord")
+## 
+## Error: unexpected ',' in "       "theFifthWord","
+```
+
+
+This next command won't throw an error, but will insert a newline and tab char into the third element, which we wanted to be `theThirdWord`...
+
+```{r}
+theWords <- c("theFirstWord","theSecondWord","theThird
+              Word","theFourthWord",
+              "theFifthWord","theSixthWord","theSeventhWord")
+```
+
+
+But instead gets  interpreted as:
+
+```{r}
+theWords[3]
+```
+
+It is often useful to organize code into **blocks**, which you can think of
+as "paragraphs" -- groups of sentences/commands that mean/do a single thing. Also good practice to put comments before every block, or even multiple times within a single block.
+
+```{r}
+# this block builds a df of words with their freq's and freq ranks
+wordList <- c("w1","w2","w3","w4","w5")
+wordFreq <- c(10,4,3,12,12)
+wordRank <- rank(-wordFreq, ties.method="min") 
+wordInfo <- data.frame(
+  word=wordList,
+  freq=wordFreq,
+  rank=wordRank
+)
+
+wordInfo
+```
+
+
+Aaaaand now it's time to clean up. This is not necessary, but can be comforting if you are a neurotic person :p 
+
+```{r}
+rm(x); rm(theWords); rm(wordList); rm(wordFreq); rm(wordRank); rm(wordInfo)
+```
+
+That's all for now, folks! Shoot me an email if you want to talk/learn/hear more!
+
+<!-- one more thing: it's good practice to end a script with a blank line -->
+
+
+
+
+
+<!-- END OF DOCUMENT IS HERE -->
+
+<style type="text/css">
+
+body{ /* Normal  */
+   font-size: 16px;
+}
+td {  /* Table  */
+   font-size: 8px;
+}
+h1 { /* Header 1 */
+ font-size: 24px;
+ font-weight: bold;
+ color: DarkGreen;
+}
+
+h2 { /* Header 2 */
+ font-size: 20px;
+ color: green;
+}
+h3 { /* Header 3 */
+ font-size: 16px;
+ color: green;
+}
+<!-- code.r{ /* Code block */ -->
+<!--   font-size: 11px; -->
+<!-- } -->
+<!-- pre { /* Code block */ -->
+<!--   font-size: 11px -->
+<!-- } -->
+</style>
+
+```{r}
+# want to get inline syntax highlighting
+library(highr)
+```
+

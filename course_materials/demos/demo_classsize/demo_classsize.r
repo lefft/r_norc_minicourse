@@ -1,6 +1,12 @@
+# prevent undesired messages + print plots nicely
+knitr::opts_chunk$set(
+  results="hold", message=FALSE, out.width=450, fig.show="hold"
+)
+#'
+
 ### load dependencies and functions #######################
 # === === === === === === 
-#
+# 
 # pipe-chaining operators
 library("magrittr")
 # chainable data manipulation operations
@@ -14,7 +20,7 @@ round_up <- function(x, to=10){
   to * (x %/% to + ifelse(x %% to != 0, 1, 0))
 }
 # === === === === === === 
-
+#'
 
 ### simulate some data ####################################
 # === === === === === === 
@@ -54,7 +60,7 @@ studclss <- data.frame(
   stringsAsFactors=FALSE
 )
 # === === === === === === 
-
+#'
 
 ### check and re-simulate data as necessary ###############
 # === === === === === === 
@@ -103,7 +109,7 @@ if (unique(load_dist) != "4") {
   print("all good -- everyone has exactly 4 classes. phew :p")
 }
 # === === === === === === 
-
+#'
 
 ### clean, transform, and organize data ###################
 # === === === === === === 
@@ -123,6 +129,7 @@ if (all(sort(unique(clss_dist$clss))==sort(unique(profclss$clss)))){
   print("id column is good to go :)")
 } else print("different set of values in id columns :(")
 #
+#'
 
 # [START HEEEEEEERE] [START HEEEEEEERE] [START HEEEEEEERE] [START HEEEEEEERE]
 # [START HEEEEEEERE] [START HEEEEEEERE] [START HEEEEEEERE] [START HEEEEEEERE]
@@ -147,13 +154,15 @@ if (all(sort(unique(clss_dist$clss))==sort(unique(profclss$clss)))){
 # 
 # first join profs and enrollments by class identifier
 dat_prof <- full_join(clss_dist, profclss, by="clss")
+head(dat_prof)
 # 
 # then join students and enrollments by class identifier
 dat_stud <- full_join(clss_dist, studclss, by="clss")
+head(dat_stud)
 # 
 # 
 # === === === === === === 
-
+#'
 
 ### compute summary statistics ############################
 # === === === === === === 
@@ -163,25 +172,25 @@ dat_stud <- full_join(clss_dist, studclss, by="clss")
 # 
 # 
 # num students per professor
-profstats <- dat_prof %>% group_by(prof) %>% summarize(
+(profstats <- dat_prof %>% group_by(prof) %>% summarize(
   num_stud=sum(nstud), 
   num_clss=length(unique(clss)),
   mean_size=num_stud/num_clss,
   small=min(nstud),
   big=max(nstud)
-)
+))
 # 
 # class sizes per student
-studstats <- dat_stud %>% group_by(stud) %>% summarize(
+(studstats <- dat_stud %>% group_by(stud) %>% summarize(
   num_stud=sum(nstud), 
   num_clss=length(unique(clss)),
   mean_size=num_stud/num_clss,
   small=min(nstud),
   big=max(nstud)
-)
+))
 
 ### ****save as [csv OR figure/table?!?!]****
-
+#'
 
 ### make some exploratory plots ###########################
 # === === === === === === 
@@ -238,13 +247,13 @@ ggplot(profstats, aes(x=prof, y=num_stud)) +
 # plot(...)
 # ggplot2 graphics:
 # ggplot(...)
-
+#'
 
 
 ### fit some statistical models ###########################
 # === === === === === === 
-
+#
 # still gotta figger aut wha modeling stuff to hit, if any
-
+#'
 
 
