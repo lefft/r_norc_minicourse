@@ -27,7 +27,7 @@ We can emphasize some topics more than others, depending on everyone's interests
 
 **Course Schedule + Agenda**
 
-###### week 1: programming fundamentals
+###### week 1: programming fundamentals 
 <hr>
 
 **list of topics**
