@@ -113,29 +113,6 @@ qplot(x, bins=8)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
 .prettyprint {
   font-size: 18px;

@@ -1,94 +1,5 @@
-### R mini-course: blahh title
-<hr>
 
-###### NORC, ARC (hyde park office)
-###### tim leffel, spring2017 
-<hr>
-
-##### summary of course goals
-
-[insert blurb here]
-
-##### summary of course content
-
-[insert blurb here]
-
-##### summary of course format
-
-We'll meet once a week for four consecutive weeks. Each session will be 90min long. There will be on-screen demos and exercises throughout every session, *but* this will only work if everyone actively participates. Bring your computer to class every week. We won't be able to stop mid-class to troubleshoot configuration issues (e.g. "why won't R Studio work?"). These are of course totally normal and expected problems, but we need to get them figured out ahead of time. So *please* make sure you have recent versions of R and R Studio installed, and confirm that you've run the `setup_test.r` script *before* the day of the first session. 
-
-##### schedule + course agenda
-
-###### week 1 
-
-- session topics: programming level 1; overview
-
-topics covered:
-
-	- outline/agenda/goals of course 
-	- fundamentals of programming with R, part 1
-
-materials: 
-
-	- link to slides
-	- link to everything else
-
-homework: 
-
-	- link to exercises
-	- link to reading
-
-###### week 2
-
-- session topics: programming level 2; data cleaning (reshape here or 3??)
-
-materials: 
-
-	- link to slides
-	- link to everything else
-
-homework: 
-
-	- link to exercises
-	- link to reading
-
-
-###### week 3
-
-- session topics: programming level 3; plotting/vizualizing data with ggplot2 (and some base graphics)
-
-materials: 
-
-	- link to slides
-	- link to everything else
-
-homework: 
-
-	- link to exercises
-	- link to reading
-
-
-
-###### week 4
-
-- session topics: authoring with Rmarkdown; working with the web
-
-materials: 
-
-	- link to slides
-	- link to everything else
-
-homework: 
-
-	- link to exercises
-	- link to reading
-
-
-
-###### week infinity + beyond!
-
-here's a list of "next steps" topics:
-
+###### week infinity + beyond -- "next steps" topics
 	- simulationz!
 	- the hadleyverse/tidyverse
 	- functional vs obj oriented
@@ -99,29 +10,32 @@ here's a list of "next steps" topics:
 	- cloud computing
 	- interactive visualization
 	- vectorization and the `*apply` family
+	- git/github
+	- knitr, rmd/rnw to latex
+	- environments
 
-###### non-technical/philosophical topics [pre-course post]
-	- the process of learning
-	- the science of the future
+###### non-technical/philosophical topics 
+	- frustration and the learning process 
+	- the future of science and the science of the future
 	- the notion of "data" and "big data"
 	- open source revolution
 	- excel pitfalls (e.g. tab vs comma)
 	- put in the time now, it will pay off
 	- getting help
+	- cran task views
 	- cheatsheets
+	- vocab glossary
 	- sometimes do things non-optimally on purpose
 
-
-###### prereq/meta topics [all week 1]
+###### preliminaries 
+	- the command line
+	- ide's and gui's +c
+	- directories and files (incl wd)
 	- working with files, doc types
 	- project dir structures
-	- vocabulary
-	- ide's and gui's +c
-	- the command line
-	- directories and files (incl wd)
 	- keyboard shortcuts
 
-###### fundamentals of programming with R, part 1 [week 1 + 2a]
+###### fundamentals of R programming, part 1 
 	- data types
 	- variables
 	- functions + arguments
@@ -130,7 +44,7 @@ here's a list of "next steps" topics:
 	- errors and warnings
 	- packages (and libraries)
 
-###### fundamentals of programming with R, part 2 [week 2b]
+###### fundamentals of R programming, part 2 
 	- environments (v basic)
 	- data structures (esp df)
 	- control flow
@@ -138,16 +52,17 @@ here's a list of "next steps" topics:
 	- more than one way to skin a cat
 	- writing functions
 
-###### working with data in R, part 1 [week 3a]
+###### working with data in R, part 1 
 	- reading data + file i/o
 	- data file formats
 	- subsetting
 	- joining/merging
+	- modifying w lookup tables
 	- data cleaning/munging 
 	- regex
 	- summarizing data
 
-###### working with data in R, part 2 [week 3b + 4a]
+###### working with data in R, part 2 
 	- dplyr
 	- pipechains via magrittr
 	- get data from the web
@@ -156,19 +71,19 @@ here's a list of "next steps" topics:
 	- plotting
 	- the concept of tidy data
 
-###### authoring and rmarkdown [week 4b]
+###### document authoring with rmarkdown 
 	- aka making nice clean documents really easily
 	- calling stuff from other scripts
 	- plain-text workflow
-	- knitr, rmd to latex
 	- (r)markdown
 	- reprex/mwe
 	- reproducibility and 21st century science
-	- git/github
 
 
 
-<hr><hr><hr>
+
+
+<hr><hr>
 
 #### checklist for getting stuff ready
 
@@ -214,7 +129,13 @@ week 4:
 
 
 
-<hr><hr><hr>
+
+
+
+
+
+
+<hr><hr>
 
 #### exercise ideas
 
@@ -233,7 +154,7 @@ pbinom(7,prob=0.5,size=16)
 
 
 
-<hr><hr><hr>
+<hr><hr>
 
 #### misc notes to self
 
@@ -278,4 +199,8 @@ fit <- lm(V1 ~ . - 1, data = dat); plot(predict(fit), resid(fit), pch = '.')
 - at first its like a foreign language, then its like legos, and eventually it becomes like clay that you can morph into legos on command
 
 - excellent class notes format (dude even had my heart idea!) [algorithms etc. notes here](http://jeffe.cs.illinois.edu/teaching/algorithms/)
+
+- 80pct of data sci is data cleaning, the other 20pct is complaining abt cleaning data
+
+
 
