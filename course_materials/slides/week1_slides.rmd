@@ -267,7 +267,7 @@ length(longvec)
 unique(longvec)
 
 # a very common operation is to see how many unique values there are:
-length(unique(longvec))
+blah <- length(unique(longvec))
 
 
 ```
