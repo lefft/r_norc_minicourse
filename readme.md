@@ -30,17 +30,17 @@ We can emphasize some topics more than others, depending on everyone's interests
 
 **meta topics:**
 
-	- the command line
 	- ide's and gui's +c
 	- directories and files (incl wd)
 	- working with files, doc types
 	- project dir structures
+	- the command line
 	- keyboard shortcuts
 
 **first steps:**
 
-	- data types + classes
 	- variables + assignments
+	- data types 
 	- functions + arguments
 	- assignments + calls + control flow (oh my!)
 	- comments comments comments!

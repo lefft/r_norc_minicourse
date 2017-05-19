@@ -7,7 +7,10 @@ css: css/style.css
 knitr::opts_chunk$set(results="hold")
 ```
 
+# container- versus pointer-based semantics for variables
 
+
+Variable behavior in R: 
 
 ```{r}
 # x contains the vector c(3, 4, 5)
@@ -25,6 +28,8 @@ print(paste("now the value of x is:", list(x), sep=" "))
 # what's y gonna be now?!?!
 print(paste("now the value of y is:", list(x), sep=" "))
 ```
+
+Variable behavior in Python:
 
 <!-- see python version with # Sys.which("python")  -->
 ```{python engine.path="/anaconda/bin/python3.5"}
@@ -45,17 +50,9 @@ print("now the value of y is:", y, sep=" ")
 ```
 
 
-<br><br>
-
-## START DRAFTING FIRST LESSON HERE
-
-<hr><hr>
-<br><br>
 
 
-<hr><hr>
-BELOW HERE IS TUTORIAL FROM PSYCHOLING AU16
-<hr><hr>
+# an older tutorial -- might be useful
 
 ## hello world
 

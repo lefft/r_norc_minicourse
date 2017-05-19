@@ -17,54 +17,115 @@ output:
 
 agenda for course:
 
-- point 1
-- point 2
-- point ...
+- **week 1** -- R workflow, navigation, programming basics
+- **week 2** -- working with datasets and external files, data cleaning + manipulation
+- **week 3** -- summarizing data with `dplyr::`,  visualizing data with `ggplot2::`
+- **week 4** -- document authoring with R Markdown, working with the web
 
-course materials are all on the course website: 
+course materials will eventually all be on the course website: 
 
 > [http://lefft.xyz/r_minicourse](http://lefft.xyz/r_minicourse)
+
 
 each week we'll have slides, notes, and a script. little exercises will be interleaved throughout the notes. the best way to write up solutions is to start a new R script called (e.g.) `week1_exercises.r` and type directly into that.
 
 there will also be a list of links to useful resources up on the site
 
 
-## how to talk to R: via command-line interface
+## types of files we'll be using
+
+
+**R scripts**
+
+- a plain-text file with extension `.R` or `.r`
+- all plain-text files (e.g. `.txt`) can be opened and edited directly in any text editor
+- contains R code that we'll run interactively in R Studio
+- also contains comments, which are just annotations that explain what the code is doing
+
+## types of files we'll be using
+
+**datasets**
+
+- all kinds of extensions, e.g. `.csv`, `.tsv`, `.xls`, `.xlsx`, `.dat`, `.sav`, `.dta`. nowadays, R can read them all. we'll go through examples of several in week 2.
+- working with `.csv` files is generally preferable, since they are simple and come in plain-text format. 
+- proprietary formats like `.xlsx` have certain nice features, but they're binary files, which can make their behavior unpredictable (and depend on the Excel version used to create them).  
+- a less common format is `.Rdata`/`.rda`, which contains an R workspace with datasets and objects pre-loaded. (not plain-text so I try to avoid them) 
+
+
+## types of files we'll be using
+
+**R Markdown files**
+
+- extension `.Rmd` or `.rmd`
+- plain-text format (opens in any text editor)
+- a special kind of R script from which nice, clean documents can be easily generated (in .pdf, .html, or .docx formats)
+- easiest way to compile is with `cmd+shift+k` from R Studio
+
+
+## firing up R via R Studio
+
+when you're using R, it's "looking" in a specific directory (folder). many tears have been shed over trying to get R to look in the desired directory (mine and those of countless other victims).
+
+the best way to start an R session is to grab/make a plain text file with extension `.r` (e.g. `my_script.r`), put it in its own folder (e.g. `R_folder`), and then open it with R Studio (which you should set as the default).
+
+if you start R by opening a specific script in R Studio, R will be looking into the folder containing your script and you won't have to mess with working directories.
+
+you can also to go "tools" --> "global options" --> "default working directory" within R Studio to tell R where it should look if you just open R Studio directly
+
+
+
+## how to talk to R -- via command-line interface (yikes :/)
 
 ![](img/interface-command-line.png)
 
-## how to talk to R: via default R GUI 
+
+
+## how to talk to R -- via default R GUI (better...)
 
 ![](img/interface-R-gui.png)
 
-## how to talk to R: via R Studio IDE 
+
+
+## how to talk to R -- via R Studio IDE (waaaaaow!)
 
 ![](img/interface-rstudio-ide.png)
 
 
-## navigating R Studio
+
+## 
+
+> navigating R Studio
+
+## 
 
 ![](img/rstudio-scap1.png)
 
-## navigating R Studio
+
+
+## 
 
 ![](img/rstudio-scap2.png)
 
 
-## navigating R Studio
+
+## 
+
 
 ![](img/rstudio-scap3.png)
 
 
-## navigating R Studio
+
+## 
 
 ![](img/rstudio-scap4.png)
 
 
-## navigating R Studio
+
+## 
 
 ![](img/rstudio-scap5.png)
+
+
 
 ## 2. Variables and Assignments
 
@@ -302,28 +363,78 @@ round(longvec)
 
 ## 4. Subsetting and Indexing
 
+we very often will want to access individual elements or subsets of a vector (e.g. if we've sorted a vector and want to look at its first element)
+
+there are several ways to do this. here are some examples to give you an idea (note that `1:5` is the vector `c(1,2,3,4,5)`, and `==` is "equals") 
+
+```{r results='hold'}
+# a vector of several words
+vec_words <- c("first","second","third","fourth","fifth")
+vec_words[1]
+vec_words[2:3]
+vec_words[c(1,4)]
+vec_words[vec_words=="first"]
+```
+
+let's inspect these a bit...
+
+## 
+
+it's annoying to have to type every element of a vector. fortunately, there are many functions designed to make this unnecessary. for example `rep()` is short for "repeat"; `seq()` is short for "sequence"; `letters` is a built-in constant for the vector `c("a","b","c",...)`); and we just saw the range operator `:`.
+
 ```{r}
-# rep() and seq() and : and ...
+# you can also combine times and each inside of rep()
+# putting parentheses around an assignment causes it to print
+(vec_num <- rep(1:5, times=2))
+(vec_abc <- rep(letters[1:5], each=2))
+(vec_odd <- seq(from=1, to=19, by=2))
+```
 
+## 
 
-# subsetting vectors (introduce via letters + LETTERS)
+very often we'll want to e.g. get the average value or the sum of a vector. we'll get way more into this in future sessions, but here's a preview:
 
+```{r results="hold"}
+# get the mean with mean()
+(vec_num_mean <- mean(vec_num))
+# or calculate it ourselves!
+(vec_num_mean <- sum(vec_num) / length(vec_num))
+
+# get the variance with var()
+(vec_num_var <- var(vec_num))
+# or calculate it ourselves
+(vec_num_var <- sum((vec_num - mean(vec_num))^2)/(length(vec_num) - 1))
+
+# get the correlation between vec_num and vec_odd
+cor(vec_num, vec_odd, method="pearson")
+```
+
+**exercise:** compute the correlation between `vec_num` and `vec_odd` using only arithmetic.
+
+```{r include=FALSE, eval=FALSE}
+x <- vec_num
+y <- vec_odd
+sum((x - mean(x)) * (y - mean(y))) / 
+  (sqrt(sum((x - mean(x))^2)) * sqrt(sum((y - mean(y))^2)))
 ```
 
 
+## why should we care about vectors?!
 
-##
+here's an analogy to keep in mind: vectors are like columns of an abstract spreadsheet (**not** like rows).
 
-here's an analogy you should keep in mind:
-think of vectors as columns of an abstract spreadsheet (**not** rows).
+- all their elements have to have the same type
+- they have a length and you can perform operations on them
+- they can contain missing values (`NA`)
 
-in fact, this is a bit more than an analogy in R.
+in fact, this is a bit more than an analogy in R!
+
 R's implementation of a "spreadsheet" -- the **data frame** -- is quite
 literally a list of vectors. the data frame is a beautiful data structure,
-and is used to represent (flat) datasets e.g. from an excel sheet.
+and is used to represent (flat) datasets e.g. the contents of an excel sheet.
 
-fun fact: python's most popular data analysis library borrows heavily from
-R, most clearly with its very nice implementation of R's data frame structure.
+<!-- fun fact: python's most popular data analysis library borrows heavily from -->
+<!-- R, most clearly with its very nice implementation of R's data frame structure. -->
 
 we'll have a first look at data frames next
 
@@ -331,45 +442,91 @@ we'll have a first look at data frames next
 
 ## 5. Data Frames!
 
-a data frame is...
+a data frame is a `list` of vectors all of which have the same length.
+
+```{r}
+first_df <- data.frame(1:5, letters[1:5], c(TRUE, TRUE, FALSE, NA, FALSE))
+```
+
+here's a slightly more interesting data frame, with names for columns. 
+<!-- note also the use of line breaks to make the code more legible. -->
+
+```{r}
+(cool_df <- data.frame(
+  id=paste0("id_", 1:6),             # identifier
+  group=rep(c("a","b"), each=3),     # "a" = NYU law school, "b" = Columbia
+  score=runif(n=6, min=1, max=100)   # score on the NY bar exam
+))
+```
 
 ## 
 
+we can access rows or columns using square-bracket syntax `[ , ]`. the `$` for individual columns is nice too -- that gives us back a vector. lots of ways to slice + dice a df -- below are some examples.
+
 ```{r}
-# there are several ways to create data frames, and here's one:
-mydf <- data.frame(
-  col1=c(1,2,3,4,5,6),
-  col2=c("a","b","c","a","b","b")
-)
-mydf
-
-# here's a handful of common functions you'll call on data frames, in order
-# to visually inspect it or to refer to some property it has:
-
-dim(mydf)        # a vector of length 2: number of rows, number of cols
-nrow(mydf)       # number of rows
-ncol(mydf)       # number of columns
-
-str(mydf)        # the structure of the data frame
-summary(mydf)    # gives useful info about each column
-names(mydf)      # the names of the columns
-
-
+cool_df[1:3, ]
+cool_df[, 1]
+cool_df$score
 ```
+
+##
+
+```{r}
+cool_df[["score"]]
+cool_df[, "score"]
+cool_df[, c("id","score")]
+```
+
+
+
+##
+
+```{r}
+# see who passed the exam:
+cool_df$id[cool_df$score >= 60]
+```
+
+we can add columns to a data frame by combining assignment `<-` with the dollar-sign `$` column-grabbing syntax:
+
+```{r}
+cool_df$passed <- ifelse(cool_df$score > 60, TRUE, FALSE)
+cool_df$aced   <- ifelse(cool_df$score >= 90, TRUE, FALSE)
+cool_df$failed <- !cool_df$passed
+```
+
+- **exercise:** what percent of the law students aced the exam?
+
+- **exercise:** what was the average score for each group?
 
 
 ## 
 
-```{r}
+finally, some useful functions to use on data frames to check them out a bit. (note that you can combine `names()` with assignment to change the column names)
 
+```{r results="hold"}
+head(cool_df, n=2)
+dim(cool_df)        # a vector of length 2: number of rows, number of cols
+nrow(cool_df)       # number of rows
+ncol(cool_df)       # number of columns
+names(cool_df)      # the names of the columns
+```
+
+##
+
+```{r results="hold"}
+str(cool_df)        # the structure of the data frame
+summary(cool_df)    # gives useful info about each column
 ```
 
 
-## 6. Recap and list of functions to learn
+## 6. Next Week
 
-```{r}
-
-```
+- installing and loading **packages**
+- more on data frames (factors, character, etc.)
+- reading in external datasets as data frames
+- manipulating data frames
+- cleaning up data frames
+- summarizing them
 
 
 
