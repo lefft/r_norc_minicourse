@@ -1,3 +1,149 @@
+some google dev [slides](https://www.youtube.com/playlist?list=PLOU2XLYxmsIK9qQfztXeybpHvru-TrqAP)
+
+
+to do tmrw:
+
+- set of vocab words
+- set of functions to establish
+- rstudio tour image
+- slidify
+- add commentary to notes
+
+
+
+
+
+
+
+
+
+
+```{r, include=FALSE}
+x <- rnorm(100, mean=5, sd=3)
+```
+
+
+## third slide -- base graphics demo
+
+<table style="width:100%">
+<tr>
+
+<td>we can have some code and a plot too!
+```{r, eval=FALSE}
+# simulate some data
+x <- rnorm(100, mean=5, sd=3)
+
+# show a histogram
+hist(x)
+```
+</td>
+
+<td>
+```{r, echo=FALSE, fig.show=TRUE}
+# show a histogram
+hist(x)
+```
+</td>
+
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+## fourth slide -- ggplot2 demo
+
+<table><tr>
+
+<td>v, v nicer graphics w ggplot :o
+
+```{r, echo=TRUE, eval=FALSE}
+# load ggplot2 for nice graphics
+library("ggplot2")
+
+# set the plot theme as desired
+theme_set(theme_minimal())
+
+# show a ggplot2 histogram 
+# (w quickplot function)
+qplot(x, bins=8)
+```
+</td>
+
+<td>
+```{r, echo=FALSE}
+library("ggplot2")
+theme_set(theme_minimal())
+qplot(x, bins=8)
+
+```
+</td>
+
+</tr></table>
+
+
+
+
+
+
+CAN PLOP THIS DIRECTLY INTO R SCRIPT FOR QUICK REPORT STYLING
+#'
+#'<link rel="stylesheet" type="text/css"
+#'href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,700">
+#'
+#'<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500" rel="stylesheet">
+#'
+#'  <style>
+#'body {
+#'  padding: 10px;
+#'  font-size: 12pt;
+#'  font-family: 'Raleway', sans-serif;
+#'}
+#'
+#'h1 { 
+#'    font-size: 20px;
+#'  font-weight:  lighter;
+#'  color: DarkGreen;
+#'}
+#'
+#'h2 { 
+#'    font-size: 16px;
+#'  color: green;
+#'}
+#'
+#'h3 { 
+#'    font-size: 14px;
+#'  color: green;
+#'}
+#'
+#'code {
+#'  font-family: 'Roboto Mono', monospace;
+#'  font-size: 14px;
+#'}
+#'
+#'pre {
+#'  font-family: 'Roboto Mono', monospace;
+#'  font-size: 14px;
+#'}
+#'
+#'</style>
+#'
+
+
+
+
+
+
+
+
+
 
 ###### week infinity + beyond -- "next steps" topics
 	- simulationz!
