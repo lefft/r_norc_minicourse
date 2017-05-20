@@ -118,6 +118,13 @@ rm(anothervec)
 
 longvec
 
+# note also that the whole numbers (**integers**) now have decimals in them.
+# this is because R coerced them into "floating-point" numbers, which are a
+# computer's decimal-based representation of the real numbers 
+# (**doubles** -- you'll learn some cool stuff if you google: 
+# "why are floats called 'doubles' in R?", including what a "float" is).
+
+
 # to see how many elements a vector has, get its `length()`
 length(longvec)
 
@@ -177,26 +184,36 @@ round(longvec, digits=4)
 # round to, it uses the default of 0. we'll see how this works later.
 round(longvec)
 
-# in fact ALL MATH STUFF IS VECTORIZED
-
-# rep() and seq() and : and ...
 
 
-# subsetting vectors (introduce via letters + LETTERS)
+
+# INSERT CONTENT FROM SLIDES + THEN ANNOTATE, STARTING HERE
+# INSERT CONTENT FROM SLIDES + THEN ANNOTATE, STARTING HERE
+# INSERT CONTENT FROM SLIDES + THEN ANNOTATE, STARTING HERE
 
 
-# here's an analogy you should keep in mind: 
-# think of vectors as columns of an abstract spreadsheet (**not** rows).
+"Table Header  | Second Header
+------------- | -------------
+Table Cell    | Cell 2
+Cell 3        | Cell 4
+Cell 5        | Cell 6"
 
-# in fact, this is a bit more than an analogy in R.
-# R's implementation of a "spreadsheet" -- the **data frame** -- is quite
-# literally a list of vectors. the data frame is a beautiful data structure, 
-# and is used to represent (flat) datasets e.g. from an excel sheet.
+# Mathjax is supported, so with latex syntax you can get inline  \(A = \pi
+#                                                                  \times r^2 \) or separate maths:
+#   
+#   \[
+#     \begin{aligned}
+#     I_{1} &= \int_{0}^{2*\pi} \sin(x)
+#     \\
+#     I_{2} &= \int_{0}^{2*\pi} \cos(x)
+#     \end{aligned}
+#     \]
 
-# fun fact: python's most popular data analysis library borrows heavily from 
-# R, most clearly with its very nice implementation of R's data frame structure.
+# `rep()` is a simple example of the "DRY" principle in programming 
+# ("don't repeat yourself"")
 
-# we'll have a first look at data frames next
+
+
 
 
 #'<br><br>
@@ -205,23 +222,8 @@ round(longvec)
 #'
 #'<hr style="height:1px; background-color:lightgray; color:lightgray;">
 
-# there are several ways to create data frames, and here's one:
-mydf <- data.frame(
-  col1=c(1,2,3,4,5,6),
-  col2=c("a","b","c","a","b","b")
-)
-mydf
 
-# here's a handful of common functions you'll call on data frames, in order
-# to visually inspect it or to refer to some property it has:
 
-dim(mydf)        # a vector of length 2: number of rows, number of cols
-nrow(mydf)       # number of rows
-ncol(mydf)       # number of columns
-
-str(mydf)        # the structure of the data frame
-summary(mydf)    # gives useful info about each column
-names(mydf)      # the names of the columns
 
 
 

@@ -1,4 +1,3 @@
-some google dev [slides](https://www.youtube.com/playlist?list=PLOU2XLYxmsIK9qQfztXeybpHvru-TrqAP)
 
 
 to do tmrw:

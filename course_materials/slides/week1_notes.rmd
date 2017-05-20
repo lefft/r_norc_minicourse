@@ -1,6 +1,6 @@
 ---
 output: html_document
-css: css/style.css
+css: css/notes.css
 ---
 
 ```{r setup, include=FALSE}
@@ -9,6 +9,12 @@ knitr::opts_chunk$set(results="hold")
 
 # container- versus pointer-based semantics for variables
 
+Here's a quick illustration of how the semantics of variables can be different 
+depending on the language. As discussed in class, you can think of R variables 
+as "containers" that you can dump an arbitrarily large/complex object into. 
+But in Python, objects kinda just chill on a shelf in memory, so Python 
+variables are more like "pointers" to an object that exists independently of 
+how we refer to it. (this analogy is approximate!)
 
 Variable behavior in R: 
 
@@ -49,6 +55,12 @@ print("now the value of x is:", x, sep=" ")
 print("now the value of y is:", y, sep=" ")
 ```
 
+This demo also illustrates a badass property of R Markdown, for which we have [Yihui Xie](https://twitter.com/xieyihui?lang=en)'s `knitr::` package to thank! The property is that you can use lots of different 
+languages inside of code chunks (with appropriate chunk options), provided 
+that you have an interpreter or compiler for that language installed on your machine. 
+To learn more, first read up about `knitr::` in general, then 
+read this page of the documentation. (btw, the `<WORD>::` syntax means that 
+`<WORD>` is an R package. we'll see why this syntax is nice later on)
 
 
 
