@@ -1,0 +1,217 @@
+---
+title: "demo for week 3 (or 4?)"
+author: "timothy leffel  &nbsp;&nbsp;&nbsp;&nbsp; may20/2017"
+date: ""
+output: html_document
+css: ../css/notes.css
+---
+
+<hr style="height:2px; background-color: gray; color:gray;">
+
+<!-- for some reason this causes problems! -->
+<!-- <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet"> -->
+
+### a mystery
+
+mystery: what does this (mysterious) code do?! ([source](https://github.com/DataScienceSpecialization/courses/blob/master/07_RegressionModels/02_04_residuals_variation_diagnostics/index.Rmd#example-described-by-stefanski-tas-2007-vol-61))
+
+```{r eval=FALSE}
+dat <- read.table('http://www4.stat.ncsu.edu/~stefanski/NSF_Supported/Hidden_Images/orly_owl_files/orly_owl_Lin_4p_5_flat.txt', header = FALSE)
+fit <- lm(V1 ~ . - 1, data = dat); plot(predict(fit), resid(fit), pch = '.')
+```
+
+it works fine and is very compact, but imo it's pretty hard to read. also, the output (*which is a mystery* doesn't convey the point of why the code is interesting, and it just isn't as pretty as it could be). let's try to solve the mystery by making the code a bit clearer (read: more pedagogical/verbose). along the way, we'll use some packages we're already learning, and see examples of concepts we've been working with. 
+
+first let's get the data from the url given in the first chunk.
+
+```{r}
+# get the link as a character string (break it up for legibility)
+lnk <- paste0(
+  "http://www4.stat.ncsu.edu/~stefanski/",
+  "NSF_Supported/Hidden_Images/orly_owl_files/orly_owl_Lin_4p_5_flat.txt"
+)
+# read in the dataset from the link
+dat <- read.table(lnk, header=FALSE, sep="", col.names=c("y", paste0("x", 1:4)))
+
+# fit a model predicting y from the x's (`mob` for "model object")
+mob <- lm(y ~ x1 + x2 + x3 + x4, data=dat)
+
+# look at a summary table of the model
+knitr::kable(summary(mob)$coef)
+```
+
+
+let's also add columns to dat for mob's fitted values and residuals. 
+this lets us compare the actual y-vals to the model's, and to evaluate the fit
+
+```{r}
+dat$mob_fitted <- fitted(mob)
+dat$mob_resid  <- residuals(mob)
+```
+
+
+let's clean up the table so we can put it next to a diagnostic plot
+
+```{r}
+# look at the summary table, save it as `mob_coef`
+mob_coef <- data.frame(round(coefficients(summary(mob)), digits=3))
+
+# clean up the summary table: get rownames as a col, rename the cols
+mob_coef            <- cbind(row.names(mob_coef), mob_coef)
+row.names(mob_coef) <- NULL
+names(mob_coef)     <- c("variable", "coefficient", "se", "t stat", "p-value")
+
+# want to have signif stars, so write a function to compute them 
+get_stars <- function(p){
+  # breaks must be longer than labels by one, "(" is not incl; "]" is incl
+  cut(p, breaks=c(-.01,.001,.01,.05,.1,1), labels=c("***","**","*",".","n.s."))
+}
+
+# now add significance stars to cleaned up summary table (colname is just " ")
+mob_coef$` ` <- get_stars(mob_coef$`p-value`)
+
+# reformat pvals so that vals rounded to zero display as "<.001"
+mob_coef$`p-value` <- ifelse(mob_coef$`p-value`==0, "<.001", mob_coef$`p-value`)
+```
+
+this is all done with base functions. we could do most or all of this munging in a cleaner and easier to read format, by using `magrittr::`/`dplyr::` pipe-chains. here's a first step to get you started:
+
+```{r eval=FALSE, message=FALSE}
+# this code isn't evaluated because we set the chunk option `eval=FALSE`
+library("magrittr"); library("dplyr")
+# the first few steps...
+summary(mob) %>% coefficients() %>% round(digits=3) %>% data.frame()
+```
+
+but anyway, back to solving the mystery. now that we have the fitted values and residuals 
+as columns of `dat`, we can make the scatterplot built above with base graphics 
+using the command `plot(predict(fit), resid(fit), pch = '.')`.
+
+```{r}
+# load packages for plotting the results the way we want to
+library("ggplot2"); library("grid"); library("gridExtra")
+
+# set the theme for all `ggplot()` objects in this session
+theme_set(theme_classic())
+
+# build the plot and assign it to `plob` (for "plot object")
+(plob <- ggplot(dat, aes(x=mob_fitted, y=mob_resid)) + 
+    geom_point(size=.5, shape=4))
+```
+
+waaaaaaaow orly wth is?!?!?! IS A OWL OR IS PIGEON OR WHA?! :o <i class="em em-scream_cat"></i>
+
+now we have the main plot. an important point about p-values! (but more importantly: lolol)
+
+now let's format the summary table so we can save it in a figure, along with the plot. let's also format the model call, so that people can see what the dataset was and what the model specification was.
+
+```{r}
+# build a coef table grob and assign it to `coef_grob`
+coef_grob <- tableGrob(mob_coef, rows=NULL, theme=ttheme_minimal())
+
+# build a text grob that specifies the model formula [as.expression(mob$call)]
+model_grob <- textGrob(as.character(as.expression(mob$call)))
+```
+
+now let's arrange the main plot with the coefficient table and the model specification. 
+seems to me like the best way would be vertically stacked, with the table on top, the 
+model call in the middle, and the plot on the bottom. we do this with the 
+`gridExtra::grid.arrange()` function. you'll need to use the trial-and-error method if you apply this 
+strategy to your own problem.
+
+```{r, fig.height=7, fig.width=5}
+# arrange plob and model_grob and coef_grob to display nicely
+(output <- grid.arrange(coef_grob, model_grob, plob, nrow=3, heights=c(2,.2,3)))
+```
+
+and there we have it!!!
+
+<!-- **exercise**: look at the output we'll save in the next chunk, and then compare  -->
+<!-- it to how the `output` figure gets rendered from the chunk above. why is the  -->
+<!-- one above smooshed? how can we make it display like we want it to? (i.e. with  -->
+<!-- the dimensions we save it with below) -->
+
+we'll save the output in three different formats: pdf, png, and jpg. we're mostly 
+doing this just to illustrate how using the `*apply()` family of functions 
+can save you keystrokes for allll kinds of purposes. 
+
+```{r}
+# save `output` grob in three diff formats, w vectorized loop via `sapply()`
+# [use .pdf when not in .rmd]
+sapply(c("pdf","png","jpg"), function(x){
+  ggsave(plot=output, filename=paste("orly_plot", x, sep="."), device=x, 
+         path="plots/", width=5, height=7, units="in")
+})
+```
+
+**exercise**: write the `sapply()` call as a regular `for`-loop.
+
+**exercise**: modify the `sapply()` loop so that we save the grob in one format, but in 
+several different sizes.
+
+**exercise**: modify the `sapply()` loop so that instead of iterating directly over file formats, 
+we're iterating over numbers that index the elements of a vector of file formats.
+
+**exercise**: we could've given `gridExtra::grid.arrange()` any number of unnamed 
+arguments at the beginning of the call (i.e. we could've just kept specifying more and more  
+grobs after `coef_grob`, `model_grob`, `plob`). sometimes we can do this and sometimes 
+we can't -- e.g. compare `mean(1,2,3)` with `mean(c(1,2,3))`; then do the same for 
+`sum(1,2,3)` and `sum(c(1,2,3))`. figure out what is going on here. (*hint*: when googling, use the keyword "ellipses")
+
+<br>
+<hr>
+
+### credits:
+
+- original concept, dataset, and plot by [Leonard Stefanski](http://www4.stat.ncsu.edu/~stefanski/), 
+described [here](http://www4.stat.ncsu.edu/~stefanski/NSF_Supported/Hidden_Images/Residual_Surrealism_TAS_2007.pdf). a collection of other examples is [here](http://www4.stat.ncsu.edu/~stefanski/NSF_Supported/Hidden_Images/stat_res_plots.html)
+
+- R code in first chunk from Johns Hopkins data science specialization materials ([link](https://github.com/DataScienceSpecialization/courses/blob/master/07_RegressionModels/02_04_residuals_variation_diagnostics/index.Rmd#example-described-by-stefanski-tas-2007-vol-61))
+
+<br><br><br><br>
+
+
+
+
+<link rel="stylesheet" type="text/css"
+href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700">
+
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500" rel="stylesheet">
+
+  <style>
+body {
+  padding: 10px;
+  font-size: 12pt;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 { 
+  font-size: 20px;
+  color: DarkGreen;
+  font-weight: bold;
+}
+
+h2 { 
+    font-size: 16px;
+    color: green;
+}
+
+h3 { 
+  font-size: 24px;
+  color: green;
+  font-weight: bold;
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+pre {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+</style>
+
+
