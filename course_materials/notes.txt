@@ -1,0 +1,6 @@
+
+
+topics to hit: 
+
+	- recycling elements of a vector in subsetting
+	- 

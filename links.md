@@ -22,8 +22,15 @@ Here's a collection of useful or interesting links related to this course and sc
 
 * [okay, last varianceexplained post](http://varianceexplained.org/r/board-game-simulation/) -- illustrates a nicely-implemented simulation, as a response to a [538 "riddler" puzzle](https://fivethirtyeight.com/features/can-you-survive-this-deadly-board-game/). we'll look at why simulation is useful in the final week of the course.
 
+* nice jenny bryan [plotcon talk](https://www.youtube.com/watch?v=4MfUCX_KpdE) on `purrr::`, and on using data frames as containers for disparate objects (advanced but useful if you continue working in R)
 
+* "how the internet works in 25 minutes" -- nice talk by jenna zeigen [video](https://www.youtube.com/watch?v=yK5G4VnMGpo) and [slides](http://jenna.is/slides/server-farm-to-table-annotated.pdf)
 
+* entertaining talk that i'd characterize as belonging to the genre of "the psychology of programming" [video here](https://www.youtube.com/watch?v=Lv29oYa7ENg) and [slides here](http://jenna.is/slides/rejectjs.pdf). related ones: [here](http://jenna.is/slides/at-jsconfis.pdf)/[here](https://www.youtube.com/watch?v=XNfpnCLbRmc) 
+
+* very recent (may 2017) andrew gelman [talk](https://www.youtube.com/watch?v=cuE9eHSbjNI) -- "Theoretical Statistics is the Theory of Applied Statistics: How to Think About What We Do"
+
+* R Studio [tips and tricks](https://www.youtube.com/watch?v=kuSQgswZdr8)
 
 ### fun/useful R functions and packages
 
@@ -34,7 +41,7 @@ these are help pages and vignettes of some cool functions and packages you can p
 * [`easypackages::` package](https://cran.r-project.org/web/packages/easypackages/README.html) -- I haven't used this, and wouldn't necessarily recommend using it in the long-term, but it might eliminate some headaches and allow you to focus on the interesting stuff while you're starting to learn.
  
 
-* 
+* []
 
 * 
 

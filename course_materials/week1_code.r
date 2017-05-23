@@ -1,9 +1,18 @@
 #'---
-#'title: "R mini-course: week 1"
+#'title: "week 1 notes etc."
 #'author: "timothy leffel  &nbsp;&nbsp;&nbsp;&nbsp; may19/2017"
 #'date: ""
 #'css: css/notes.css
 #'---
+
+#'<hr>
+# THIS IS THE DOC TO CANNIBALIZE
+# THIS IS THE DOC TO CANNIBALIZE
+# THIS IS THE DOC TO CANNIBALIZE
+# THIS IS THE DOC TO CANNIBALIZE
+# THIS IS THE DOC TO CANNIBALIZE
+#'<hr>
+#'
 
 #'<hr style="height:2px; background-color: gray; color:gray;"><br>
 #'This is a version of the class code that you can look at alongside its output, chunk by chunk. Each week
@@ -12,6 +21,7 @@
 #'### 1. Hello, R! 
 #'
 #'<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
 
 # welcome to the R mini-course. in keeping with tradition...
 print("...an obligatory 'hello, world!'")
