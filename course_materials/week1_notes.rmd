@@ -598,7 +598,7 @@ x <- c(x, 6)
 print(paste("now the value of x is:", list(x), sep=" "))
 
 # what's y gonna be now?!?!
-print(paste("now the value of y is:", list(x), sep=" "))
+print(paste("now the value of y is:", list(y), sep=" "))
 ```
 
 Variable behavior in Python:
