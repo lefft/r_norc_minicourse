@@ -712,3 +712,24 @@ source("../demos/demo_classsize/demo_classsize.r", echo=TRUE)
 <hr><hr>
 <br><br>
 
+```{r}
+# formatR code samples from help page
+library(formatR)
+
+## a messy R script
+messy = system.file("format", "messy.R", package = "formatR")
+tidy_source(messy)
+
+## use the 'text' argument
+src = readLines(messy)
+
+## source code
+cat(src, sep = "\n")
+
+## the formatted version
+tidy_source(text = src)
+
+## preserve blank lines
+tidy_source(text = src, blank = TRUE)
+```
+

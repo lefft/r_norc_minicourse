@@ -147,11 +147,15 @@ is.vector(10)
 identical(10, c(10))
 identical("boosh", c("boosh"))
 
-identical(10, c(10.0))
+identical(10, 10.0)
+identical(as.numeric(10), 10.0)
+
+identical(as.integer(10), 10.0)
+identical(as.integer(10), 10)
 ```
 
-**exercise**: why are the first two `identical()` statements 
-true but the last one false? 
+**exercise**: why are the final two `identical()` statements 
+false? why are the others true? 
 
 
 Vectors can hold elements of any type, but they must all be of the same type. 
