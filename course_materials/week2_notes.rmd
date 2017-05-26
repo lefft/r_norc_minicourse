@@ -51,26 +51,23 @@ sets of numbers that can be read into R and manipulated just like `mtcars` or `i
 
 Here's some genres you might consider: 
 
-- spreadsheets that represent repeated measurements over time, or a set of spreadsheets that you could in theory merge together, e.g.
-
-    - a project budget/expenditures table (or a collection of them); 
-    - stock or currency trading prices; 
-    - game-level, player-level sports data (e.g. box scores); 
-    - longitudinal data from an experimental(y) study; or 
-    - your personal budget!
-
-- a set of survey responses your team has collected as part of a project
-- some government data about labor, income, health, healthcare, etc. (here's links to [the Census Bureau](LINK) and [the Bureau of Labor Statistics](LINK) for some inspiration)
-- a word list with fields for frequency, collocation, part-of-speech, etc. etc. 
-
+* spreadsheets that represent repeated measurements over time, or a set of spreadsheets that you could in theory merge together, e.g.
+    + a project budget/expenditures table (or a collection of them); 
+    + stock or currency trading prices; 
+    + game-level, player-level sports data (e.g. box scores); 
+    + longitudinal data from an experimental(y) study; or 
+    + your personal budget!
+* a set of survey responses your team has collected as part of a project
+* a word list with fields for frequency, collocation, part-of-speech, etc. 
+* some government data about labor, income, health, healthcare, etc. -- here's links to [the Census Bureau](LINK) and [the Bureau of Labor Statistics](LINK) for inspiration
+<!-- end of list -->
 
 Here's some questions to keep in mind when selecting a dataset:
 
-
-- does it seem manageable to get acquainted with over the next few weeks? (e.g. a full GSS dataset might be too much to digest)
-- will gaining familiarity with the dataset be beneficial to you, whether personally or professionally? 
-- are you going to lose interest in the subject matter of the dataset quickly?
-- does it have a reasonable size for quick work-checking? (let's say: between 3 and 20 columns of interest, and between 10 and 10,000 rows)
+* does it seem manageable to get acquainted with over the next few weeks? (e.g. a full GSS dataset might be too much to digest)
+* will gaining familiarity with the dataset be beneficial to you, whether personally or professionally? 
+* are you going to lose interest in the subject matter of the dataset quickly?
+* does it have a reasonable size for quick work-checking? (let's say: between 3 and 20 columns of interest, and between 10 and 10,000 rows)
 
 
 ### 1. Working with real data
@@ -136,8 +133,8 @@ But wait, something important is missing: what are the makes and models of the c
 rownames(tim_mtcars)
 ```
 
-This is annoying, and in 2017 no one really uses rownames in R. Since 
-`rownames(tim_mtcars)` is just a character vector, let's move it to a column, and then delete the rownames.
+This is annoying, and in 2017 it's not very common to actually use rownames in R. Since 
+`rownames(tim_mtcars)` is a character vector, we can just move it to a column and then delete the rownames.
 
 ```{r}
 tim_mtcars$make_model <- rownames(tim_mtcars)
@@ -150,9 +147,9 @@ Do we have any missing values?
 
 ```{r}
 # one way to check would be:
-length(is.na(tim_mtcars$mpg))
-length(is.na(tim_mtcars$cyl))
-length(is.na(tim_mtcars$disp))
+sum(is.na(tim_mtcars$mpg))
+sum(is.na(tim_mtcars$cyl))
+sum(is.na(tim_mtcars$disp))
 # ...
 ```
 
@@ -167,7 +164,7 @@ colSums(is.na(tim_mtcars))
 colSums(tim_mtcars=="NA")
 ```
 
-**exercise**: use the `%in%` function to see whether the column `mtcars$wt` has any missing values. Note that `%in%` has **infix** syntax like `+`, `-`, `*`, and `/`, so we write `x %in% y` to see if `y` contains `x`. We'll see another useful infix operator below...
+**exercise**: use the `%in%` function to see whether the column `mtcars$wt` has any missing values. Note that `%in%` has **infix** syntax like `+`, `-`, `*`, and `/`, so we write `x %in% y` to see if `y` contains `x` (we'll get a logical back -- `TRUE` if `x` is in `y`, and `FALSE` otherwise). We'll see another useful infix operator below...
 
 Let's clean up one of the columns, `am`, before moving on. Manual vs automatic 
 should really not be coded as 0 or 1, since transmission is most definitely 
@@ -187,7 +184,7 @@ rm(tim_mtcars)
 
 <br>
 
-### 2. A brief detour: packages!
+### 2. A brief but necessary detour: packages!
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
@@ -199,7 +196,7 @@ of what automatically comes with R when you install it (aka **base R**).
 
 If you are using a particular package for the first time, you will
 have to install it, which is done with `install.packages("<package name>")`
-(note quotes around the name). Everyone should install the following packages: 
+(note quotes around the name). Everyone should install the following packages for the class: 
 
 ```{r}
 # install.packages("dplyr")
@@ -210,9 +207,9 @@ have to install it, which is done with `install.packages("<package name>")`
 **note**: once you have a package installed, it stays installed until you update 
 your version of R. Then, to reinstall a package, just call `install.packages()` on it again. 
 
-After a package is installed, you can "load" it (i.e. make its functions available for use) with `library(<packagename>)`. For this course, we'll use the following packages (maybe more too).
+After a package is installed, you can "load" it (i.e. make its functions available for use) with `library("<packagename>")`. For this course, we'll use the following packages (maybe more too).
 
-```{r}
+```{r message=FALSE, warning=FALSE, results='hold'}
 # don't worry if you get some output here that you don't expect!
 # some packages send you messages when you load them. no need for concern. 
 library("dplyr")
@@ -245,6 +242,8 @@ management and data import. Look at the [R Studio IDE cheatsheet](LINK) on the c
 
 #### 3.1 read from a url
 
+Here's a cool word-frequency dataset: 
+
 ```{r}
 # link to url of a word frequency dataset
 link <- "http://lefft.xyz/r_minicourse/datasets/top5k-word-frequency-dot-info.csv"
@@ -254,8 +253,10 @@ words <- read.csv(link)
 head(words, n=5)
 ```
 
+**exercise**: plot frequency against rank in the `words` dataset. What does the pattern suggest? (*after* you do this, google "Zipf's Law")
 
-#### 3.2 read from local file
+
+#### 3.2 read from a local file
 
 Here's a government education dataset I found [here](https://inventory.data.gov/dataset/032e19b4-5a90-41dc-83ff-6e4cd234f565/resource/38625c3d-5388-4c16-a30f-d105432553a4).
 
@@ -272,11 +273,14 @@ names(edu_data)
 Check out the `readxl::` package, and specifically try `readxl_example()` to see some examples. See [this vignette](https://cran.r-project.org/web/packages/readxl/vignettes/cell-and-column-types.html) for some examples of reading excel files in R. 
 
 
-```{r}
+```{r results='markup'}
 library("readxl")
 # an example of reading xls datasets
 crime1 <- read_xls("datasets/crime/Crime2016EXCEL/noncampusarrest131415.xls")
 crime2 <- read_xls("datasets/crime/Crime2016EXCEL/noncampuscrime131415.xls")
+
+# see how many rows + columns each one has
+dim(crime1); dim(crime2)
 
 # see what columns they have in common
 intersect(names(crime1), names(crime2))
@@ -288,8 +292,7 @@ length(intersect(unique(crime1$UNITID_P), unique(crime2$UNITID_P)))
 identical(crime1$INSTNM, crime2$INSTNM)
 
 # suppose we want to join these together, matching by UNITID_P
-# here's one way to do it:
-library("dplyr")
+# here's one way to do it (note that left_join() comes from dplyr::):
 crime <- left_join(crime1, crime2, by=c("UNITID_P", "INSTNM"))
 
 # now if we check it out, it's kinda a mess but it worked. 
@@ -305,7 +308,7 @@ give us what we want?
 Here's [a link](http://www.stata.com/links/examples-and-datasets/) to some datasets in Stata format.
 ```{r}
 # an example of reading a stata dta file (note we need the haven:: package)
-library(haven)
+library("haven")
 election_data <- read_dta("datasets/election/bes_f2f_original_v3.0.dta")
 
 # notice that objects read from stata maintain some of their 
@@ -314,7 +317,35 @@ election_data <- read_dta("datasets/election/bes_f2f_original_v3.0.dta")
 head(election_data, n=5)
 ```
 
+We can even extract descriptions of each column, since they are present in the original `.dta` file:
 
+```{r}
+# how many columns are there
+numcols <- ncol(election_data)
+
+# create an empty container to catch the column info text
+election_data_colinfo <- rep(NA, times=numcols)
+
+# for every number x between 1 and however many columns election_data has:
+for (x in 1:numcols){
+  # to the x'th element of 
+  election_data_colinfo[x] <- attributes(election_data[[x]])$label
+}
+
+# now make a df w each row as the name and description of an election_data col
+election_dictionary <- data.frame(
+  colname  = names(election_data), 
+  colinfo  = election_data_colinfo
+)
+
+# check out the first 20 -- not bad, eh?
+head(election_dictionary, n=20)
+```
+
+**note**: here we're using a `for`-loop, which is the first **control structure** we've seen. Depending on class interest, we can go deeper into looping next week. It's an important topic, but you can do a lot of stuff in R 
+without ever writing loops. 
+
+**exercise**: google "for-loops vs apply family in R", read up about the function `lapply()`, and then re-write the loop above as a vectorized "loop" with `sapply()` or `lapply()`. 
 
 **exercise (for those interested in SPSS)**: find an SPSS dataset and read it in. 
 
@@ -366,28 +397,28 @@ ggplot2::qplot(container)
 ```
 
 
-#### 3.5 cleaning data and then writing/saving it
+#### 3.5 cleaning up a dataset and then writing (saving) it
 
 Say we want to introduce info about the region of the manufacturer of each make/model in the `mtcars` dataset. One approach we might use: first, list all the manufacturers in the dataset, organizing them by where the maker is from (here I'm just relying on pre-existing knowledge). Then make a data frame consisting of all the unique manufacterers (`mfr`), and the regions associated with them. 
 
 Here's the first step:
 
 ```{r}
-mfg_NA   <- c("Hornet", "Valiant", "Duster")           # unknown  manufacturer
-mfg_asia <- c("Mazda", "Datsun", "Honda", "Toyota")    # asian    manufacturer
-mfg_usa  <- c("Cadillac","Lincoln","Chrysler","Dodge", # american manufacturer
+mfr_NA   <- c("Hornet", "Valiant", "Duster")           # unknown  manufacturer
+mfr_asia <- c("Mazda", "Datsun", "Honda", "Toyota")    # asian    manufacturer
+mfr_usa  <- c("Cadillac","Lincoln","Chrysler","Dodge", # american manufacturer
               "AMC","Chevrolet","Pontiac","Ford")      # european manufacturer
-mfg_euro <- c("Mercedes", "Fiat", "Porsche", "Lotus", 
+mfr_euro <- c("Mercedes", "Fiat", "Porsche", "Lotus", 
               "Ferrari", "Maserati", "Volvo")
 ```
 
 These vectors have all the info necessary to encode manufacturer region for the `mtcars` dataset. Now how should we integrate this into the dataset?! There's more than one way we could do this, but here's one. 
 
-Make the four `mfg_*` vectors into a single object...But how should we do *that*? A natural instinct might be to make each of them a column of a data frame...
+Make the four `mfr_*` vectors into a single object...But how should we do *that*? A natural instinct might be to make each of them a column of a data frame...
 
 ```{r}
 # but if we try this we'll get an error -- why?
-# car_regions <- data.frame(mfg_NA, mfg_asia, mfg_usa, mfg_euro)
+# car_regions <- data.frame(mfr_NA, mfr_asia, mfr_usa, mfr_euro)
 ```
 
 A good way to represent this information would be as a data frame with two columns: one listing the manufacturer, and the other listing the region. Here's how we could create such a data frame:
@@ -395,19 +426,19 @@ A good way to represent this information would be as a data frame with two colum
 ```{r}
 # make a data frame assigning regions to car types
 car_regions <- data.frame(
-  # the mfg_* vectors strung together
-  make   = c(mfg_NA, mfg_asia, mfg_usa, mfg_euro), 
-  # assign regions to manufacturers, based on the mfg_* vectors and 'make'
+  # the mfr_* vectors strung together
+  make   = c(mfr_NA, mfr_asia, mfr_usa, mfr_euro), 
+  # assign regions to manufacturers, based on the mfr_* vectors and 'make'
   # the idea is to repeat the label for each value in the corresponding vector
-  region = c(rep(NA,    length(mfg_NA)),   rep("asia", length(mfg_asia)), 
-             rep("usa", length(mfg_usa)),  rep("euro", length(mfg_euro))),
+  region = c(rep(NA,    length(mfr_NA)),   rep("asia", length(mfr_asia)), 
+             rep("usa", length(mfr_usa)),  rep("euro", length(mfr_euro))),
   # since we know we'll be joining this with another df, don't use factors
   stringsAsFactors=FALSE
 )
 
 ```
 
-<!-- # match(c("Valiant","Honda"), table=c(mfg_NA, mfg_asia, mfg_usa, mfg_euro)) -->
+<!-- # match(c("Valiant","Honda"), table=c(mfr_NA, mfr_asia, mfr_usa, mfr_euro)) -->
 
 **exercise**: what's another way we could have associated manufacturers with regions? (*hint*: it's reminiscent of what we do with `gear_lookup` below)
 
@@ -609,7 +640,7 @@ Here's a bunch of code that does a bunch of useful stuff. If you understand how 
 - we look through everyone's datasets and discuss any issues that came up
 - wide- vs long-format data, reshaping data, the concept of "tidy data"
 - visualizing a dataset as a class (type-along)
-- visualizing your own data with base graphics and `ggplot2::`
+- visualizing your own dataset with base graphics and `ggplot2::`
 
 
 
@@ -629,7 +660,7 @@ Which is equivalent to:
 
 > `z(h(g(f(x))))`, 
 
-except that the first one is easier to read. Assuming we want to save the result of `x` applied to `f()` through `z()`, we can just assign the whole chain to a variable. Here's a little example. 
+except that the first one is easier to read (*or will become easier to read if you start using it regularly*). Assuming we want to save the result of `x` applied to `f()` through `z()`, we can just assign the whole chain to a variable. Here's a little example where given the schema above, `x` is `chars`, and `f()` and `g()` are `unique()` and `length()`. 
 
 ```{r}
 chars <- sample(letters, size=20, replace=TRUE)
@@ -808,8 +839,9 @@ h3 {
 }
 
 h4 { 
-  font-size: 20px;
+  font-size: 18px;
   color: green;
+  font-weight: bolder;
   padding-top: 30px;
 }
 
