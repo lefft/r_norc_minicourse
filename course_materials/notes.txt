@@ -3,4 +3,6 @@
 topics to hit: 
 
 	- recycling elements of a vector in subsetting
+	- for-loops and if else control flow
+	- how to ask a stack overflow question
 	- 

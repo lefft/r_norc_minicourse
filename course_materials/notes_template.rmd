@@ -1,0 +1,116 @@
+---
+title: "R mini-course: week 3 notes"
+author: "timothy leffel  &nbsp;&nbsp;&nbsp;&nbsp; xxxXX/2017"
+output: html_document
+css: css/notes.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(results="hold")
+```
+
+<hr style="height:2px; background-color: gray; color:gray;">
+
+[FRONT MATTER]
+
+<br><br>
+
+[list of topics for this week from last week's notes]
+
+- ...
+- ...
+
+
+<br>
+
+### 1. [SECTION 1 HEADER]
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+[SECTION 1 CONTENT]
+
+
+
+<br>
+
+### 2. [SECTION 2 HEADER]
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+[SECTION 2 CONTENT]
+
+
+<br>
+
+### 3. [SECTION 3 HEADER]
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+
+[SECTION 3 CONTENT]
+
+
+<br>
+
+### Appendix: [APPENDIX HEADER] {#appendix}
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+[APPENDIX CONTENT]
+
+
+<hr><hr>
+<br><br>
+
+
+
+<link rel="stylesheet" type="text/css"
+href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700">
+
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500" rel="stylesheet">
+
+  <style>
+body {
+  padding: 10px;
+  font-size: 12pt;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 { 
+  font-size: 20px;
+  color: DarkGreen;
+  font-weight: bold;
+}
+
+h2 { 
+    font-size: 16px;
+    color: green;
+}
+
+h3 { 
+  font-size: 24px;
+  color: green;
+  font-weight: bold;
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+pre {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+p {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+</style>
+
+
+
+<!-- END OF DOCUMENT IS HERE -->
+

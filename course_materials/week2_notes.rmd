@@ -1,0 +1,529 @@
+---
+title: "R mini-course: week 2 notes"
+author: "timothy leffel  &nbsp;&nbsp;&nbsp;&nbsp; may26/2017"
+output: html_document
+css: css/notes.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(results="hold")
+```
+
+<hr style="height:2px; background-color: gray; color:gray;">
+
+Same format as last week: exercises and additional discussion interleaved throughout. But this time, I'd recommend starting a blank R script and typing your responses into it. That way if you want feedback, you can just send me the `.R` file with your solutions (where applicable), including commented lines that explain what you're doing and why you're doing it (example [here](LINK TO SCREENSHOT OF AN EXAMPLE)). I'll send you back a file that has all of your original code, plus some comments and code from me. 
+
+Also for next week, I want everyone (who's so compelled) to identify a dataset 
+they'd be interested in exploring, and save it to the directory you're storing 
+your files for this class in. It's definitely best if the data is in .csv format, 
+but it doesn't have to be. Before the regular notes, here's a quick guide on why 
+and how to find a dataset of interest. 
+
+<br>
+
+### 0. for next week: everyone obtain a dataset
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+Since R was designed to be used for data analysis, you'll only understand why R works the way it does -- and more importantly, what it can do for you -- by practicing writing R code that manipulates rectangular datasets. 
+
+The best way to learn R is to use R. In my experience, the best way to motivate 
+yourself to use R is to identify a topic that (i) has some kind of quantitative 
+data associated with it; that (ii) you know how to find a dataset pertaining to; and that (iii) you have a *genuine* interest in understanding at a deeper level. 
+
+Since we all work in social science, there's lots of candidates for (i) and (ii) -- even if one doesn't come to mind, ask a few colleagues and I'm sure someone will 
+have some thoughts. 
+*But* criterion (iii) can be harder to satisfy. Even so, I think it's crucial -- 
+you'll get bored of and/or frustrated with playing around with `mtcars` and 
+`iris` reeeeeal quickly (*trust me*). 
+
+I'd actually go as far as to argue that when it 
+comes to learning how to code in R, (iii) is *more* important than points (i) and (ii), because if you have a topic that satisfies (iii) but neither of the first two, then you can spend time 
+thinking about how to code up simulations to model the phenomenon you're interested in. At the same time I'm sure everyone has a *genuine* interest in getting done with their work faster (more 
+time for twitter :p), so a good dataset might be something work-related that 
+satisfies (iii) in virtue of you being interested in finishing your work faster 
+and consequently having more free time. 
+
+Fortunately, the internet has many, many datasets to offer. For a shocking array 
+of topics, you can google "datasets on X" and find interesting spreadsheet-like 
+sets of numbers that can be read into R and manipulated just like `mtcars` or `iris` (in case you weren't in class: these datasets are introduced in section 1 below). 
+
+
+Here's some genres you might consider: 
+
+- spreadsheets that represent repeated measurements over time, or a set of spreadsheets that you could in theory merge together, e.g.
+
+    - a project budget/expenditures table (or a collection of them); 
+    - stock or currency trading prices; 
+    - game-level, player-level sports data (e.g. box scores); 
+    - longitudinal data from an experimental(y) study; or 
+    - your personal budget!
+
+- a set of survey responses your team has collected as part of a project
+- some government data about labor, income, health, healthcare, etc. (here's links to [the Census Bureau](LINK) and [the Bureau of Labor Statistics](LINK) for some inspiration)
+- a word list with fields for frequency, collocation, part-of-speech, etc. etc. 
+
+
+Here's some questions to keep in mind when selecting a dataset:
+
+
+- does it seem manageable to get acquainted with over the next few weeks? (e.g. a full GSS dataset might be too much to digest)
+- will gaining familiarity with the dataset be beneficial to you, whether personally or professionally? 
+- are you going to lose interest in the subject matter of the dataset quickly?
+- does it have a reasonable size for quick work-checking? (let's say: between 3 and 20 columns of interest, and between 10 and 10,000 rows)
+
+
+### 1. Working with real data
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+
+R comes with some pre-loaded datasets, which have reserved names. The two examples 
+we'll look at here are `mtcars` and `iris`. They're both kinda famous datasets 
+in the data science world, and you should be aware of them because a lot of 
+tutorials and walkthroughs you'll find on the web use one of them as an example. 
+`mtcars` is *Motor Trend* data from the '70s about different types of cars. 
+`iris` provides several measurements for 150 individual iris flowers, each of 
+which belongs to one sub-species (spoiler: the measurements can be used to 
+predict the sub-species). This dataset was made famous by Ronald Fisher in the 
+'30s and has been used regularly since. 
+
+Most of the built-in datasets are **data frames**. You can access built-in datasets by their names:
+
+```{r}
+head(iris, n=5)
+```
+
+```{r}
+head(mtcars, n=5)
+```
+
+
+Let's focus on `mtcars`. Notice that it's not in your environment tab. That's 
+because there's a bunch of built-in datasets and it'd be annoying if they were 
+all there all the time. We can just introduce a variable and assign the dataset 
+to it:
+
+```{r}
+mtcars <- mtcars
+```
+
+**exercise**: from a fresh(-ish) session, try this with e.g. `myvar <- myvar`. Why can't we do this with `myvar`? What does the error message tell you, and why doesn't it arise in the case of `mtcars`? What happens if you assign `myvar` a value first?
+
+Let's check out what the columns are:
+
+```{r}
+str(mtcars)
+```
+
+Not super informative. But if we google around a bit, we'll find what each of 
+them are: 
+
+- `mtcars$mpg` -- miles per gallon
+- `mtcars$cyl` -- number of cylinders
+- `mtcars$disp` -- 
+- `mtcars$hp` -- 
+- `mtcars$drat` -- 
+- `mtcars$wt` -- 
+- `mtcars$qsec` -- 
+- `mtcars$vs` -- 
+- `mtcars$am` -- automatic or manual transmission
+- `mtcars$gear` -- number of gears
+- `mtcars$carb` -- 
+
+**exercise**: some of these columns are coded horribly. How could we improve 
+the legibility of the data by transforming some of the columns? (hint: inspect and contemplate the column `mtcars$am`)
+
+
+But wait, something important is missing: what are the makes and models of the cars?! Well, turns out they're in...
+
+```{r}
+rownames(mtcars)
+```
+
+This is annoying, and in 2017 no one really uses rownames in R. Since 
+`rownames(mtcars)` is just a character vector, let's move it to a column, and then delete the rownames.
+
+```{r}
+mtcars$make_model <- rownames(mtcars)
+rownames(mtcars) <- NULL
+```
+
+**note**: we can combine assignment and `$` with `NULL` to remove a column from a data frame. 
+
+Do we have any missing values?
+
+```{r}
+# one way to check would be:
+length(is.na(mtcars$mpg))
+length(is.na(mtcars$cyl))
+length(is.na(mtcars$disp))
+# ...
+
+# a quicker way to check:
+colSums(is.na(mtcars))
+```
+
+Let's clean up one of the columns, `am`, before moving on. Manual vs automatic 
+should really not be coded as 0 or 1, since transmission is most definitely 
+a category and not a number. We can use `ifelse()` to change this.
+
+```{r}
+mtcars$am <- ifelse(mtcars$am==0, "automatic", "manual")
+```
+
+**exercise**: it is *very* important that we checked missing values before 
+recoding the `am` column. Why? What would've happened if `mtcars$am` had some missing values but we went ahead and recoded it as above anyway? How could we recode the column in the presence of missing values?
+
+
+<br>
+
+### 2. A brief detour: packages!
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+Very important point: **in R, packages are your friend**. 
+
+One of the best things about R is that anyone can contribute helfpul, 
+new user-defined functions and methods. These are typically bundled into a portable format called a **package**. Packages are just collections of functions and other stuff that aren't part 
+of what automatically comes with R when you install it (aka **base R**).
+
+If you are using a particular package for the first time, you will
+have to install it, which is done with `install.packages("<package name>")`
+(note quotes around the name). Everyone should install the following packages: 
+
+```{r}
+# install.packages("dplyr")
+# install.packages("reshape2")
+# install.packages("ggplot2")
+```
+
+**note**: once you have a package installed, it stays installed until you update 
+your version of R. Then, to reinstall a package, just call `install.packages()` on it again. 
+
+After a package is installed, you can "load" it (i.e. make its functions available for use) with `library(<packagename>)`. For this course, we'll use the following packages (maybe more too).
+
+```{r}
+# don't worry if you get some output here that you don't expect!
+# some packages send you messages when you load them. no need for concern. 
+library("dplyr")
+library("reshape2")
+library("ggplot2")
+```
+
+You can see your **library** -- a list of your installed packages -- by saying
+`library()`, *without* an argument. You can see which packages are currently **attached** ("loaded") with `search()`, again with no argument. 
+
+```{r}
+# see installed packages (will be different for everyone)
+# library()
+
+# see packages available *in current session*
+search()
+```
+
+**note**: R Studio has lots of point-and-click tools to deal with package 
+management and data import. Look at the [R Studio IDE cheatsheet](LINK) on the course page for details. 
+
+**note**: Check out [CRAN](LINK TO CRAN) to browse tons of cool R packages, which exist for almost any imaginable purpose! 
+
+<br>
+
+### 3. The outside world (or: reading and writing external files)
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+
+#### read from a url
+
+```{r}
+# words
+```
+
+
+#### read from local file
+
+```{r}
+# words
+```
+
+
+#### reading different file types
+
+
+```{r}
+# xls
+```
+
+```{r}
+# dta
+```
+
+
+```{r}
+# spss
+```
+
+
+
+#### writing data
+
+```{r}
+# simulate some data + save it
+```
+
+
+
+
+<br>
+
+### 4. WTF why can't I read in this dataset right?!?!
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+when starting out, doesnt usually go right right away...
+
+important
+
+- errors and warnings
+
+
+#### common pitfalls
+
+- comma/tab separator (make an exx)
+- misalignment of headers + vals 
+- empty cells (esp in excel)
+- quoting + separators inside quoted vals
+- SPACES!
+- directories!
+
+
+#### useful troubleshooting strategies
+
+- look in a text editor
+- use readxl + haven
+- use rstudio p+c interface (*but* save code!)
+- open in excel and (re-)export
+
+
+<br>
+
+### 5. Data cleaning ("munging", "pre-processing", "screening", etc.)
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+
+#### transforming columns
+
+- code missing vals correctly
+
+#### adding/removing/renaming/rearranging columns
+
+- eliminate spaces from colnames (for dollar sign usage)
+- "dog" vs "dog " vs " dog" vs " dog "
+
+
+#### merging data from another data frame
+
+intro to dplyr 
+
+- mention regex
+- mention pipe-chaining
+- mention tidy data
+
+
+
+
+<br>
+
+### 6. Once everything's how we want it to be...
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+- aggregation  
+- subsetting
+- grouping vars (dplyr)
+- summary statistics
+- contingency tables
+- diagnostic plots
+- modeling...
+
+
+<br>
+
+### 7. Next Week
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+- reshaping data
+- visualizing data with base graphics and `ggplot2::`
+
+
+
+<br>
+
+### Appendix: writing functions {#appendix}
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+
+The more you use R, the more things you'll realize you could be doing 
+in a waaaay more efficient manner. Learning to write your own functions 
+is a crucial step in making your workflow and data processing pipelines more 
+efficient and less headache-inducing. 
+
+A simple example: often we have something that's coded as a factor or a number, 
+and we'd rather have it coded as a character. 
+
+```{r}
+thingie <- factor(rep(1:3, 5), labels=c("categoryA", "categoryB", "categoryC"))
+
+as.character(thingie)
+```
+
+Imagine we had several objects like `thingie` and wanted to apply `as.character()` 
+to all of them. We could do it manually, or write a function and have it do the 
+work for us:
+
+```{r}
+# a quick function to save us keystrokes
+ac <- function(x){
+  as.character(x)
+}
+
+ac(thingie)
+```
+
+Another example:
+
+```{r}
+# saves us even more keystrokes
+lu <- function(x){
+  length(unique(x))
+}
+
+lu(thingie)
+```
+
+Here's a function that does some useful stuff. Think of it as breaking data 
+analysis or summary into two pieces: when you define your main function, you're 
+defining **the data analysis routine**. When you actually apply the function to 
+your data, you're **executing the analysis**. 
+
+
+```{r}
+# define analysis routine
+custom_summary <- function(df, group_col, measure_col){
+  # make a lil df with just the relevant cols
+  df <- data.frame(group_col=df[[group_col]], measure_col=df[[measure_col]])
+
+  # want to return the mean and sd, and plot measure_col by group_col
+  require("dplyr")
+  out_table <- df %>% group_by(group_col) %>% summarize(
+    avg = mean(measure_col, na.rm=TRUE),
+    sd  = sd(measure_col, na.rm=TRUE)
+  ) %>% data.frame()
+  
+  require("ggplot2")
+  out_plot <- ggplot(out_table, aes(x=group_col, y=avg)) +
+    geom_bar(stat="identity") +
+    geom_errorbar(aes(ymin=avg-sd, ymax=avg+sd, width=.25)) +
+    labs(x=group_col, y=paste0("mean of ", measure_col, ", +/- sd"), 
+         title=paste0("average ", measure_col, " by ", group_col))
+  
+  return(list(tab=out_table, plot=out_plot))
+}
+```
+
+We can apply `custom_summary()` to `mtcars` in a number of ways. 
+Summarize `mtcars$mpg` for each value of `mtcars$gear` using 
+`custom_summary()`, and assign the result to the variable `mpg_by_gear`. 
+
+```{r}
+mpg_by_gear <- custom_summary(df=mtcars, group_col="gear", measure_col="mpg")
+```
+
+Now we can look at the components of the result that we decided to return 
+when we defined `custom_summary()`:
+
+```{r}
+# print a table
+knitr::kable(mpg_by_gear$tab)
+```
+
+Now the plot: 
+
+```{r}
+# display the plot
+mpg_by_gear$plot
+```
+
+We can repeat the process with any data frame and any combination of variables. Play around with this for a while and some ideas might come to your mind about how we could include other useful information in the return value of 
+`custom_summary()`.
+
+```{r}
+mpg_by_cyl <- custom_summary(df=mtcars, group_col="cyl", measure_col="mpg")
+
+# ...
+```
+
+**exercise**: use our function to summarize mpg by cyl and a couple other variables. How could we apply `custom_summary()` to `iris` to understand some aspect of that dataset?
+
+**exercise (caution -- this one might not be worth the time)**: why does the plot have "gear" on the axis title and x-axis label, but the table ends up with "group_col"? Both were specified with `group_col` in the definition of `custom_summary()`, so why don't they display the same? (*hint*: read [the chapter on non-standard evaluation](LINK) from Wickham's *Advanced R*)
+
+
+<hr><hr>
+<br><br>
+
+
+
+<link rel="stylesheet" type="text/css"
+href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700">
+
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500" rel="stylesheet">
+
+  <style>
+body {
+  padding: 10px;
+  font-size: 12pt;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 { 
+  font-size: 20px;
+  color: DarkGreen;
+  font-weight: bold;
+}
+
+h2 { 
+    font-size: 16px;
+    color: green;
+}
+
+h3 { 
+  font-size: 24px;
+  color: green;
+  font-weight: bold;
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+pre {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+}
+
+p {
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+</style>
+
+
+
+<!-- END OF DOCUMENT IS HERE -->
+
