@@ -81,12 +81,7 @@ Here's some questions to keep in mind when selecting a dataset:
 R comes with some pre-loaded datasets, which have reserved names. The two examples 
 we'll look at here are `mtcars` and `iris`. They're both kinda famous datasets 
 in the data science world, and you should be aware of them because a lot of 
-tutorials and walkthroughs you'll find on the web use one of them as an example. 
-`mtcars` is *Motor Trend* data from the '70s about different types of cars. 
-`iris` provides several measurements for 150 individual iris flowers, each of 
-which belongs to one sub-species (spoiler: the measurements can be used to 
-predict the sub-species). This dataset was made famous by Ronald Fisher in the 
-'30s and has been used regularly since. 
+tutorials and walkthroughs you'll find on the web use one of them as an example. `mtcars` is *Motor Trend* data from the '70s about various attributes of different types of cars. `iris` provides several measurements of 150 individual iris flowers, each of which belongs to one of three sub-species (spoiler: the measurements can be used to predict the sub-species reasonably well). This dataset was made famous by Ronald Fisher in the '30s and is still used regularly in examples. 
 
 Most of the built-in datasets are **data frames**. You can access built-in datasets by their names:
 
@@ -105,31 +100,31 @@ all there all the time. We can just introduce a variable and assign the dataset
 to it:
 
 ```{r}
-mtcars <- mtcars
+tim_mtcars <- mtcars
 ```
 
-**exercise**: from a fresh(-ish) session, try this with e.g. `myvar <- myvar`. Why can't we do this with `myvar`? What does the error message tell you, and why doesn't it arise in the case of `mtcars`? What happens if you assign `myvar` a value first?
+<!-- **exercise**: from a fresh(-ish) session, try this with e.g. `myvar <- myvar`. Why can't we do this with `myvar`? What does the error message tell you, and why doesn't it arise in the case of `mtcars`? What happens if you assign `myvar` a value first? -->
 
 Let's check out what the columns are:
 
 ```{r}
-str(mtcars)
+str(tim_mtcars)
 ```
 
-Not super informative. But if we google around a bit, we'll find what each of 
+Not super informative. But if we google around a bit, we'll [find](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/mtcars.html) what each of 
 them are: 
 
 - `mtcars$mpg` -- miles per gallon
 - `mtcars$cyl` -- number of cylinders
-- `mtcars$disp` -- 
-- `mtcars$hp` -- 
-- `mtcars$drat` -- 
-- `mtcars$wt` -- 
-- `mtcars$qsec` -- 
-- `mtcars$vs` -- 
+- `mtcars$disp` -- displacement (in$^3$)
+- `mtcars$hp` -- gross horsepower
+- `mtcars$drat` -- rear axle ratio 
+- `mtcars$wt` -- weight (1000lb)
+- `mtcars$qsec` -- 1/4 mile time
+- `mtcars$vs` -- V/S (V- versus Straight block, I think)
 - `mtcars$am` -- automatic or manual transmission
 - `mtcars$gear` -- number of gears
-- `mtcars$carb` -- 
+- `mtcars$carb` -- number of carburetors
 
 **exercise**: some of these columns are coded horribly. How could we improve 
 the legibility of the data by transforming some of the columns? (hint: inspect and contemplate the column `mtcars$am`)
@@ -138,15 +133,15 @@ the legibility of the data by transforming some of the columns? (hint: inspect a
 But wait, something important is missing: what are the makes and models of the cars?! Well, turns out they're in...
 
 ```{r}
-rownames(mtcars)
+rownames(tim_mtcars)
 ```
 
 This is annoying, and in 2017 no one really uses rownames in R. Since 
-`rownames(mtcars)` is just a character vector, let's move it to a column, and then delete the rownames.
+`rownames(tim_mtcars)` is just a character vector, let's move it to a column, and then delete the rownames.
 
 ```{r}
-mtcars$make_model <- rownames(mtcars)
-rownames(mtcars) <- NULL
+tim_mtcars$make_model <- rownames(tim_mtcars)
+rownames(tim_mtcars) <- NULL
 ```
 
 **note**: we can combine assignment and `$` with `NULL` to remove a column from a data frame. 
@@ -155,25 +150,39 @@ Do we have any missing values?
 
 ```{r}
 # one way to check would be:
-length(is.na(mtcars$mpg))
-length(is.na(mtcars$cyl))
-length(is.na(mtcars$disp))
+length(is.na(tim_mtcars$mpg))
+length(is.na(tim_mtcars$cyl))
+length(is.na(tim_mtcars$disp))
 # ...
-
-# a quicker way to check:
-colSums(is.na(mtcars))
 ```
+
+```{r}
+# a quicker way to check:
+colSums(is.na(tim_mtcars))
+
+"" # adding an empty string to make space between the two results in the output
+
+# aaand make sure there aren't NA's that accidentally became characters
+# (note "NA" is not the same as NA)
+colSums(tim_mtcars=="NA")
+```
+
+**exercise**: use the `%in%` function to see whether the column `mtcars$wt` has any missing values. Note that `%in%` has **infix** syntax like `+`, `-`, `*`, and `/`, so we write `x %in% y` to see if `y` contains `x`. We'll see another useful infix operator below...
 
 Let's clean up one of the columns, `am`, before moving on. Manual vs automatic 
 should really not be coded as 0 or 1, since transmission is most definitely 
 a category and not a number. We can use `ifelse()` to change this.
 
 ```{r}
-mtcars$am <- ifelse(mtcars$am==0, "automatic", "manual")
+tim_mtcars$am <- ifelse(tim_mtcars$am==0, "automatic", "manual")
 ```
 
-**exercise**: it is *very* important that we checked missing values before 
-recoding the `am` column. Why? What would've happened if `mtcars$am` had some missing values but we went ahead and recoded it as above anyway? How could we recode the column in the presence of missing values?
+**exercise**: it is *very* important that we checked missing values before recoding the `am` column in the way that we did. Why? What could happen if the thing we're recoding has missing values in it, but we go ahead and recode it with `ifelse()` anyway? How could we safely recode the column in the presence of missing values? 
+
+```{r}
+# now let's remove tim_mtcars since we want to manipulate the original later on
+rm(tim_mtcars)
+```
 
 
 <br>
@@ -234,45 +243,274 @@ management and data import. Look at the [R Studio IDE cheatsheet](LINK) on the c
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
-#### read from a url
+#### 3.1 read from a url
 
 ```{r}
-# words
+# link to url of a word frequency dataset
+link <- "http://lefft.xyz/r_minicourse/datasets/top5k-word-frequency-dot-info.csv"
+# read in the dataset with defaults (header=TRUE, sep=",")
+words <- read.csv(link)
+# look at the first few rows
+head(words, n=5)
 ```
 
 
-#### read from local file
+#### 3.2 read from local file
+
+Here's a government education dataset I found [here](https://inventory.data.gov/dataset/032e19b4-5a90-41dc-83ff-6e4cd234f565/resource/38625c3d-5388-4c16-a30f-d105432553a4).
 
 ```{r}
-# words
+# i saved it to a local folder, so I can read it in like this
+edu_data <- read.csv("datasets/university/postscndryunivsrvy2013dirinfo.csv")
+head(edu_data[, 1:10], n=5)
+names(edu_data)
 ```
 
 
-#### reading different file types
+#### 3.3 reading different file types
+
+Check out the `readxl::` package, and specifically try `readxl_example()` to see some examples. See [this vignette](https://cran.r-project.org/web/packages/readxl/vignettes/cell-and-column-types.html) for some examples of reading excel files in R. 
 
 
 ```{r}
-# xls
+library("readxl")
+# an example of reading xls datasets
+crime1 <- read_xls("datasets/crime/Crime2016EXCEL/noncampusarrest131415.xls")
+crime2 <- read_xls("datasets/crime/Crime2016EXCEL/noncampuscrime131415.xls")
+
+# see what columns they have in common
+intersect(names(crime1), names(crime2))
+
+# looks like we could prooobably merge them by UNITID_P, which looks like an id
+length(intersect(unique(crime1$UNITID_P), unique(crime2$UNITID_P)))
+
+# could also join by INSTNM
+identical(crime1$INSTNM, crime2$INSTNM)
+
+# suppose we want to join these together, matching by UNITID_P
+# here's one way to do it:
+library("dplyr")
+crime <- left_join(crime1, crime2, by=c("UNITID_P", "INSTNM"))
+
+# now if we check it out, it's kinda a mess but it worked. 
+# this suggests we should've inspected the columns more thoroughly 
+# before joining them (bc we've probably duplicated some matching columns)
 ```
+
+**exercise**: look at the [data wrangling cheatsheet](LINK), and determine 
+whether `left_join()` was the best strategy to use here, given the crime data. 
+How else could we have joined the datasets? What would make a left join *not* 
+give us what we want?
+
+Here's [a link](http://www.stata.com/links/examples-and-datasets/) to some datasets in Stata format.
+```{r}
+# an example of reading a stata dta file (note we need the haven:: package)
+library(haven)
+election_data <- read_dta("datasets/election/bes_f2f_original_v3.0.dta")
+
+# notice that objects read from stata maintain some of their 
+# idiosyncratic internal structure -- e.g. you can see the survey items 
+# "embedded" inside the header fields in the R Studio spreadsheet view 
+head(election_data, n=5)
+```
+
+
+
+**exercise (for those interested in SPSS)**: find an SPSS dataset and read it in. 
+
+#### 3.4 simulating data
+
+If we don't have actual data on a topic but still want to explore it quantitatively, a good option is to use randomly (but systematically!) **simulate** some data. Here's an example:
 
 ```{r}
-# dta
+# what's the probability that two of the people here have the same bday?!
+# here's one strategy we could use: 
+# get a vector of days of the year 
+days <- seq(as.Date("2017-01-01"), as.Date("2017-12-31"), "days")
+
+# define a df with 11 people, randomly assigning birthdays
+birthday <- data.frame(
+  # create 11 "people"
+  person = paste0("person_", 1:11),
+  # sample from days with replacement to assign birthdays
+  bday   = sample(days, size=11, replace=TRUE)
+)
+
+# write a statement that'll be true iff two ppl have the same bday
+length(unique(birthday$bday)) < nrow(birthday)
 ```
 
+**exercise**: whether two people have the same birthday will vary each time 
+you run the above, because we're randomly sampling from days. Conceptually (i.e. without writing any code), how would we answer the question of how likely it is 
+for two people of the 11 to share a birthday? Now, practically (i.e. by writing some code), how likely is it? (*hint*: use a `for`-loop -- ask me if you're interested)
+
+**exercise**: make a plot that represents the change in probability of two 
+people having the same birthday as the size of the class increases. 
 
 ```{r}
-# spss
+# define some parameters
+numsims <- 100
+numppl  <- 11
+# make a container to hold the simulation results
+container <- rep(NA, times=numsims)
+# loop over 1,2,...,numsims and generate numppl-many birthdays
+for (x in 1:numsims){
+  dat <- sample(days, size=numppl, replace=TRUE)
+  # for each iteration, assign TRUE to the container element if we have a match
+  container[x] <- length(unique(dat)) < length(dat)
+}
+# now get the proportion of sims where there's a common bday
+sum(container==TRUE) / length(container)
+# make a quick plot to see the results
+ggplot2::qplot(container)
 ```
 
 
+#### 3.5 cleaning data and then writing/saving it
 
-#### writing data
+Say we want to introduce info about the region of the manufacturer of each make/model in the `mtcars` dataset. One approach we might use: first, list all the manufacturers in the dataset, organizing them by where the maker is from (here I'm just relying on pre-existing knowledge). Then make a data frame consisting of all the unique manufacterers (`mfr`), and the regions associated with them. 
+
+Here's the first step:
 
 ```{r}
-# simulate some data + save it
+mfg_NA   <- c("Hornet", "Valiant", "Duster")           # unknown  manufacturer
+mfg_asia <- c("Mazda", "Datsun", "Honda", "Toyota")    # asian    manufacturer
+mfg_usa  <- c("Cadillac","Lincoln","Chrysler","Dodge", # american manufacturer
+              "AMC","Chevrolet","Pontiac","Ford")      # european manufacturer
+mfg_euro <- c("Mercedes", "Fiat", "Porsche", "Lotus", 
+              "Ferrari", "Maserati", "Volvo")
 ```
 
+These vectors have all the info necessary to encode manufacturer region for the `mtcars` dataset. Now how should we integrate this into the dataset?! There's more than one way we could do this, but here's one. 
 
+Make the four `mfg_*` vectors into a single object...But how should we do *that*? A natural instinct might be to make each of them a column of a data frame...
+
+```{r}
+# but if we try this we'll get an error -- why?
+# car_regions <- data.frame(mfg_NA, mfg_asia, mfg_usa, mfg_euro)
+```
+
+A good way to represent this information would be as a data frame with two columns: one listing the manufacturer, and the other listing the region. Here's how we could create such a data frame:
+
+```{r}
+# make a data frame assigning regions to car types
+car_regions <- data.frame(
+  # the mfg_* vectors strung together
+  make   = c(mfg_NA, mfg_asia, mfg_usa, mfg_euro), 
+  # assign regions to manufacturers, based on the mfg_* vectors and 'make'
+  # the idea is to repeat the label for each value in the corresponding vector
+  region = c(rep(NA,    length(mfg_NA)),   rep("asia", length(mfg_asia)), 
+             rep("usa", length(mfg_usa)),  rep("euro", length(mfg_euro))),
+  # since we know we'll be joining this with another df, don't use factors
+  stringsAsFactors=FALSE
+)
+
+```
+
+<!-- # match(c("Valiant","Honda"), table=c(mfg_NA, mfg_asia, mfg_usa, mfg_euro)) -->
+
+**exercise**: what's another way we could have associated manufacturers with regions? (*hint*: it's reminiscent of what we do with `gear_lookup` below)
+
+
+"number of gears" (`mtcars$gear`) is technically a number, but practically speaking it's kind of like a category (albeit ordered): there's only a few possible values, and there's no reason to think the difference between 3 and 4 gears is "comparable" to the difference between 4 and 5 gears. To avoid accidentally computing on `mtcars$gear` as if it were numeric, let's recode it as character. Here is a nice, concise way to do this: 
+
+```{r}
+# "number of gears" is a category but currently coded as numeric
+
+# make a "lookup table" that associates values of gear with the labels we want 
+gear_lookup <- c(three=3, four=4, five=5)
+
+# now combine names(), match(), and [] to recode the values how we want them
+mtcars$gear <- names(gear_lookup[match(mtcars$gear, gear_lookup)])
+```
+
+**note**: since we manipulated `mtcars`, now it shows up in the environment pane in R Studio :)
+
+
+Okay, now let's do some other stuff to the data and then save the cleaned up version. 
+
+The following block of code illustrates the utility of combining `dplyr::` data manipulation operations with the forward pipe operator `%>%` from `magrittr::`. 
+
+**note**: I don't expect that you guys will be able to read all of this next block just yet. With some practice, you will. And once you see exactly what's going on,  then you'll be well on your way to writing nice, pretty, precise, concise, etc. data processing workflows. 
+
+**note**: See [the first appendix](#appendix_pipe) for a quick description of how `magrittr::`'s forward pipe operator `%>%` works. 
+
+```{r}
+# the variable 'mtcars_clean' will hold the result of piping mtcars
+# into the chain mutate() %>% select() %>% rename()
+mtcars_clean <- mtcars %>% 
+  mutate(
+    car       = row.names(mtcars),                        # create 'car' column
+    qsec      = round(qsec),                              # round qm time
+    mpg       = round(mpg),                               # round mpg
+    wt        = wt * 1000,                                # get weight in lbs
+    am        = ifelse(am==0, "manual", "auto"),          # code as char
+    musclecar = cyl >= 6 & hp > 200 & qsec < 16           # define a muscle car
+  ) %>% 
+  select(
+    car, am, gear, musclecar, cyl, 
+    hp, qsec, gear, wt, mpg
+  ) %>% 
+  rename(
+    horsepower=hp, cylinders=cyl, qm_time=qsec, 
+    num_gears=gear, lbs=wt, transmission=am
+  )
+```
+
+Now the dataset is cleaned up to our liking and now we want to use the cleaned up vesion as our official version of record (or share it with ppl). We'll save it 
+in a few different formats as a demo. 
+
+**note**: Unless you have a very good reason to do otherwise (e.g. your boss demands .xls format), it's always best to write data frames to disk in .csv format. .csv is closest thing to a universal format for rectangular datasets. One exception is: if your dataset is very large (anything above ~ half a gig), it makes sense to save it in a compressed format such as `.rda`/`.RData`, so that you can load it quickly in the future. 
+
+```{r}
+# write as .csv (the default strategy)
+write.csv(mtcars_clean, file="mtcars_clean.csv", row.names=FALSE)
+
+# ...
+
+# then read it back in later
+mtcars_csv <- read.csv("mtcars_clean.csv")
+rm(mtcars_csv)
+```
+
+**exercise**: try writing and then reading in `mtcars_clean`, once with `row.names=FALSE`, and once without it. What's the difference? Why might we want to specify `row.names=FALSE`?
+
+```{r}
+# write as .rda (a compressed R data file -- can include multiple objects)
+save(mtcars_clean, file="mtcars_clean.rda")
+
+# ...
+
+# then we could use load() to read it back in later
+# load("mtcars_clean.rda")
+```
+
+**note**: sometimes it's useful to save a "snapshot" of whatever you're working on, so that you can shut things down and then come back later and start where you left off. You can save your entire R workspace by using `save.image(file="my/desired/location/my_desired_filename.RData")`, and then bring it back up with `load()`. I prefer not to use `load()` in the middle of a session though, so we won't use it here. 
+
+```{r}
+# we can save a dataset in stata format
+write_dta(mtcars_clean, path="mtcars_stata.dta", version=14)
+
+# ...
+
+# and then read it back in later
+mtcars_stata <- read_dta("mtcars_stata.dta")
+```
+
+Aaaand finally, for our old friend excel, we'll look at the `rio::` package (for "R, i/o"). 
+
+
+
+Check out [the vignette](https://cran.r-project.org/web/packages/rio/vignettes/rio.html) for the `rio::` package -- you'll see examples of how you can read and save datasets in various formats, and how you can convert between different filetypes too. Here's an example from the vignette, which I imagine could be quite useful for many of us working at NORC. (check out the output file in excel!)
+
+```{r}
+# you'll get a message w instructions for installing some suggested packages -- 
+# i recommend following them 
+library("rio")
+
+# export to sheets of an Excel workbook
+export(list(mtcars = mtcars, iris = iris), "multi.xlsx")
+```
 
 
 <br>
@@ -281,57 +519,45 @@ management and data import. Look at the [R Studio IDE cheatsheet](LINK) on the c
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
-when starting out, doesnt usually go right right away...
+When you're starting out, reading in an external dataset doesnt always go like you want it to...Sometimes there's invisible half-empty columns created by excel, and that breaks the "all columns must have the same length" rule for data frames. Other times, the dataset will use a weird or confusing quoting convention or non-standard separator, and that'll cause problems. **This can be extremely frustrating**, but with practice you'll learn that there's really only a few possible sources of problems for reading in plain-text data (I can't speak for other formats, unfortunately). 
 
-important
+**note**: I'd consider the "standard" separators to be `,` (comma), `\t` (tab), and maybe `|` (pipe). Sometimes you'll see a delimited plain-text files with extensions other than ".csv" -- some examples are ".txt" (for "text") and ".tsv" (for "tab-separated values"). These can be read in with `read.table()`, which is actually what's happening under the hood anyway when you use `read.csv()`. 
 
-- errors and warnings
+This kind of stuff really has to be learned on a case-by-case basis. So here's a list of tips for problems reading in data files:
+
+#### common pitfalls + sources of errors/warnings
+
+- comma versus tab separator (specify in `sep=` argument of `read.csv()`)
+- misalignment of headers + values (check out `fill=` and `skip=` arguments) 
+- empty cells (again, `fill=` and `skip=`)
+- quoting + separators inside quoted vals (check out `quote=` and `sep=`)
+- weird comment characters (check out `comment.char=`)
+- directories! (you can use `"../"` to go up a dir level, and `"folder/"` to look into a folder, all in the main argument of the read call -- for example the following looks up two levels, then looks into a folder called "data/" to get the file: `read.csv("../../data/boosh.csv")`)
+
+#### the most dangerous error!
+The most dangerous error is the one that R couldn't possibly tell you about, because it's only an "error" in the sense that there was something wrong in the file you're reading in. The two most common cases of this in my experience are: 
+
+**LEADING/TRAILING SPACES IN VALUES AND/OR COLUMN NAMES!**
+
+  - `"dog"` vs `"dog "` vs `" dog"` vs `" dog "` all seem the same to humans (*especially* if you're using Excel), but they are **not** the same to a computer.
+  - thus it's best practice to completely eliminate spaces from column names. This has the added benefit that if you do this, you can use the convenient dollar-sign syntax for column selection (**exercise**: what happens if you use `$` on a column that has a space in the name? what about one with a special character?)
+
+```{r include=FALSE}
+names(mtcars_clean) <- c("waowwie! @ # <o_0> ", names(mtcars_clean)[1:(ncol(mtcars_clean)-1)])
+```
 
 
-#### common pitfalls
+**NON-STANDARD SYMBOLS FOR "MISSINGS" OR COMMENT CHARACTERS**
 
-- comma/tab separator (make an exx)
-- misalignment of headers + vals 
-- empty cells (esp in excel)
-- quoting + separators inside quoted vals
-- SPACES!
-- directories!
-
+  - sometimes data will have missing values coded as `99` or `-1` or something else. Since there's inconsistency across software, this can lead to the most dangerous kind of error -- **the silent error**.
+  - check what the comment character is of the software that created the dataset, it could be that there's comments in the data file, but R is trying to read them as rows. If you know this to be the case, ask yourself how you should specify `comment.char`, `na.strings`, and `skip` arguments in the `read.*()` command you use.
 
 #### useful troubleshooting strategies
 
-- look in a text editor
-- use readxl + haven
-- use rstudio p+c interface (*but* save code!)
-- open in excel and (re-)export
-
-
-<br>
-
-### 5. Data cleaning ("munging", "pre-processing", "screening", etc.)
-
-<hr style="height:1px; background-color:lightgray; color:lightgray;">
-
-
-#### transforming columns
-
-- code missing vals correctly
-
-#### adding/removing/renaming/rearranging columns
-
-- eliminate spaces from colnames (for dollar sign usage)
-- "dog" vs "dog " vs " dog" vs " dog "
-
-
-#### merging data from another data frame
-
-intro to dplyr 
-
-- mention regex
-- mention pipe-chaining
-- mention tidy data
-
-
+- look at the data file in a plain text editor (**I'd highly recommend getting Sublime Text** -- you can use the free version forever, it'll just ask you if you want to buy a license every once in a while)
+- read the documentation of `readxl::`, `haven::`, and `rio::`
+- use the R Studio point-and-click data import interface (*but* save the code after!)
+- re-open file in excel and (re-)export, this time specifying the options you want when you save as .csv.
 
 
 <br>
@@ -340,13 +566,38 @@ intro to dplyr
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
-- aggregation  
-- subsetting
-- grouping vars (dplyr)
-- summary statistics
-- contingency tables
-- diagnostic plots
-- modeling...
+Let's clean up the workspace then read in `mtcars_clean` again. 
+
+```{r}
+# read it in
+dat <- read.csv("mtcars_clean.csv")
+
+knitr::kable(head(dat, 5))
+```
+
+Here's a bunch of code that does a bunch of useful stuff. If you understand how this code works, you'll be able to apply it to your own unique situation.
+
+```{r}
+# now manipulate it in a bunch of ways
+
+# some ideas to start with?
+#   - aggregation  
+#   - subsetting
+#   - grouping vars (dplyr)
+#   - summary statistics
+#   - contingency tables
+#   - diagnostic plots
+#   - modeling...
+
+
+# [FILL IN LIVE DURING CLASS]
+# [FILL IN LIVE DURING CLASS]
+# [FILL IN LIVE DURING CLASS]
+
+```
+
+
+
 
 
 <br>
@@ -355,14 +606,53 @@ intro to dplyr
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
-- reshaping data
-- visualizing data with base graphics and `ggplot2::`
+- we look through everyone's datasets and discuss any issues that came up
+- wide- vs long-format data, reshaping data, the concept of "tidy data"
+- visualizing a dataset as a class (type-along)
+- visualizing your own data with base graphics and `ggplot2::`
 
 
 
 <br>
 
-### Appendix: writing functions {#appendix}
+### Appendix: the forward pipe operator `%>%` from `magrittr::` {#appendix_pipe}
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+Most R commands consist of a function applied to one or more arguments (potentially assigning the result to a variable). In the case where there's only one argument, it can be nice to use the forward pipe operator `%>%`. This is part of a family of similar operators defined in the `magrittr::` package, and is made use of heavily in modern `dplyr::` data processing workflows. 
+
+It's not as scary as it looks: `x %>% f()` is equivalent to `f(x)`. What's nice about this is that you can make "pipe-chains" when you want to apply a sequence of functions to a single object (`dplyr::`'s functions are designed for exactly this). Forward pipe-chains have the following shape:
+
+> `x %>% f() %>% g() %>% h() %>% z()`
+
+Which is equivalent to:
+
+> `z(h(g(f(x))))`, 
+
+except that the first one is easier to read. Assuming we want to save the result of `x` applied to `f()` through `z()`, we can just assign the whole chain to a variable. Here's a little example. 
+
+```{r}
+chars <- sample(letters, size=20, replace=TRUE)
+
+# we could write
+numUnique <- length(unique(chars))
+numUnique
+```
+
+```{r}
+# or equivalently:
+numUnique <- chars %>% unique() %>% length()
+numUnique
+```
+
+
+After reading this, go back and look at the `mtcars` pipe-chain above. Make any more sense now? The more you use pipes, the more natural it will feel, and the weirder it will feel to use nested function calls like `length(unique())`. 
+
+
+
+<br>
+
+### Appendix: writing functions {#appendix_func}
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
@@ -382,8 +672,7 @@ as.character(thingie)
 ```
 
 Imagine we had several objects like `thingie` and wanted to apply `as.character()` 
-to all of them. We could do it manually, or write a function and have it do the 
-work for us:
+to each of them. We could type out `as.character()` each time, or we could write a function that basically just abbreviates it. That'll save us keystrokes.
 
 ```{r}
 # a quick function to save us keystrokes
@@ -405,6 +694,9 @@ lu <- function(x){
 lu(thingie)
 ```
 
+**exercise**: rewrite the body of the `lu()` function as a forward pipe-chain with `%>%` (also, it's good practice to put `require("magrittr")` or `require("dplyr")` at the beginning of the function body since we'll need one of those packages to use the pipe).
+
+So what can writing functions do for you? 
 Here's a function that does some useful stuff. Think of it as breaking data 
 analysis or summary into two pieces: when you define your main function, you're 
 defining **the data analysis routine**. When you actually apply the function to 
@@ -414,24 +706,33 @@ your data, you're **executing the analysis**.
 ```{r}
 # define analysis routine
 custom_summary <- function(df, group_col, measure_col){
+  require("dplyr"); require("ggplot2")
+  
   # make a lil df with just the relevant cols
   df <- data.frame(group_col=df[[group_col]], measure_col=df[[measure_col]])
 
-  # want to return the mean and sd, and plot measure_col by group_col
-  require("dplyr")
+  # make a table of the mean and sd of measure_col for each value of group_col
   out_table <- df %>% group_by(group_col) %>% summarize(
     avg = mean(measure_col, na.rm=TRUE),
-    sd  = sd(measure_col, na.rm=TRUE)
+    sd  = sd(measure_col, na.rm=TRUE)     # ... more calculations
   ) %>% data.frame()
   
-  require("ggplot2")
+  # make a plot the avg of measure_col for each value of group_col
   out_plot <- ggplot(out_table, aes(x=group_col, y=avg)) +
     geom_bar(stat="identity") +
     geom_errorbar(aes(ymin=avg-sd, ymax=avg+sd, width=.25)) +
     labs(x=group_col, y=paste0("mean of ", measure_col, ", +/- sd"), 
          title=paste0("average ", measure_col, " by ", group_col))
   
-  return(list(tab=out_table, plot=out_plot))
+  # now combine the table (out_table) and the plot (out_plot) 
+  # we're using a list here because these objects are very different!
+  # we can also use the $ syntax on the output, which is why we give 
+  # both of the slots in 'out' a name ('table' and 'plot')
+  out <- list(table=out_table, plot=out_plot)
+  
+  # then return 'out' as the value of the function
+  # (if you don't specify return value, the default is the final printed value)
+  return(out)
 }
 ```
 
@@ -448,7 +749,7 @@ when we defined `custom_summary()`:
 
 ```{r}
 # print a table
-knitr::kable(mpg_by_gear$tab)
+knitr::kable(mpg_by_gear$table)
 ```
 
 Now the plot: 
@@ -504,6 +805,16 @@ h3 {
   font-size: 24px;
   color: green;
   font-weight: bold;
+}
+
+h4 { 
+  font-size: 20px;
+  color: green;
+  padding-top: 30px;
+}
+
+li {
+  padding: 3px;
 }
 
 code {
