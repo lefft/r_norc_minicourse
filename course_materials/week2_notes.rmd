@@ -338,8 +338,9 @@ election_dictionary <- data.frame(
   colinfo  = election_data_colinfo
 )
 
-# check out the first 20 -- not bad, eh?
-head(election_dictionary, n=20)
+# check out the first 10 -- not bad, eh? 
+# (reduce the zoom in R Studio to have the columns display next to each other)
+head(election_dictionary, n=10)
 ```
 
 **note**: here we're using a `for`-loop, which is the first **control structure** we've seen. Depending on class interest, we can go deeper into looping next week. It's an important topic, but you can do a lot of stuff in R 
@@ -347,11 +348,11 @@ without ever writing loops.
 
 **exercise**: google "for-loops vs apply family in R", read up about the function `lapply()`, and then re-write the loop above as a vectorized "loop" with `sapply()` or `lapply()`. 
 
-**exercise (for those interested in SPSS)**: find an SPSS dataset and read it in. 
+**exercise (for those interested in SPSS)**: find an SPSS dataset and read it in using `read_spss()` from the `haven::` package. 
 
 #### 3.4 simulating data
 
-If we don't have actual data on a topic but still want to explore it quantitatively, a good option is to use randomly (but systematically!) **simulate** some data. Here's an example:
+If we don't have actual data on a topic but still want to explore it quantitatively, a good option is to randomly (but systematically!) **simulate** some data. Here's an example:
 
 ```{r}
 # what's the probability that two of the people here have the same bday?!
@@ -373,7 +374,7 @@ length(unique(birthday$bday)) < nrow(birthday)
 
 **exercise**: whether two people have the same birthday will vary each time 
 you run the above, because we're randomly sampling from days. Conceptually (i.e. without writing any code), how would we answer the question of how likely it is 
-for two people of the 11 to share a birthday? Now, practically (i.e. by writing some code), how likely is it? (*hint*: use a `for`-loop -- ask me if you're interested)
+for two people of the 11 to share a birthday? Now, practically (i.e. by writing some code), how likely is it? Partial solution below. (*hint*: use a `for`-loop -- ask me if you're interested)
 
 **exercise**: make a plot that represents the change in probability of two 
 people having the same birthday as the size of the class increases. 
@@ -396,6 +397,10 @@ sum(container==TRUE) / length(container)
 ggplot2::qplot(container)
 ```
 
+**exercise**: using the code block above, estimate how many people it takes to reach a 50% chance of two people having the same birthday (*hint*: try different values of `numppl`)
+
+**exercise**: run the simulation a few times with `numsims <- 100`. Then do the same with `numsims <- 10000`. What's the effect of increasing the number of simulations? 
+
 
 #### 3.5 cleaning up a dataset and then writing (saving) it
 
@@ -417,7 +422,7 @@ These vectors have all the info necessary to encode manufacturer region for the 
 Make the four `mfr_*` vectors into a single object...But how should we do *that*? A natural instinct might be to make each of them a column of a data frame...
 
 ```{r}
-# but if we try this we'll get an error -- why?
+# but if we try this we'll get an error -- **exercise**: why?
 # car_regions <- data.frame(mfr_NA, mfr_asia, mfr_usa, mfr_euro)
 ```
 
@@ -442,8 +447,10 @@ car_regions <- data.frame(
 
 **exercise**: what's another way we could have associated manufacturers with regions? (*hint*: it's reminiscent of what we do with `gear_lookup` below)
 
+**exercise**: how might we merge the manufacturer info in `car_regions` with the `mtcars` dataset? (*hint*: add a column to `mtcars` that has the same range of values as `car_regions$make`, then use a join operation from `dplyr::` -- see the data wrangling cheatsheet for possible join operations. Here you'll have to create the new  column by just looking at the data and saying things like, okay, a row with `"Mazda RX4"` should have the value `"Mazda"` in the new column.)
 
-"number of gears" (`mtcars$gear`) is technically a number, but practically speaking it's kind of like a category (albeit ordered): there's only a few possible values, and there's no reason to think the difference between 3 and 4 gears is "comparable" to the difference between 4 and 5 gears. To avoid accidentally computing on `mtcars$gear` as if it were numeric, let's recode it as character. Here is a nice, concise way to do this: 
+
+Moving on: "number of gears" (`mtcars$gear`) is technically a number, but practically speaking it's kind of like a category (albeit ordered): there's only a few possible values, and there's no reason to think the difference between 3 and 4 gears is "comparable" to the difference between 4 and 5 gears. To avoid accidentally computing on `mtcars$gear` as if it were numeric, let's recode it as character. Here is a nice, concise way to do this: 
 
 ```{r}
 # "number of gears" is a category but currently coded as numeric
@@ -470,7 +477,7 @@ The following block of code illustrates the utility of combining `dplyr::` data 
 # the variable 'mtcars_clean' will hold the result of piping mtcars
 # into the chain mutate() %>% select() %>% rename()
 mtcars_clean <- mtcars %>% 
-  mutate(
+  mutate(                                             # transform some colums:
     car       = row.names(mtcars),                        # create 'car' column
     qsec      = round(qsec),                              # round qm time
     mpg       = round(mpg),                               # round mpg
@@ -478,11 +485,11 @@ mtcars_clean <- mtcars %>%
     am        = ifelse(am==0, "manual", "auto"),          # code as char
     musclecar = cyl >= 6 & hp > 200 & qsec < 16           # define a muscle car
   ) %>% 
-  select(
+  select(                                             # select cols to keep 
     car, am, gear, musclecar, cyl, 
     hp, qsec, gear, wt, mpg
   ) %>% 
-  rename(
+  rename(                                             # make nicer colnames
     horsepower=hp, cylinders=cyl, qm_time=qsec, 
     num_gears=gear, lbs=wt, transmission=am
   )
@@ -491,16 +498,18 @@ mtcars_clean <- mtcars %>%
 Now the dataset is cleaned up to our liking and now we want to use the cleaned up vesion as our official version of record (or share it with ppl). We'll save it 
 in a few different formats as a demo. 
 
-**note**: Unless you have a very good reason to do otherwise (e.g. your boss demands .xls format), it's always best to write data frames to disk in .csv format. .csv is closest thing to a universal format for rectangular datasets. One exception is: if your dataset is very large (anything above ~ half a gig), it makes sense to save it in a compressed format such as `.rda`/`.RData`, so that you can load it quickly in the future. 
+**note**: Unless you have a very good reason to do otherwise (e.g. your boss demands .xls format), it's always best to write data frames to disk in .csv format. .csv is the closest thing to a universal format for rectangular datasets. One exception is: if your dataset is very large (anything above ~ half a gig), it makes sense to save it in a compressed format such as `.rda`/`.RData`, so that you can load it quickly in the future. 
 
 ```{r}
 # write as .csv (the default strategy)
-write.csv(mtcars_clean, file="mtcars_clean.csv", row.names=FALSE)
+# note that datasets we create get filed in output/, 
+# and datasets we get from elsewhere get filed in datasets/
+write.csv(mtcars_clean, file="output/mtcars_clean.csv", row.names=FALSE)
 
 # ...
 
 # then read it back in later
-mtcars_csv <- read.csv("mtcars_clean.csv")
+mtcars_csv <- read.csv("output/mtcars_clean.csv")
 rm(mtcars_csv)
 ```
 
@@ -508,7 +517,7 @@ rm(mtcars_csv)
 
 ```{r}
 # write as .rda (a compressed R data file -- can include multiple objects)
-save(mtcars_clean, file="mtcars_clean.rda")
+save(mtcars_clean, file="output/mtcars_clean.rda")
 
 # ...
 
@@ -520,15 +529,15 @@ save(mtcars_clean, file="mtcars_clean.rda")
 
 ```{r}
 # we can save a dataset in stata format
-write_dta(mtcars_clean, path="mtcars_stata.dta", version=14)
+write_dta(mtcars_clean, path="output/mtcars_stata.dta", version=14)
 
 # ...
 
 # and then read it back in later
-mtcars_stata <- read_dta("mtcars_stata.dta")
+mtcars_stata <- read_dta("output/mtcars_stata.dta")
 ```
 
-Aaaand finally, for our old friend excel, we'll look at the `rio::` package (for "R, i/o"). 
+Aaaand finally, for our old friend excel, we'll look at the `rio::` package (for "R, i/o", which in turn is for "R, in/out"). 
 
 
 
@@ -540,7 +549,7 @@ Check out [the vignette](https://cran.r-project.org/web/packages/rio/vignettes/r
 library("rio")
 
 # export to sheets of an Excel workbook
-export(list(mtcars = mtcars, iris = iris), "multi.xlsx")
+export(list(mtcars = mtcars, iris = iris), "output/multi.xlsx")
 ```
 
 
@@ -601,33 +610,27 @@ Let's clean up the workspace then read in `mtcars_clean` again.
 
 ```{r}
 # read it in
-dat <- read.csv("mtcars_clean.csv")
+dat <- read.csv("output/mtcars_clean.csv")
 
 knitr::kable(head(dat, 5))
 ```
 
-Here's a bunch of code that does a bunch of useful stuff. If you understand how this code works, you'll be able to apply it to your own unique situation.
+Here is some starter code that does some useful stuff. If you understand how this code works, you'll be able to apply it to your own unique situation.
 
-```{r}
+```{r results='markup'}
 # now manipulate it in a bunch of ways
 
-# some ideas to start with?
-#   - aggregation  
-#   - subsetting
-#   - grouping vars (dplyr)
-#   - summary statistics
-#   - contingency tables
-#   - diagnostic plots
-#   - modeling...
+# aggregation (group-wise mean, sd, etc.)
+aggregate(mpg ~ cylinders + num_gears, data=dat, FUN="mean")
 
+# subsetting (these all do the same thing)
+filter(dat, musclecar==TRUE) # filter() is from dplyr::
+dat[dat$musclecar==TRUE, ]   
+subset(dat, musclecar==TRUE) # subset is a base function
 
-# [FILL IN LIVE DURING CLASS]
-# [FILL IN LIVE DURING CLASS]
-# [FILL IN LIVE DURING CLASS]
-
+# contingency tables
+table(dat$transmission, dat$num_gears)
 ```
-
-
 
 
 
