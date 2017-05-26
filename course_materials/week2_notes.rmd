@@ -593,7 +593,7 @@ names(mtcars_clean) <- c("waowwie! @ # <o_0> ", names(mtcars_clean)[1:(ncol(mtca
 
 <br>
 
-### 6. Once everything's how we want it to be...
+### 5. Once everything's how we want it to be...
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
@@ -633,7 +633,7 @@ Here's a bunch of code that does a bunch of useful stuff. If you understand how 
 
 <br>
 
-### 7. Next Week
+### Next Week
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
@@ -697,13 +697,31 @@ A simple example: often we have something that's coded as a factor or a number,
 and we'd rather have it coded as a character. 
 
 ```{r}
-thingie <- factor(rep(1:3, 5), labels=c("categoryA", "categoryB", "categoryC"))
+thing1 <- factor(rep(1:3, 5), labels=c("categoryA", "categoryB", "categoryC"))
 
-as.character(thingie)
+as.character(thing1)
 ```
 
-Imagine we had several objects like `thingie` and wanted to apply `as.character()` 
-to each of them. We could type out `as.character()` each time, or we could write a function that basically just abbreviates it. That'll save us keystrokes.
+Imagine we had several objects like `thing1` and wanted to apply `as.character()` 
+to each of them (e.g. because they all have the same values, but the underlying factor values are a non-uniform mess). 
+
+```{r}
+thing1 <- factor(rep(1:3, 5), labels=c("catA", "catB", "catC"))
+thing2 <- factor(rep(4:6, 5), labels=c("catA", "catB", "catC"))
+thing3 <- factor(rep(3:5, 5), labels=c("catA", "catB", "catC"))
+thing4 <- factor(rep(2:4, 5), labels=c("catA", "catB", "catC"))
+thing5 <- factor(rep(3:1, 5), labels=c("catA", "catB", "catC"))
+```
+
+We could type out `as.character()` each time: 
+
+```{r eval=FALSE}
+thing1 <- as.character(thing1)
+thing2 <- as.character(thing2)
+# ...
+```
+
+Or we could write a function that basically just abbreviates it. That'll save us keystrokes.
 
 ```{r}
 # a quick function to save us keystrokes
@@ -711,7 +729,9 @@ ac <- function(x){
   as.character(x)
 }
 
-ac(thingie)
+thing1 <- ac(thing1)
+thing2 <- ac(thing2)
+# ...
 ```
 
 Another example:
@@ -722,7 +742,9 @@ lu <- function(x){
   length(unique(x))
 }
 
-lu(thingie)
+lu(thing3)
+lu(thing4)
+lu(thing5)
 ```
 
 **exercise**: rewrite the body of the `lu()` function as a forward pipe-chain with `%>%` (also, it's good practice to put `require("magrittr")` or `require("dplyr")` at the beginning of the function body since we'll need one of those packages to use the pipe).
