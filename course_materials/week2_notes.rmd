@@ -495,6 +495,28 @@ mtcars_clean <- mtcars %>%
   )
 ```
 
+**exercise**: rewrite the block above, but instead of using the `dplyr::` functions `mutate()` (which re-defines a column), `select()` (which specifies which columns to keep), and `rename()` (which renames columns), use base functions. (*hint*: below is a partial solution)
+
+```{r eval=FALSE}
+# **this block is just a hint so it doesn't get run**
+mtcars_clean <- mtcars
+mtcars_clean$car <- row.names(mtcars_clean)
+mtcars_clean$qsec <- round(mtcars_clean$qsec)
+# <-- transform the rest of the columns here
+# ... 
+
+# <-- select cols to keep here
+# ...
+
+names(mtcars_clean) <- c("...") # <-- fill in desired  names
+# ...
+
+
+```
+
+
+Okay, back to saving the dataset. 
+
 Now the dataset is cleaned up to our liking and now we want to use the cleaned up vesion as our official version of record (or share it with ppl). We'll save it 
 in a few different formats as a demo. 
 
