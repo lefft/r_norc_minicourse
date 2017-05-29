@@ -11,13 +11,11 @@ knitr::opts_chunk$set(results="hold")
 
 <hr style="height:2px; background-color: gray; color:gray;">
 
-Same format as last week: exercises and additional discussion interleaved throughout. But this time, I'd recommend starting a blank R script and typing your responses into it. That way if you want feedback, you can just send me the `.R` file with your solutions (where applicable), including commented lines that explain what you're doing and why you're doing it (example [here](LINK TO SCREENSHOT OF AN EXAMPLE)). I'll send you back a file that has all of your original code, plus some comments and code from me. 
+Same format as last week: exercises and additional discussion interleaved throughout. But this time, I'd recommend starting a blank R script and typing your responses into it. That way if you want feedback, you can just send me the `.R` file with your solutions (where applicable), including commented lines that explain what you're doing and why you're doing it (example [here](img/week2_homework-ex.png)). I'll send you back a file that has all of your original code, plus some comments and code from me. (**note**: another good way to share code would be with an R-Fiddle -- see [the note on R-Fiddle](http://lefft.xyz/r_minicourse/index.html#rfiddle) on the course page for instructions)
 
 Also for next week, I want everyone (who's so compelled) to identify a dataset 
 they'd be interested in exploring, and save it to the directory you're storing 
-your files for this class in. It's definitely best if the data is in .csv format, 
-but it doesn't have to be. Before the regular notes, here's a quick guide on why 
-and how to find a dataset of interest. 
+your files for this class in. It's definitely best if the data is in .csv format, but it doesn't have to be. Before the regular notes, section 0 gives a quick guide on why and how to find a dataset of interest. 
 
 <br>
 
@@ -44,7 +42,7 @@ time for twitter :p), so a good dataset might be something work-related that
 satisfies (iii) in virtue of you being interested in finishing your work faster 
 and consequently having more free time. 
 
-Fortunately, the internet has many, many datasets to offer. For a shocking array 
+Fortunately, the internet has many, many, *many* datasets to offer. For a shocking array 
 of topics, you can google "datasets on X" and find interesting spreadsheet-like 
 sets of numbers that can be read into R and manipulated just like `mtcars` or `iris` (in case you weren't in class: these datasets are introduced in section 1 below). 
 
@@ -59,7 +57,7 @@ Here's some genres you might consider:
     + your personal budget!
 * a set of survey responses your team has collected as part of a project
 * a word list with fields for frequency, collocation, part-of-speech, etc. 
-* some government data about labor, income, health, healthcare, etc. -- here's links to [the Census Bureau](LINK) and [the Bureau of Labor Statistics](LINK) for inspiration
+* some government data about labor, income, health, healthcare, etc. -- here's links to the 'data' pages of [the Census Bureau](https://www.census.gov/data.html) and [the Bureau of Labor Statistics](https://www.bls.gov/data/) for inspiration
 <!-- end of list -->
 
 Here's some questions to keep in mind when selecting a dataset:
@@ -141,7 +139,7 @@ tim_mtcars$make_model <- rownames(tim_mtcars)
 rownames(tim_mtcars) <- NULL
 ```
 
-**note**: we can combine assignment and `$` with `NULL` to remove a column from a data frame. 
+**quick exercise**: combine assignment and `$` with `NULL` to remove a column from a data frame. 
 
 Do we have any missing values?
 
@@ -229,9 +227,9 @@ search()
 ```
 
 **note**: R Studio has lots of point-and-click tools to deal with package 
-management and data import. Look at the [R Studio IDE cheatsheet](LINK) on the course page for details. 
+management and data import. Look at the [R Studio IDE cheatsheet](http://lefft.xyz/r_minicourse/#cheatsheets) on the course page for details. 
 
-**note**: Check out [CRAN](LINK TO CRAN) to browse tons of cool R packages, which exist for almost any imaginable purpose! 
+**note**: Check out "contributed packages" on [CRAN](https://cran.r-project.org/) to browse tons of cool R packages, which exist for almost any imaginable purpose! 
 
 <br>
 
@@ -253,12 +251,12 @@ words <- read.csv(link)
 head(words, n=5)
 ```
 
-**exercise**: plot frequency against rank in the `words` dataset. What does the pattern suggest? (*after* you do this, google "Zipf's Law")
+**exercise**: plot frequency against rank in the `words` dataset. What does the pattern suggest? *hint*: here are links to R-Cookbook tutorials on [scatterplots with `ggplot2::`](http://www.cookbook-r.com/Graphs/Scatterplots_(ggplot2)/) and [scatterplots with base graphics](http://www.cookbook-r.com/Graphs/Scatterplot/). (**fun bonus thing**: *after* you plot frequency against rank, google "Zipf's Law")
 
 
 #### 3.2 read from a local file
 
-Here's a government education dataset I found [here](https://inventory.data.gov/dataset/032e19b4-5a90-41dc-83ff-6e4cd234f565/resource/38625c3d-5388-4c16-a30f-d105432553a4).
+Here's a government education dataset I found [here](https://inventory.data.gov/dataset/032e19b4-5a90-41dc-83ff-6e4cd234f565/resource/38625c3d-5388-4c16-a30f-d105432553a4). I'd recommend going through the interface to download the file for practice dealing with web-based data acquisition, but no need -- [here](datasets/university/postscndryunivsrvy2013dirinfo.csv)'s a link you can use directly. 
 
 ```{r}
 # i saved it to a local folder, so I can read it in like this
@@ -270,7 +268,7 @@ names(edu_data)
 
 #### 3.3 reading different file types
 
-Check out the `readxl::` package, and specifically try `readxl_example()` to see some examples. See [this vignette](https://cran.r-project.org/web/packages/readxl/vignettes/cell-and-column-types.html) for some examples of reading excel files in R. 
+Check out the `readxl::` package, and specifically try `readxl_example()` to see some examples. See [this vignette](https://cran.r-project.org/web/packages/readxl/vignettes/cell-and-column-types.html) for some examples of reading excel files in R. (here's a link to the data read in as [crime1](datasets/crime/Crime2016EXCEL/noncampusarrest131415.xls) and [crime2](datasets/crime/Crime2016EXCEL/noncampuscrime131415.xls))
 
 
 ```{r results='markup'}
@@ -300,12 +298,12 @@ crime <- left_join(crime1, crime2, by=c("UNITID_P", "INSTNM"))
 # before joining them (bc we've probably duplicated some matching columns)
 ```
 
-**exercise**: look at the [data wrangling cheatsheet](LINK), and determine 
+**exercise**: look at the [data wrangling cheatsheet](http://lefft.xyz/r_minicourse/#cheatsheets), and determine 
 whether `left_join()` was the best strategy to use here, given the crime data. 
 How else could we have joined the datasets? What would make a left join *not* 
 give us what we want?
 
-Here's [a link](http://www.stata.com/links/examples-and-datasets/) to some datasets in Stata format.
+Here's [a link](http://www.stata.com/links/examples-and-datasets/) to some datasets in Stata format. (and a link to the one read in as [election_data](datasets/election/bes_f2f_original_v3.0.dta))
 ```{r}
 # an example of reading a stata dta file (note we need the haven:: package)
 library("haven")
@@ -467,7 +465,7 @@ mtcars$gear <- names(gear_lookup[match(mtcars$gear, gear_lookup)])
 
 Okay, now let's do some other stuff to the data and then save the cleaned up version. 
 
-The following block of code illustrates the utility of combining `dplyr::` data manipulation operations with the forward pipe operator `%>%` from `magrittr::`. 
+The following block of code illustrates the utility of combining `dplyr::` data manipulation operations with the forward pipe operator `%>%` from `magrittr::`. (below that is an exercise with some starter code to re-write these operations in base-R style -- both dplyr/magrittr wrangling style and base wrangling style are totally legit and you should be familiar with both)
 
 **note**: I don't expect that you guys will be able to read all of this next block just yet. With some practice, you will. And once you see exactly what's going on,  then you'll be well on your way to writing nice, pretty, precise, concise, etc. data processing workflows. 
 
@@ -848,7 +846,7 @@ mpg_by_cyl <- custom_summary(df=mtcars, group_col="cyl", measure_col="mpg")
 
 **exercise**: use our function to summarize mpg by cyl and a couple other variables. How could we apply `custom_summary()` to `iris` to understand some aspect of that dataset?
 
-**exercise (caution -- this one might not be worth the time)**: why does the plot have "gear" on the axis title and x-axis label, but the table ends up with "group_col"? Both were specified with `group_col` in the definition of `custom_summary()`, so why don't they display the same? (*hint*: read [the chapter on non-standard evaluation](LINK) from Wickham's *Advanced R*)
+**exercise (caution -- this one might not be worth the time)**: why does the plot have "gear" on the axis title and x-axis label, but the table ends up with "group_col"? Both were specified with `group_col` in the definition of `custom_summary()`, so why don't they display the same? (*hint*: read [the chapter on non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) from Wickham's *Advanced R* (the whole thing's available for free online))
 
 
 <hr><hr>
