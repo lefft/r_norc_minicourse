@@ -1,4 +1,6 @@
 
+link to hadley slides on ggplot2:
+	http://ggplot2.org/resources/2007-vanderbilt.pdf
 
 topics to hit: 
 
