@@ -7,4 +7,5 @@ topics to hit:
 	- recycling elements of a vector in subsetting
 	- for-loops and if else control flow
 	- how to ask a stack overflow question
-	- 
+	- "dialects" of R in modern usage
+	- DSL's (formulas, dplyr, ggplot2, etc.)

@@ -1,4 +1,38 @@
 
+
+###### june 1 additions (not on site yet)
+
+- [official R manual](https://cran.r-project.org/doc/manuals/R-intro.pdf) -- by the benevolent overlords of the R Core Team
+- [rseek.org](http://rseek.org/) -- a custom R-centric google-based search engine
+- [quick R](http://www.statmethods.net/) -- tons of super useful resources. here's the author's description of the site: "*I created this website for both current R users, and experienced users of other statistical packages (e.g., SAS, SPSS, Stata) who would like to transition to R. My goal is to help you quickly access this language in your work.*"
+- [a note on the R learning curve](http://www.statmethods.net/about/learningcurve.html) -- the last sentence: "*[I]n the end, however, I believe that you will feel much more intimately in touch with your data and in control of your work. And it's fun!*"
+- [scatterplots in `ggplot2::`](https://www.youtube.com/watch?v=PVLB9cURhiA&feature=youtu.be)
+
+
+
+###### interactive online R courses (mixed-media)
+
+Bang for your buck, this might be the best approach to learning new R concepts once you have the very basics down (where *your buck* is understood as "your time," since most of them are free). [DataCamp](datacamp.com) is an excellent resource for interactive mini-courses aimed at teaching all kinds of data-science, data-analysis, data-* etc. concepts and techniques. The courses are (in my experience) very current, and are taught by trustworthy researchers or developers. All courses are taught either in R or in Python, so there's plenty to explore. Here's their [catalog of courses taught in R](https://www.datacamp.com/courses/tech:r) (the list often grows!). 
+
+Here is a handful of R courses on DataCamp that I'd *highly* recommend "taking". Everything's at your own pace. If you don't have a bunch of extra time laying around, the best strategy would be to start by working on a course for, say, ten or fifteen minutes every day (or one "lesson" a day). 
+
+- [intermediate R](https://www.datacamp.com/courses/intermediate-r), and a [follow-up course with practice activities](https://www.datacamp.com/courses/intermediate-r-practice) 
+- [writing functions in R](https://www.datacamp.com/courses/writing-functions-in-r) -- taught by [Hadley](http://hadley.nz/) and [Charlotte](http://cwick.co.nz/) Wickham
+- [data manipulation with `dplyr::`](https://www.datacamp.com/courses/dplyr-data-manipulation-r-tutorial) -- taught by Garrett Grolemund, co-author of [*R for Data Science*](http://r4ds.had.co.nz/)
+- data vizualization with `ggplot2::` -- [part 1](https://www.datacamp.com/courses/data-visualization-with-ggplot2-1), [part 2](https://www.datacamp.com/courses/data-visualization-with-ggplot2-2/), and [part 3](https://www.datacamp.com/courses/data-visualization-with-ggplot2-part-3)
+- [(web-based) swirl course](https://www.datacamp.com/community/open-courses/r-programming-with-swirl#gs.iCe9LZ4) -- this one starts more-or-less from scratch
+
+
+
+
+###### GSS analysis examples in R
+
+- [analyze the general social survey (gss) with r](http://www.asdfree.com/2012/10/analyze-general-social-survey-gss-with-r.html) -- a NORC-external look at wrangling with public GSS data in R
+- [Statistical inference with GSS data](https://rpubs.com/fsmontenegro/infstatgss), also [here](https://rpubs.com/hlo415/209688) and [here](https://rpubs.com/caiomiyashiro/gssStatInf) and [here](https://rpubs.com/tslumley/264497) and [here](https://rpubs.com/website/176941) -- **coursera final project examples**
+
+
+##### BELOW HERE IS ON SITE OR DECIDED NOT TO BE
+
 Here's a collection of useful or interesting links related to this course and scientific computing in general. If you find something cool, send it to me and I'll put it up! (if I think it's well-written and makes sense for the course trajectory)
 
 ###### online resources for learning R via playing with R

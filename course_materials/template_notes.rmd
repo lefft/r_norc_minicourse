@@ -1,5 +1,5 @@
 ---
-title: "R mini-course: week 3 notes"
+title: "R mini-course: week XXX notes"
 author: "timothy leffel  &nbsp;&nbsp;&nbsp;&nbsp; xxxXX/2017"
 output: html_document
 css: css/notes.css
@@ -19,6 +19,15 @@ knitr::opts_chunk$set(results="hold")
 
 - ...
 - ...
+
+
+<br>
+
+### 0. [SECTION 0 HEADER]
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+[NON-CODE/META INFO]
 
 
 <br>
@@ -48,6 +57,30 @@ knitr::opts_chunk$set(results="hold")
 
 
 [SECTION 3 CONTENT]
+
+
+<br>
+
+...
+
+<br>
+
+### x. [SECTION x HEADER]
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+
+[SECTION x CONTENT]
+
+
+
+<br>
+
+### Next Week {#nextweek}
+
+<hr style="height:1px; background-color:lightgray; color:lightgray;">
+
+[PREVIEW OF NEXT WEEK CONTENT]
 
 
 <br>
