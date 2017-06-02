@@ -8,7 +8,7 @@ css: css/notes.css
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, fig.align="center")
 ```
 
 <hr style="height:2px; background-color: gray; color:gray;">
@@ -30,60 +30,6 @@ knitr::opts_chunk$set(message=FALSE, warning=FALSE)
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
-We want to see if the wording of a question has an effect on how people (identified by an `id`) respond to it. The (categorical) grouping variable that determines what kind of wording they got is `form`, which takes the values 1 or 2 (which aren't categorical -- we'll recode them so that they are). 
-
-We have three questions with alternative wordings, which we'd like to investigate (manipulated between-subjects, across the levels of `form`). The questions of interest are:
-
-- `natcity` -- whether ...
-    + blah
-    + blah
-- `natrace` -- whether ...
-    + blah
-    + blah
-- `natfare` -- whether ...
-    + blah
-    + blah
-
-Important question: should we be measuring variation across each individual outcome, or can we consider each question an "item" that appears in two conditions (`form==1`, `form==2`)?
-
-Since the `form==2` questions for `nat*(y)` are all longer than their `form==1` counterpart, I'd say it makes sense to consider `form==2` an indication of *additional description*. Viewed this way, instead of having $n=2867$ observations of three different outcome variables, we now have $n=2867\times3=8601$ observations of a single outcome variable. But our outcome is spread across six columns...What'd be nice would be to have it instead as two columns: one indicating the question (i.e. `natcity` or `natrace` or `natfare`), and one indicating the response (i.e. `0`, `1`, `2`, `3`, `8`, or `9`). Since we already checked that `form` encodes wording type, we can safely just remove the `y` suffixes from the columns of interest. 
-
-How do we arrive at our target format? 
-
-There are many ways. Here's a natural one to implement: 
-
-1. expand each row into six separate rows of `ncol(dat16) - 6 + 2` columns apiece, where the final six columns are deleted and replaced by two new columns `item` and `response` such that for each set of six rows `i:(i+5)` (all of whose values in columns `1:(ncol(dat16)-6)` are identical to the original value in the unexpanded row `i`): 
-<!-- from which they were generated): -->
-    + `dat16$item[i:(i+5)]` is the length-six character vector consisting of the names of the columns we're chopping off (i.e. `c("natcity","natcityy","natrace","natracey","natfare","natfarey")`); and 
-    + `dat16$response[i:(i+5)]` contains the value of the chopped-off column with the name `dat16$item` specifies for that row.
-
-2. delete all rows $i$ for which `dat16$value[i] %in% c(0,9)` (OR WE USE `NA` ALREADY?!), since: 
-    + half of all the rows we generated in step 1. will have value `0`, since they didn't provide an answer to the corresponding `dat16$item` -- these aren't real data points; and
-    + we can't use the "no answers," for present purposes they are dead to us.
-
-Notice that now we've erased all the empty values, what we're left with is a dataset where `dat16$item` has one set of values for one level of `form`, and another set of distinct but corresponding values for the other level of `form`. But conceptually, the situation is that there's only three values of `dat16$item` -- not six -- and that `dat16$item` form tells us what kind of wording a particular subject got for the three items. This justifies identifying `*y` values in `dat16$item` with their corresponding `*` values. In other words, 
-
-3. we delete all the trailing `y`'s from the `dat16$item` column. 
-
-
-**note**: we shouldn't just delete all `y`'s, since `"natcityy"` has one that we don't want to chop off! 
-
-**exercise**: how would you chop off all `"y"`'s from the column? 
-
-**exercise**: what if anything could or would go wrong if we just chopped off all the `"y"`'s?
-
-Now our data is (are?!) *fucking beautiful* and we're ready to start exploring it (although in the colloquial sense I'd say we've already explored it quite a bit!).
-
-**note**: the steps we took above were motivated not just by intuition, but also by the concept of "tidy data," championed by Hadley Wickham et al. If you're interested, I'd **highly** recommend reading [this excellent paper](LINK), which is kind of a manifesto for a certain kind of "tidiness" through all phases of a data-related endeavor. 
-
-
-
-We also want to see if demographic variables modulate the effect of wording on response. The demographic variables we have are: 
-
-- `sex`
-- `age`
-
-These are all pretty self explanatory as far as what they represent goes, but other than `age` we don't really know the correspondence between the numeric codes and the real-world values they represent. To make the correspondence visible, we'll recode each of them to values we can look at and immediately understand.
 
 
 
@@ -135,24 +81,77 @@ Question: is it important *for our purposes* to distinguish between "refused" an
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
+We want to see if the wording of a question has an effect on how people (identified by an `id`) respond to it. The (categorical) grouping variable that determines what kind of wording they got is `form`, which takes the values 1 or 2 (which aren't categorical -- we'll recode them so that they are). 
 
-```{r}
-# [SECTION 1 CONTENT]
-```
+We have three questions with alternative wordings, which we'd like to investigate (manipulated between-subjects, across the levels of `form`). The questions of interest are:
 
+- `natcity` -- whether ...
+    + blah
+    + blah
+- `natrace` -- whether ...
+    + blah
+    + blah
+- `natfare` -- whether ...
+    + blah
+    + blah
 
+**important question**: should we be measuring variation across each individual outcome, or can we consider each question an "item" that appears in two conditions (`form==1`, `form==2`)?
+
+Since the `form==2` questions for `nat*(y)` are all longer than their `form==1` counterparts, I'd say it makes sense to consider `form==2` an indication of a variable called *additional description*. Viewed this way, instead of having $n=2867$ observations of three different outcome variables, we would now have $n=2867\times3=8601$  observations of a single outcome variable. 
+
+So what we want to do is to investigate relationships between item responses and other characteristics of the data that responses are "nested" inside of -- which item it is; which wording the respondent got; demographic characteristics of the respondents; etc. 
 
 
 <br>
 
-### 2. identifying necessary external information
+### 2. developing a gameplan
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
+<!-- identifying necessary external information -->
+First we'll need to read in the dataset and do some basic cleaning operations to make it easier to work with (e.g. recoding vars that need recoded). After that, we need to map out a gameplan for getting the data in the format we want it in. 
 
-```{r}
-# [SECTION 2 CONTENT]
-```
+Here's the gameplan that came to my mind.
+
+To investigate the impact of wording, item, etc. on responses, we'll need to have our outcome variable `response` as a single column of the dataset. But there's a problem: the outcome is spread across six columns...What'd be nice would be to have it instead as two columns: one indicating the question (i.e. `natcity` or `natrace` or `natfare`), and one indicating the response (i.e. `0`, `1`, `2`, `3`, `8`, or `9`). Since we already checked that `form` encodes wording type, we can safely just remove the `y` suffixes from the columns of interest. 
+
+So how do we arrive at our target format? 
+
+There are many ways. Here's a natural one to implement: 
+
+1. expand each row into six separate rows of `ncol(dat16) - 6 + 2` columns apiece, where the final six columns are deleted and replaced by two new columns `item` and `response` such that for each set of six rows `i:(i+5)` (all of whose values in columns `1:(ncol(dat16)-6)` are identical to the original value in the unexpanded row `i`): 
+<!-- from which they were generated): -->
+    + `dat16$item[i:(i+5)]` is the length-six character vector consisting of the names of the columns we're chopping off (i.e. `c("natcity","natcityy","natrace","natracey","natfare","natfarey")`); and 
+    + `dat16$response[i:(i+5)]` contains the value of the chopped-off column with the name `dat16$item` specifies for that row.
+
+2. delete all rows $i$ for which `dat16$value[i] %in% c(0,9)` (OR WE USE `NA` ALREADY?!), since: 
+    + half of all the rows we generated in step 1. will have value `0`, since they didn't provide an answer to the corresponding `dat16$item` -- these aren't real data points; and
+    + we can't use the "no answers," for present purposes they are dead to us.
+
+Notice that now we've erased all the empty values, what we're left with is a dataset where `dat16$item` has one set of values for one level of `form`, and another set of distinct but corresponding values for the other level of `form`. But conceptually, the situation is that there's only three values of `dat16$item` -- not six -- and that `dat16$item` form tells us what kind of wording a particular subject got for the three items. This justifies identifying `*y` values in `dat16$item` with their corresponding `*` values. In other words, 
+
+3. we delete all the trailing `y`'s from the `dat16$item` column. 
+
+
+**note**: we shouldn't just delete all `y`'s, since `"natcityy"` has one that we don't want to chop off! 
+
+**exercise**: how would you chop off all `"y"`'s from the column? 
+
+**exercise**: what if anything could or would go wrong if we just chopped off all the `"y"`'s?
+
+Now our data is (are?!) *fucking beautiful* and we're ready to start exploring it (although in the colloquial sense I'd say we've already explored it quite a bit!).
+
+**note**: the steps we took above were motivated not just by intuition, but also by the concept of "tidy data," championed by Hadley Wickham et al. If you're interested, I'd **highly** recommend reading [this excellent paper](LINK), which is kind of a manifesto for a certain kind of "tidiness" through all phases of a data-related endeavor. 
+
+
+
+We also want to see if demographic variables modulate the effect of wording on response. The demographic variables we have are: 
+
+- `sex`
+- `age`
+
+These are all pretty self explanatory as far as what they represent goes, but other than `age` we don't really know the correspondence between the numeric codes and the real-world values they represent. To make the correspondence visible, we'll recode each of them to values we can look at and immediately understand.
+
 
 
 <br>
@@ -168,7 +167,7 @@ Question: is it important *for our purposes* to distinguish between "refused" an
 # read in the data and do some initial inspection
 dat <- read.csv("datasets/gss_2016_test.csv") 
 
-# check for na's (none, yay!)
+# check for na's (none, yay!...but are there *really* none?!)
 colSums(is.na(dat))
 
 str(dat)
@@ -264,6 +263,7 @@ dat$hisp[dat$racecen2=="Hispanic"] <- "hispanic"
 dat$racecen1 <- NULL; dat$racecen2 <- NULL
 ```
 
+#### 3.4 reorganize columns as desired, toss unused ones
 
 ```{r}
 # now we have everything except the outcome vars
@@ -274,7 +274,11 @@ dat <- dat[, c(dem_cols, item_cols)]
 ```
 
 
-#### 3.2 data transformation with `reshape2::`
+#### 3.5 deriving the outcome variable with `reshape2::melt()`
+
+Now we'll implement our strategy for representing the responses summarized in section 2 above (steps 1-3). This involves a process called "melting" the dataset. The result is moving from the current "wide format" to a "long format" dataset. 
+
+The terminology should become more clear as you see more instances of this (very common) transformation. 
 
 ```{r}
 # NATFARE/NATFAREY/NATCITY/NATCITYY/NATRACE/NATRACEY
@@ -288,25 +292,46 @@ dat <- dat[, c(dem_cols, item_cols)]
 library("reshape2")
 dat <- melt(dat, id.vars=dem_cols)
 dat$variable <- as.character(dat$variable)
+names(dat)[names(dat)=="variable"] <- "item"
+names(dat)[names(dat)=="value"]    <- "response"
 
+# let's check out what we have now:
 knitr::kable(head(dat, n=10))
 ```
 
+**exercise**: how does the line of code renaming `variable` to `item` work? Now try the command `"item" -> names(dat)[names(dat)=="variable"]`. What is the symbol `->` and how is it related to `<-`?
+
 ```{r}
 # toss all the rows w/o real answers
-dat <- dat[!dat$value %in% c(9, 8, 0), ]
+dat <- dat[!dat$response %in% c(9, 8, 0), ]
 
 # make a lookup table for the responses
 val_lkup <- c(`1`="too little", `2`="about right", `3`="too much")
 
 # recode responses as character
-dat$value <- as.character(val_lkup[match(dat$value, names(val_lkup))])
+dat$response <- as.character(val_lkup[match(dat$response, names(val_lkup))])
 
-# for now we'll just toss all y's to make life easier
-dat$variable <- gsub("y", "", dat$variable)
+# look at a table
+knitr::kable(table(dat$response, useNA="ifany"), col.names=c("resp", "freq"), pad=0)
 ```
 
+Recall point 3. in our gameplan above -- we want just 3 unique vals in `item`. But currently we have six:
 
+```{r}
+knitr::kable(table(dat$item, useNA="ifany"), col.names=c("item", "freq"), pad=0)
+```
+
+A simple -- albeit kind of sloppy -- solution would be to just remove all occurrences of the letter "y" from the `item` column. Let's just do that (see exercise though):
+
+```{r}
+# for now we'll just toss all y's to make life easier
+dat$item <- gsub("y", "", dat$item)
+
+# confirm that we have just three vals now
+knitr::kable(table(dat$item, useNA="ifany"), col.names=c("item", "freq"), pad=0)
+```
+
+**exercise (important)**: Remove all trailing `"y"`'s from the `dat$response` column. (*hint*: use the regular expressions cheatsheet on the course page)
 
 <br>
 
@@ -316,10 +341,264 @@ dat$variable <- gsub("y", "", dat$variable)
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
+#### 4.1 summarizing data with a variety of methods
+
+Here's a variety of ways we can summarize the data, using a few different strategies. 
+
 ```{r}
-# [SECTION 4 CONTENT]
+# many ways to summarize data by groups!
+
+# frequency tables
+table(dat$sex, dat$response)
+table(dat$income_cat, dat$response)
+
+# tables can have arbitrary dimensions, but even three is tough to parse...
+# table(dat$sex, dat$income_cat, dat$response)
+
+# cross-tabulate 
+xtabs( ~ sex + income_cat, data=dat)
+xtabs( ~ response + sex + income_cat, data=dat)
+
+# marginal proportions
+# **exercise** try setting margin=2
+prop.table(xtabs( ~ response + income_cat, data=dat), margin=1)
+prop.table(table(dat$response, dat$income_cat), margin=1)
+
+# dplyr::summarize()/group_by() is my drug of choice:
+library("dplyr")
+dat %>% group_by(sex, income_cat) %>% summarize(
+  num_obs = length(response),
+  num_toolittle = sum(response=="too little", na.rm=TRUE),
+  prop_toolittle  = num_toolittle / num_obs,
+  num_aboutright = sum(response=="about right", na.rm=TRUE),
+  prop_aboutright = num_aboutright / num_obs,
+  num_toomuch = sum(response=="too much", na.rm=TRUE),
+  prop_toomuch = num_toomuch / num_obs
+  # the `mutate_if()` is just to make it display nicer
+) %>% mutate_if(is.numeric, round, digits=3) %>% data.frame()
+
+dat %>% group_by(item, form) %>% summarize(
+  num_obs = length(response),
+  num_toolittle = sum(response=="too little", na.rm=TRUE),
+  prop_toolittle  = num_toolittle / num_obs,
+  num_aboutright = sum(response=="about right", na.rm=TRUE),
+  prop_aboutright = num_aboutright / num_obs,
+  num_toomuch = sum(response=="too much", na.rm=TRUE),
+  prop_toomuch = num_toomuch / num_obs
+) %>% mutate_if(is.numeric, round, digits=3) %>% data.frame()
+
+
+# can use formula interface with `aggregate()`
+aggregate(age ~ sex + income_cat, FUN="mean", data=dat)
+aggregate(age ~ sex + income_cat, FUN="sd", data=dat)
+aggregate(age ~ sex + income_cat, FUN=function(x) round(mean(x)), data=dat)
+
+# write a custom function for aggregating
+custom_summary <- function(x){
+  c(mean=round(mean(x)), sd=round(sd(x)), min=min(x), max=max(x))
+}
+aggregate(age ~ sex + income_cat, FUN=custom_summary, data=dat)
 ```
 
+
+**exercise**: what does the following command yield, and why does it yield that? Does this make sense as a summary for some combination of our variables? 
+command: `xtabs(age ~ sex + income_cat, data=dat)`
+
+**note**: you'll see the *formula* interface used in `xtabs()` in a few different areas in R -- most notably in regression modeling. The form is usually `y ~ x1 + ... + xn`, with `y` being the outcome variable and the `xi`'s being predictors. 
+
+
+Now let's get to plotting folks!!!
+
+
+
+#### 4.2 plotting with base functions
+
+There are several base functions for making plots. They're great for exploratory analysis because they're so quick and easy. They can be customized endlessly, but if you want to customize the appearance, you're better off using `ggplot()`.
+
+```{r}
+# barplots made from a table
+barplot(table(dat$sex))
+barplot(table(dat$income_cat))
+```
+
+
+```{r}
+# basic scatterplot
+plot(iris$Sepal.Width, iris$Sepal.Length)
+# with color coding
+plot(iris$Sepal.Width, iris$Sepal.Length, col=iris$Species)
+```
+
+```{r}
+x <- 1:10
+y <- rnorm(x)
+# line plot (nice for time-series)
+plot(x, y, type="l")
+# scatter
+plot(x, y, type="p")
+# both
+plot(x, y, type="b")
+# other options are "c", "o", "S"/"s", "h", "n"
+```
+
+```{r}
+# histograms for numeric univariate distributions
+# this is probably the base plotting function i use the most
+hist(dat$age)
+```
+
+**exercise**: merge the 2012, 2014, and 2016 data using a `*_join()` operation from `dplyr::` (see the top-right of the second page of the data wrangling cheatsheet). Then make a line-plot where the x-axis is `year`, and the y-axis is proportion "too much" responses across all three items.
+
+
+
+#### 4.3 plotting with `ggplot2::`
+
+Alright, bringing out the big guns now. `ggplot2::` has its own syntax, because you interact with its plotting capabilities via a **domain-specific language** (DSL), which you can think of as kind of a mini-language that's very limited in scope because it's only meant to do one thing. For example the formula interface we saw with `aggregate()` can be considered a DSL. 
+
+Before plotting, we'll make a couple of summary datasets, which will make some aspects easier moving forward.
+
+```{r}
+pdat <- dat %>% group_by(sex, income_cat, item, form) %>% summarize(
+  num_obs = length(response),
+  mean_age = mean(age, na.rm=TRUE),
+  prop_toolittle  = sum(response=="too little", na.rm=TRUE) / num_obs,
+  prop_aboutright = sum(response=="about right", na.rm=TRUE) / num_obs,
+  prop_toomuch = sum(response=="too much", na.rm=TRUE) / num_obs
+) %>% mutate_if(is.numeric, round, digits=3) %>% 
+  melt(measure.vars=c("prop_toolittle","prop_aboutright","prop_toomuch")) %>% 
+  data.frame()
+
+# make sure income is ordered how we want it (the others dont matter)
+pdat$income_cat <- factor(pdat$income_cat, levels=c("lo","mid","hi"))
+
+```
+
+
+The best way to learn ggplot is by example, so here we go.
+
+
+```{r}
+library("ggplot2")
+
+# scatterplots
+
+# regular
+ggplot(pdat, aes(x=mean_age, y=value)) +
+  geom_point()
+
+# color-coded
+ggplot(pdat, aes(x=mean_age, y=value, color=variable)) +
+  geom_point()
+
+ggplot(pdat, aes(x=mean_age, y=value, color=income_cat)) +
+  geom_point()
+
+# size-coded
+ggplot(pdat, aes(x=mean_age, y=value, size=num_obs)) + 
+  geom_point()
+
+# size- and color-coded
+ggplot(pdat, aes(x=mean_age, y=value, size=num_obs, color=income_cat)) + 
+  geom_point()
+```
+
+**exercise**: how could we get rid of the `NA`'s in the plot with color coding for `income_cat`?
+
+
+Now let's look at how the responses are distributed for individual items:
+
+```{r}
+# first group the data by item and get proportions for each response
+boosh <- dat %>% group_by(item) %>% summarize(
+  prop_toolittle  = sum(response=="too little", na.rm=TRUE) / n(),
+  prop_aboutright = sum(response=="about right", na.rm=TRUE) / n(),
+  prop_toomuch = sum(response=="too much", na.rm=TRUE) / n()
+) %>% melt(id.vars="item")
+
+# now make some plots
+ggplot(boosh, aes(x=item, y=value, fill=variable)) + geom_bar(stat="identity")
+
+ggplot(boosh, aes(x=item, y=value, fill=variable)) +
+  geom_bar(stat="identity", position="dodge") 
+
+ggplot(boosh, aes(x="", y=value, fill=variable)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~item)
+```
+
+
+Now let's see if `form` looks like it has an effect on responses!
+
+```{r}
+# first group the data by item and get proportions for each response
+boosh <- dat %>% group_by(item, form) %>% summarize(
+  prop_toolittle  = sum(response=="too little", na.rm=TRUE) / n(),
+  prop_aboutright = sum(response=="about right", na.rm=TRUE) / n(),
+  prop_toomuch = sum(response=="too much", na.rm=TRUE) / n()
+) %>% melt(id.vars=c("item","form")) %>% data.frame()
+
+knitr::kable(boosh)
+```
+
+
+We can plot this in a number of ways -- each providing a slightly different perspective on the data. (generally speaking, *not* all perspectives are equally useful/sensical!)
+
+```{r}
+ggplot(boosh, aes(x=variable, y=value, fill=form)) + 
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~item) 
+
+ggplot(boosh, aes(x=item, y=value, fill=form)) + 
+  geom_bar(stat="identity", position="dodge") +
+  facet_wrap(~variable) 
+
+
+
+ggplot(boosh, aes(x=variable, y=value)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_grid(item ~ form) 
+
+ggplot(boosh, aes(x=variable, y=value, fill=variable)) +
+  geom_bar(stat="identity", position="dodge") +
+  facet_grid(item~form) 
+
+
+```
+
+**exercise**: what should we expect `sum(boosh$value)` to evaluate to? Why?
+
+
+#### 4.4 styling and saving plots!
+
+Okay, here's the fun part. Here's a few of the things we went over in class:
+
+
+```{r}
+# control the color coding
+
+# move the legend position
+
+# label the axes and plot
+
+# add a caption
+
+# add labels for the values
+
+# axis limits and axis ticks
+
+# ...
+```
+
+Two basic ways to save a `ggplot2::` plot object are:
+
+1. via the "export" interface in R Studio
+2. via the function `ggsave()`
+
+You can specify the dimensions and filetype etc. with the "export" interface. You can do the same with `ggsave()`, *but* the latter has a few advantages: 
+
+- if you save a plot with a command instead of point-and-click, you'll never forget what size you saved it as! That way, if you need to update the figure, you can just re-run the code. 
+- you can save a bunch of plots automatically as a by-product of just running your script.
+- you can do fun stuff like the animation in the appendix :p
 
 
 <br>
@@ -329,9 +608,9 @@ dat$variable <- gsub("y", "", dat$variable)
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
-- topic 1
-- topic 2
-- ...
+- document authoring with R Markdown
+    + everyone will create one quick R Markdown document together
+    + then everyone will create their own with their own dataset!
 
 <br>
 
@@ -372,7 +651,7 @@ Title is hopefully self-explanatory! Check out the super fun + cool `magick::` p
 
 **exercise**: mark up the code below with comments explaining what's happening in each step or line of code, and why. (places where I'd suggest putting comments are marked with `# [comment here]` -- writing lots of comments is a good way to reinforce stuff in your memory)
 
-```{r eval=TRUE}
+```{r eval=FALSE}
 library("ggplot2")
 library("magick")
 
@@ -440,7 +719,6 @@ Aaaand here's what we end up with:
 <br><br>
 
 
-
 <link rel="stylesheet" type="text/css"
 href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,700">
 
@@ -468,6 +746,21 @@ h3 {
   font-size: 24px;
   color: green;
   font-weight: bold;
+}
+
+h4 { 
+  font-size: 18px;
+  color: green;
+  font-weight: bolder;
+  padding-top: 30px;
+}
+
+.table {
+  width: 75%;
+}
+
+li {
+  padding: 3px;
 }
 
 code {
