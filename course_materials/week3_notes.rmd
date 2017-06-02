@@ -430,14 +430,14 @@ plot(iris$Sepal.Width, iris$Sepal.Length, col=iris$Species)
 ```
 
 ```{r}
-x <- 1:10
-y <- rnorm(x)
+xvar <- 1:10
+yvar <- rnorm(xvar)
 # line plot (nice for time-series)
-plot(x, y, type="l")
+plot(xvar, yvar, type="l")
 # scatter
-plot(x, y, type="p")
+plot(xvar, yvar, type="p")
 # both
-plot(x, y, type="b")
+plot(xvar, yvar, type="b")
 # other options are "c", "o", "S"/"s", "h", "n"
 ```
 

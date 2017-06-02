@@ -1,4 +1,13 @@
-### read data and check missings ###############################################
+### load dependencies #########################################################
+# === === === === === === === === === === === === === === === === === === 
+library("reshape2")
+library("dplyr")
+library("ggplot2")
+
+
+#'
+
+### read data and check missings ##############################################
 # === === === === === === === === === === === === === === === === === === 
 
 # read in the data and do some initial inspection
@@ -11,7 +20,10 @@ str(dat)
 head(dat, n=5)
 
 
-### basic cleanup and recoding #################################################
+#'
+
+
+### basic cleanup and recoding ################################################
 # === === === === === === === === === === === === === === === === === === 
 
 # now check + clean up + transform columns as necessary
@@ -67,6 +79,9 @@ dat$income_range <- income_lkup[match(dat$INCOME16, names(income_lkup))]
 dat$INCOME16 <- NULL
 
 
+#'
+
+
 ### a slightly more complicated case ##########################################
 # === === === === === === === === === === === === === === === === === === 
 
@@ -100,6 +115,8 @@ dat$hisp[dat$racecen2=="Hispanic"] <- "hispanic"
 dat$racecen1 <- NULL; dat$racecen2 <- NULL
 
 
+#'
+
 
 ### reorganize columns as desired, toss unused ones ###########################
 # === === === === === === === === === === === === === === === === === === 
@@ -109,6 +126,9 @@ dat$racecen1 <- NULL; dat$racecen2 <- NULL
 dem_cols  <- c("id", "year", "form", "sex", "age", "income_cat", "hisp")
 item_cols <- names(dat)[startsWith(names(dat), "nat")]
 dat <- dat[, c(dem_cols, item_cols)]
+
+
+#'
 
 
 ### deriving the outcome variable with `reshape2::melt()` #####################
@@ -121,8 +141,6 @@ dat <- dat[, c(dem_cols, item_cols)]
 #    2        "About right"
 #    1        "Too little"
 #    0        "Not applicable"
-
-library("reshape2")
 
 dat <- melt(dat, id.vars=dem_cols)
 
@@ -154,6 +172,8 @@ dat$item <- gsub("y", "", dat$item)
 table(dat$item, useNA="ifany")
 
 
+#'
+
 
 ### summarizing the data ######################################################
 # === === === === === === === === === === === === === === === === === === 
@@ -177,7 +197,6 @@ prop.table(xtabs( ~ response + income_cat, data=dat), margin=1)
 prop.table(table(dat$response, dat$income_cat), margin=1)
 
 # dplyr::summarize()/group_by() is my drug of choice:
-library("dplyr")
 dat %>% group_by(sex, income_cat) %>% summarize(
   num_obs = length(response),
   num_toolittle = sum(response=="too little", na.rm=TRUE),
@@ -214,6 +233,9 @@ custom_summary <- function(x){
 aggregate(age ~ sex + income_cat, FUN=custom_summary, data=dat)
 
 
+#'
+
+
 ### plotting with base functions ##############################################
 # === === === === === === === === === === === === === === === === === === 
 
@@ -227,7 +249,7 @@ plot(iris$Sepal.Width, iris$Sepal.Length)
 plot(iris$Sepal.Width, iris$Sepal.Length, col=iris$Species)
 
 xvar <- 1:10
-yvar <- rnorm(x)
+yvar <- rnorm(xvar)
 # line plot (nice for time-series)
 plot(xvar, yvar, type="l")
 # scatter
@@ -241,9 +263,11 @@ plot(xvar, yvar, type="b")
 hist(dat$age)
 
 
+#'
+
+
 ### plotting with `ggplot2::` #################################################
 # === === === === === === === === === === === === === === === === === === 
-
 
 # make a couple of summaries to plot directly
 pdat <- dat %>% group_by(sex, income_cat, item, form) %>% summarize(
@@ -262,7 +286,6 @@ pdat$income_cat <- factor(pdat$income_cat, levels=c("lo","mid","hi"))
 
 
 # the best way to learn ggplot is by example, so here we go.
-library("ggplot2")
 
 # scatterplots
 
@@ -337,20 +360,23 @@ ggplot(boosh, aes(x=variable, y=value, fill=variable)) +
   facet_grid(item~form) 
 
 
+#'
 
 
-
-### styling and saving plots ##################################################
+### styling and saving plot objects ###########################################
 # === === === === === === === === === === === === === === === === === === 
 
 plob <- ggplot(boosh, aes(x=form, y=value, fill=variable)) +
   geom_bar(stat="identity") +
   facet_wrap( ~ item)
 
+# display the starting point
+plob
+
 # set a global "theme" (also try "minimal", "classic", "538", etc.)
 theme_set(theme_bw())
 
-# control the colors
+# control the color coding, and show new theme
 plob + 
   scale_fill_manual(values=c("lightgray","darkgray","black"))
 
