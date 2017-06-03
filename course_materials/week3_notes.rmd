@@ -475,9 +475,9 @@ hist(dat$age)
 
 #### 4.3 plotting with `ggplot()`
 
-Alright, bringing out the big guns now. `ggplot2::` has its own syntax, because you interact with its plotting capabilities via a **domain-specific language** (DSL), which you can think of as kind of a mini-language that's very limited in scope because it's only meant to do one thing. For example the formula interface we saw with `aggregate()` can be considered a DSL. 
+Alright, bringing out the big guns now. `ggplot2::` has its own syntax, because you interact with its plotting capabilities via a **domain-specific language** (DSL), which you can think of as kind of a mini-language that's very limited in scope because it's only meant to do one thing. For example the formula interface we saw with `aggregate()` can be considered a DSL. The same formula-language (with some extra capabilities) is also used for most of R's regression modeling functions, e.g. `lm()`, `glm()`, `lme4::lmer()`, and `lme4::glmer()`.
 
-Before plotting, we'll make a couple of summary datasets, which will make some aspects easier moving forward.
+Before plotting, we'll make a couple of summary datasets, which will make some aspects easier moving forward. (see week 2 appendix for background on pipe-chains with `%>%` if you want to understand what's going on here)
 
 ```{r}
 pdat <- dat %>% group_by(sex, income_cat, item, form) %>% summarize(
@@ -496,7 +496,7 @@ pdat$income_cat <- factor(pdat$income_cat, levels=c("lo","mid","hi"))
 ```
 
 
-The best way to learn ggplot is by example, so here we go.
+The best way to learn ggplot is by example, so here we go. **note** that some of the plots below are more useful than others, but they're all valid examples of stuff you might have/want to do eventually.
 
 
 ```{r}
