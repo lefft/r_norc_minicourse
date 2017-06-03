@@ -1,6 +1,6 @@
 ---
 title: "R mini-course: week 3 notes"
-author: "timothy leffel  &nbsp;&nbsp;&nbsp;&nbsp; xxxXX/2017"
+author: "timothy leffel  &nbsp;&nbsp;&nbsp;&nbsp; june2/2017"
 output: html_document
 css: css/notes.css
 ---
@@ -13,24 +13,25 @@ knitr::opts_chunk$set(message=FALSE, warning=FALSE, fig.align="center")
 
 <hr style="height:2px; background-color: gray; color:gray;">
 
-[FRONT MATTER]
+**[non-final draft -- official version will be up sometime monday]**
 
-<br><br>
+<br>
 
-[list of topics for this week from last week's notes]
+In these notes we'll be looking at some sample data from the General Social Survey (GSS), conducted bi-annually(?) by NORC for many years. Many thanks to Ben Schapiro for prepping this stuff! It's very cool data, and good for illustrating many common data wrangling tasks. After some planning, we start writing actual code to manipulate the data in Section 3 below. 
 
-- ...
-- ...
+We have sample data from three years: 2012, 2014, and 2016. Here we'll look just at the 2016 data, but there's so much more we could look at if we merged all three files. There are a couple of exercises below that will involve doing exactly that. 
 
 
 <br>
 
-### 0. [SECTION 0 HEADER]
+### 0. for next week
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
+Keep your dataset in mind when working through these notes. Then try to make a list of things you want to do to the data. For example: recode some variables, maybe reshape it with a `melt()` command, plot some variables in it, make a frequency table for a couple of variables, etc. 
 
+Try to make the list manageable -- maybe five operations total. Then next week, we'll implement those operations and build a nice lil output document from an R-Markdown file (which is just a fancy type of R script, basically). 
 
 
 
@@ -55,23 +56,10 @@ knitr::opts_chunk$set(message=FALSE, warning=FALSE, fig.align="center")
 
 # note: "%in%" <- function(x, table) match(x, table, nomatch = 0) > 0
 
+
+# **question**: is it important *for our purposes* to distinguish between "refused" and "no answer" and "does not apply"? I'd say not, since none of them give us data and someone's proclivity for volunteering their race has nothing to do with what we want to measure or explore. Also, it's not even clear that proclivity is that these would indicate...
+
 ```
-
-
-
-
-**exercise**: use the commented code in the next chunk to make formatted tables, and compile an R-markdown document to print them nicely :)
-```{r}
-# to make nicer-looking tables:
-# knitr::kable(t(as.table(colSums(is.na(dat)))))
-# knitr::kable(table(dat$form), col.names=c("form","count"))
-# knitr::kable(table(dat$sex), col.names=c("sex", "count"))
-```
-
-
-##### dk whar this goes 
-
-Question: is it important *for our purposes* to distinguish between "refused" and "no answer" and "does not apply"? I'd say not, since none of them give us data and someone's proclivity for volunteering their race has nothing to do with what we want to measure or explore. Also, it's not even clear that proclivity is that these would indicate...
 
 
 
@@ -85,21 +73,27 @@ We want to see if the wording of a question has an effect on how people (identif
 
 We have three questions with alternative wordings, which we'd like to investigate (manipulated between-subjects, across the levels of `form`). The questions of interest are:
 
-- `natcity` -- whether ...
-    + blah
-    + blah
-- `natrace` -- whether ...
-    + blah
-    + blah
-- `natfare` -- whether ...
-    + blah
-    + blah
+> We are faced with many problems in this country, none of which can be solved easily or inexpensively. I'm going to name some of these problems, and for each one I'd like you to tell me whether you think we're spending too much money on it, too little money, or about the right amount... [A]re we spending too much, too little, or about the right amount on (ITEM)?
 
-**important question**: should we be measuring variation across each individual outcome, or can we consider each question an "item" that appears in two conditions (`form==1`, `form==2`)?
+where *(ITEM)* is one of the following: 
 
-Since the `form==2` questions for `nat*(y)` are all longer than their `form==1` counterparts, I'd say it makes sense to consider `form==2` an indication of a variable called *additional description*. Viewed this way, instead of having $n=2867$ observations of three different outcome variables, we would now have $n=2867\times3=8601$  observations of a single outcome variable. 
+- **`natcity`**: *[A]re we spending too much, too little, or about the right amount on...*
+    + ...SOLVING PROBLEMS OF BIG CITIES (if `form==1`, response is in `natcity`)
+    + ...ASSISTANCE TO BIG CITIES (if `form==2`, response is in `natcityy`)
+- **`natrace`**: *[A]re we spending too much, too little, or about the right amount on...*
+    + ...IMPROVING THE CONDITIONS OF BLACKS (if `form==1`, response is in `natrace`)
+    + ...ASSISTANCE TO BLACKS (if `form==2`, response is in `natracey`)
+- **`natfare`**: *[A]re we spending too much, too little, or about the right amount on...*
+    + ...WELFARE (if `form==1`, response is in `natfare`)
+    + ...ASSISTANCE TO THE POOR (if `form==2`, response is in `natfarey`)
 
-So what we want to do is to investigate relationships between item responses and other characteristics of the data that responses are "nested" inside of -- which item it is; which wording the respondent got; demographic characteristics of the respondents; etc. 
+*An important question*: should we be interested in variation across `form` for each individual questionnaire item, or can we consider each question an "item" in the sense that a "trial" instantiating it can appear in multiple "conditions" (here `form==1` or `form==2`)? 
+
+Since the `form==2` questions for `nat*` all involve the same wording -- namely "assistance to ..." -- I'd say it makes sense to consider `form==1` an indication of a "variable" that we could call something like *non-uniform wording*. Viewed this way, instead of having $n=2867$ observations of three different outcome variables, we would now have $n=2867\times3=8601$  observations of a single outcome variable. 
+
+So what we want to do is to investigate relationships between item responses and other characteristics of the data that responses are "nested" inside of -- which of the three items it is; which wording the respondent got (form 1 or form 2); demographic characteristics of the respondents; etc. 
+
+**note on the importance of domain-specific knowledge**: One could certainly argue that the notion of a single, underlying "difference in wording" between the `nat*` and `nat*y` variables isn't very well motivated. It's not like the `nat*` versions all have more words than their `nat*t` counterparts, for example. Well, that might be. And this is where domain-specific knowledge is really important. Since I'm not super well-versed in the GSS, my strategy might not be the best one for the particular problem we're looking at (particularly if we're fitting statistical models to the data and making questionable assumptions about what the nature of `form` is). But nevertheless, doing things the way we're going to do them will illustrate a pretty decent sample of the types of data-munging and visualization tasks you'll likely have to deal with. This is all to say the following: hacking skills are very useful, but are *absolutely not a substitute* for nuanced understanding of the subject matter a dataset is "about." Ability to manipulate, transform, and model data is a *complementary* skill to the theorizing that makes up the foundation of all scientific fields...Okay, back to something concrete now. 
 
 
 <br>
@@ -111,37 +105,34 @@ So what we want to do is to investigate relationships between item responses and
 <!-- identifying necessary external information -->
 First we'll need to read in the dataset and do some basic cleaning operations to make it easier to work with (e.g. recoding vars that need recoded). After that, we need to map out a gameplan for getting the data in the format we want it in. 
 
-Here's the gameplan that came to my mind.
+How do we determine what the format is that we want it in? I think a good strategy is to think visually: what kind of graph could you imagine making from the data? Once you have an idea of that, work backwards and try to figure out what shape (e.g. columns) the data would need to have to create that graph. This definitely requires practice! And in fact, the more you practice plotting, the better intuitions you'll have about how to get started cleaning/transforming a dataset.
 
-To investigate the impact of wording, item, etc. on responses, we'll need to have our outcome variable `response` as a single column of the dataset. But there's a problem: the outcome is spread across six columns...What'd be nice would be to have it instead as two columns: one indicating the question (i.e. `natcity` or `natrace` or `natfare`), and one indicating the response (i.e. `0`, `1`, `2`, `3`, `8`, or `9`). Since we already checked that `form` encodes wording type, we can safely just remove the `y` suffixes from the columns of interest. 
+Here's a gameplan that came to my mind (and again, heed above disclaimer on domain knowledge): to investigate the impact of wording, item, etc. on responses, we'll need to have our outcome variable `response` as a single column of the dataset. This column will have the possible values `"too much"`, `"about the right amount"`, and `"too little"`. But there's a problem: the outcome is currently spread across six columns...What'd be nice would be to have it instead as two columns: one indicating the question (i.e. `natcity` or `natrace` or `natfare`), and one indicating the response (i.e. `0`, `1`, `2`, `3`, `8`, or `9`, which we'll recode as `NA`, `"too much"`, `"about the right amount"`, and `"too little"`). Since we already checked that `form` encodes wording type, we can safely just remove the `y` suffixes from the columns of interest and use `form` to represent "the wording manipulation." 
 
 So how do we arrive at our target format? 
 
-There are many ways. Here's a natural one to implement: 
+There are many ways. Here's a natural one to implement, where `dat16` is the dataset in the file `datasets/gss_2016_test.csv`: 
 
-1. expand each row into six separate rows of `ncol(dat16) - 6 + 2` columns apiece, where the final six columns are deleted and replaced by two new columns `item` and `response` such that for each set of six rows `i:(i+5)` (all of whose values in columns `1:(ncol(dat16)-6)` are identical to the original value in the unexpanded row `i`): 
+- **Step 1.** expand each row into six separate rows of `ncol(dat16) - 6 + 2` columns apiece, where the final six columns are deleted and replaced by two new columns `item` and `response` such that for each set of six rows `i:(i+5)` (all of whose values in columns `1:(ncol(dat16)-6)` are identical to the original value in the unexpanded row `i`): 
 <!-- from which they were generated): -->
     + `dat16$item[i:(i+5)]` is the length-six character vector consisting of the names of the columns we're chopping off (i.e. `c("natcity","natcityy","natrace","natracey","natfare","natfarey")`); and 
     + `dat16$response[i:(i+5)]` contains the value of the chopped-off column with the name `dat16$item` specifies for that row.
 
-2. delete all rows $i$ for which `dat16$value[i] %in% c(0,9)` (OR WE USE `NA` ALREADY?!), since: 
-    + half of all the rows we generated in step 1. will have value `0`, since they didn't provide an answer to the corresponding `dat16$item` -- these aren't real data points; and
-    + we can't use the "no answers," for present purposes they are dead to us.
+- **Step 2.** delete all rows $i$ for which `dat16$value[i] %in% c(0,8,9)` (which will all be coded as `NA`), since: 
+    + half of all the rows we generated in step 1 will have value `0` (not applicable), since they didn't provide an answer to the corresponding `dat16$item` -- in other words, these aren't real data points in the first place; and
+    + we can't use the other non-answer categories anyway; for present purposes, *they are dead to us*.
 
-Notice that now we've erased all the empty values, what we're left with is a dataset where `dat16$item` has one set of values for one level of `form`, and another set of distinct but corresponding values for the other level of `form`. But conceptually, the situation is that there's only three values of `dat16$item` -- not six -- and that `dat16$item` form tells us what kind of wording a particular subject got for the three items. This justifies identifying `*y` values in `dat16$item` with their corresponding `*` values. In other words, 
+After Step 2, we'll have erased all the rows with empty responses, so what we're left with is a dataset where `dat16$item` has one set of values for one level of `form`, and another set of distinct but corresponding values for the other level of `form`. But conceptually, the situation is that there's only three values of `dat16$item` -- not six -- and that `dat16$form` tells us what kind of wording a particular subject got for *all three* items. This justifies identifying `"nat*y"` values in `dat16$item` with their corresponding `"nat*"` values. In other words, 
 
-3. we delete all the trailing `y`'s from the `dat16$item` column. 
+- **Step 3.** we delete all the trailing `"y"`'s from the `dat16$item` column. 
 
 
-**note**: we shouldn't just delete all `y`'s, since `"natcityy"` has one that we don't want to chop off! 
+**note**: if we're being pedantic, we shouldn't just delete all `"y"`'s, since `"natcityy"` has one that isn't part of the original coding scheme (and hence we're not targeting it for off-chopping!). In practice we're going to, but see exercise on regular expressions below. 
 
-**exercise**: how would you chop off all `"y"`'s from the column? 
 
-**exercise**: what if anything could or would go wrong if we just chopped off all the `"y"`'s?
+Now our data is (are?!) *really really beautiful* and we're ready to start exploring it (although in the colloquial sense I'd say we've already explored it quite a bit!).
 
-Now our data is (are?!) *fucking beautiful* and we're ready to start exploring it (although in the colloquial sense I'd say we've already explored it quite a bit!).
-
-**note**: the steps we took above were motivated not just by intuition, but also by the concept of "tidy data," championed by Hadley Wickham et al. If you're interested, I'd **highly** recommend reading [this excellent paper](LINK), which is kind of a manifesto for a certain kind of "tidiness" through all phases of a data-related endeavor. 
+**note**: the steps we mapped out above were motivated not just by intuition, but also by the concept of "tidy data," championed by Hadley Wickham et al. If you're interested, I'd **highly** recommend reading [this excellent paper](LINK), which is kind of a manifesto for a certain kind of "tidiness" through all phases of a data-related endeavor. 
 
 
 
@@ -167,11 +158,20 @@ These are all pretty self explanatory as far as what they represent goes, but ot
 # read in the data and do some initial inspection
 dat <- read.csv("datasets/gss_2016_test.csv") 
 
-# check for na's (none, yay!...but are there *really* none?!)
+# check for na's (none, yay!...but are there *really* none?! to be continued...)
 colSums(is.na(dat))
 
 str(dat)
 head(dat, n=5)
+```
+
+**exercise**: use the commented code in the next chunk to make formatted tables, and compile an R-markdown document to print them nicely. Next week how to do this will be made completely explicit, so feel free to skip for now :)
+
+```{r}
+# to make nicer-looking tables:
+# knitr::kable(t(as.table(colSums(is.na(dat)))))
+# knitr::kable(table(dat$form), col.names=c("form","count"))
+# knitr::kable(table(dat$sex), col.names=c("sex", "count"))
 ```
 
 
@@ -218,6 +218,9 @@ income <- read.csv(
   "datasets/lookup_income.csv", header=FALSE, col.names=c("num","val"), 
   stringsAsFactors=FALSE
 )
+# **note**: this won't feel intuitive, but try to break down what's happening.
+#           the following recoding method is very general and very useful.
+
 # make a vector with values equal to income$val, and names income$num
 income_lkup        <- as.vector(income$val)
 names(income_lkup) <- income$num
@@ -228,6 +231,10 @@ dat$income_range <- income_lkup[match(dat$INCOME16, names(income_lkup))]
 # remove the original income col
 dat$INCOME16 <- NULL
 ```
+
+**note**: semicolons just "end" the current line -- they're used to put a small set of similar commands on a single line to save space and emphasize that they're all involved in a single operation. 
+
+**exercise**: make a new column, derived from `income_range`, that contains the same information as `income_cat` (which was computed directly from `INCOME16`)
 
 
 #### 3.3 a slightly more complicated case
@@ -274,9 +281,9 @@ dat <- dat[, c(dem_cols, item_cols)]
 ```
 
 
-#### 3.5 deriving the outcome variable with `reshape2::melt()`
+#### 3.5 creating the desired outcome variable with `reshape2::melt()`
 
-Now we'll implement our strategy for representing the responses summarized in section 2 above (steps 1-3). This involves a process called "melting" the dataset. The result is moving from the current "wide format" to a "long format" dataset. 
+Now we'll implement our strategy for representing the responses summarized in section 2 above (see Steps 1-3). This involves a process called "melting" the dataset. The result is moving from the current "wide format" to a "long format" dataset. 
 
 The terminology should become more clear as you see more instances of this (very common) transformation. 
 
@@ -290,8 +297,14 @@ The terminology should become more clear as you see more instances of this (very
 #    0        "Not applicable"
 
 library("reshape2")
+
+# hold `dem_cols` (see above) constant, collapse the other columns
 dat <- melt(dat, id.vars=dem_cols)
+
+# recode the new "column-column" as character (instead of factor)
 dat$variable <- as.character(dat$variable)
+
+# rename the two new columns
 names(dat)[names(dat)=="variable"] <- "item"
 names(dat)[names(dat)=="value"]    <- "response"
 
@@ -299,10 +312,11 @@ names(dat)[names(dat)=="value"]    <- "response"
 knitr::kable(head(dat, n=10))
 ```
 
-**exercise**: how does the line of code renaming `variable` to `item` work? Now try the command `"item" -> names(dat)[names(dat)=="variable"]`. What is the symbol `->` and how is it related to `<-`?
+**exercise**: how does the line of code renaming `variable` to `item` work? Try the command `"item" -> names(dat)[names(dat)=="variable"]`. What is the symbol `->` and how is it related to `<-`?
 
 ```{r}
 # toss all the rows w/o real answers
+# (don't forget the comma before the closing square bracked -- `dat` is a df!)
 dat <- dat[!dat$response %in% c(9, 8, 0), ]
 
 # make a lookup table for the responses
@@ -314,6 +328,9 @@ dat$response <- as.character(val_lkup[match(dat$response, names(val_lkup))])
 # look at a table
 knitr::kable(table(dat$response, useNA="ifany"), col.names=c("resp", "freq"), pad=0)
 ```
+
+**note**: the "backtick" syntax (\` and \`) allows you to use numbers, spaces, and other stuff that you wouldn't normally be able to directly say without a syntax error. For example if you had a column of `dat` called `favorite color`, you couldn't say `dat$favorite color` because there's a space in the column name. But you *could* say    ``dat$`favorite color` `` to refer to that column.
+
 
 Recall point 3. in our gameplan above -- we want just 3 unique vals in `item`. But currently we have six:
 
@@ -331,7 +348,11 @@ dat$item <- gsub("y", "", dat$item)
 knitr::kable(table(dat$item, useNA="ifany"), col.names=c("item", "freq"), pad=0)
 ```
 
-**exercise (important)**: Remove all trailing `"y"`'s from the `dat$response` column. (*hint*: use the regular expressions cheatsheet on the course page)
+**exercise (important)**: Remove all trailing `"y"`'s from the `dat$response` column. (*hint*: use the regular expressions cheatsheet on the course page. *another hint-slash-exercise*: google for examples of `gsub()`, `grep()`, `grepl()`, and `gregexpr()` in action. Also peep their cousins `sub()` and `regexpr()` too, though they're not quite as useful imo. If this sounds too painful, peruse the [intro vignette for the `stringr::` package](https://cran.r-project.org/web/packages/stringr/vignettes/stringr.html)) instead.
+
+
+**exercise**: what if anything could or would go wrong if we just chopped off all the `"y"`'s in the current situation? What conditions would *definitely* cause this to be a bad idea?
+
 
 <br>
 
@@ -449,9 +470,10 @@ hist(dat$age)
 
 **exercise**: merge the 2012, 2014, and 2016 data using a `*_join()` operation from `dplyr::` (see the top-right of the second page of the data wrangling cheatsheet). Then make a line-plot where the x-axis is `year`, and the y-axis is proportion "too much" responses across all three items.
 
+**exercise**: after doing the previous exercise, read in the file called `"datasets/gss_complete_test.csv"` and make the corresponding plot. Does it look identical to yours? (*hint*: it should!)
 
 
-#### 4.3 plotting with `ggplot2::`
+#### 4.3 plotting with `ggplot()`
 
 Alright, bringing out the big guns now. `ggplot2::` has its own syntax, because you interact with its plotting capabilities via a **domain-specific language** (DSL), which you can think of as kind of a mini-language that's very limited in scope because it's only meant to do one thing. For example the formula interface we saw with `aggregate()` can be considered a DSL. 
 
@@ -608,24 +630,19 @@ You can specify the dimensions and filetype etc. with the "export" interface. Yo
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
-- document authoring with R Markdown
-    + everyone will create one quick R Markdown document together
+- document authoring with R Markdown:
+    + everyone will create one quick R Markdown document together;
     + then everyone will create their own with their own dataset!
 
-<br>
+- if time, *very* quick/incomplete intro to web-scraping in R 
 
-### appendix 1: analyzing the data with statistical models  {#appendix}
+- if time, whatever else y'all want to talk about/do!
 
-<hr style="height:1px; background-color:lightgray; color:lightgray;">
-
-
-```{r}
-# [APPENDIX CONTENT]
-```
 
 <br>
 
-### appendix 2: the power of pipe-chains for data cleaning
+
+### appendix 1: the power of pipe-chains for data cleaning
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
@@ -643,7 +660,7 @@ dat16 <- read.csv("datasets/gss_2016_test.csv") %>% mutate(
 
 <br>
 
-### appendix 3: using `for`-loops to make animated gif plots!
+### appendix 2: using `for`-loops to make animated gif plots!
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
@@ -766,6 +783,10 @@ li {
 code {
   font-family: 'Roboto Mono', monospace;
   font-size: 14px;
+}
+
+blockquote {
+  font-style: italic;
 }
 
 pre {
