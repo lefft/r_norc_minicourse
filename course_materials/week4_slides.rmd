@@ -1,0 +1,155 @@
+---
+title: "R mini-course: week 4"
+subtitle: "NORC, Academic Research Centers"
+author: "http://lefft.xyz/r_minicourse"
+date: "timothy leffel, spring 2017"
+output: 
+  ioslides_presentation:
+    css: css/slides.css
+---
+
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+
+## housekeeping
+
+agenda for the day:
+
+- planning the flow of our "analysis document"
+- wha is "markdown" and wha is "R markdown"?!
+- structure of an R markdown document
+- output formats
+- working through a quick example document
+- everyone builds a nice pretty document! (I won't leave until everyone has successfully compiled one)
+- drinks, anyone?! (thinking of going to Jimmy's aka Woodlawn Tap -- takers?)
+
+<br><br>
+
+all materials on the course website: 
+
+> [http://lefft.xyz/r_minicourse](http://lefft.xyz/r_minicourse)
+
+
+
+## a couple R Studio tips + tricks
+
+
+1. knitr dropdowns ("knit"; "gear"; "insert"; "run")
+2. keyboard shortcuts!!!
+
+
+## knitr dropdown menus
+
+"knit"
+
+"gear"
+
+"insert"
+
+"run"
+
+
+
+## more keyboard shortcuts!
+
+- ctrl+f ~~> search document for string (same as e.g. a browser)
+- alt+enter (from search box) ~~> highlight all occurrences of term, with a cursor for each
+- ctrl+shift+k ~~> knit
+- ctrl+shift+enter ~~> run current chunk
+- ctrl+shift+F10 ~~> restart R session
+- ctrl+1 ~~> cursor goes to script editor
+- ctrl+2 ~~> cursor goes to console
+- F1 (while completion being offered) ~~> view help page for completion
+
+
+## planning our "analysis document"
+
+
+## the idea behind markdown formatting
+
+
+## R markdown syntax 
+
+
+
+## structure of an R markdown document
+
++ header ("YAML header")
++ text 
+    - just normal text, in markdown format 
+    - any html you want to add (*optional*)
++ code chunks
+    - the setup chunk (specify defaults)
+    - all other chunks (show code and/or output)
++ inline R code
+    - to evaluate and format as text: `r cat("\x60r ... \x60")`
+    - to display as code: `r cat("\x60 ... \x60")`
++ css (*optional*) <!-- , as html or external style file -->
+
+
+## output formats for `.rmd` documents
+
+- html document
+- pdf document
+- MS Word document
+- slides (various output options)
+
+
+## an example document
+
+[FIT AN ACTUAL ENTIRE RMD DOC SOURCE ON HERE -- SHOW SIMPLICITY]
+
+
+## 
+
+now everyone build their own!
+
+if desired, start with this template: 
+
+        http://lefft.xyz/r_minicourse/week4_materials/simple_template.rmd
+
+to get fancy, try this template:
+
+        http://lefft.xyz/r_minicourse/week4_materials/fancy_norc_template.rmd
+
+
+## 
+
+ideas for things to include in document:
+
+- remember to load your packages!
+- read in your dataset and print a summary or the `head()`/`tail()`
+- tables for a few variables, with or without `kable()` 
+- scatterplots or barplots or histograms with `plot(x, y)`, `barplot(table(df$x)))`, and `hist(df$x)`
+- fancy visualizations with `ggplot()`
+
+
+<br><br><br><br><br><br><br><br>
+
+(some combinations make more sense than others...)
+
+## next week...
+
+
+- we look through everyone's datasets and discuss any issues that came up
+- wide- vs long-format data, reshaping data, the concept of "tidy data"
+- visualizing a dataset as a class (type-along)
+- visualizing your own dataset with base graphics and `ggplot2::`
+
+
+
+
+
+
+<style>
+.prettyprint {
+  font-size: 18px;
+}
+.col2 {
+ float:left;
+}
+</style>
+

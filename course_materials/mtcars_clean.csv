@@ -1,0 +1,33 @@
+"car","transmission","num_gears","musclecar","cylinders","horsepower","qm_time","lbs","mpg"
+"Mazda RX4","auto","four",FALSE,6,110,16,2620,21
+"Mazda RX4 Wag","auto","four",FALSE,6,110,17,2875,21
+"Datsun 710","auto","four",FALSE,4,93,19,2320,23
+"Hornet 4 Drive","manual","three",FALSE,6,110,19,3215,21
+"Hornet Sportabout","manual","three",FALSE,8,175,17,3440,19
+"Valiant","manual","three",FALSE,6,105,20,3460,18
+"Duster 360","manual","three",FALSE,8,245,16,3570,14
+"Merc 240D","manual","four",FALSE,4,62,20,3190,24
+"Merc 230","manual","four",FALSE,4,95,23,3150,23
+"Merc 280","manual","four",FALSE,6,123,18,3440,19
+"Merc 280C","manual","four",FALSE,6,123,19,3440,18
+"Merc 450SE","manual","three",FALSE,8,180,17,4070,16
+"Merc 450SL","manual","three",FALSE,8,180,18,3730,17
+"Merc 450SLC","manual","three",FALSE,8,180,18,3780,15
+"Cadillac Fleetwood","manual","three",FALSE,8,205,18,5250,10
+"Lincoln Continental","manual","three",FALSE,8,215,18,5424,10
+"Chrysler Imperial","manual","three",FALSE,8,230,17,5345,15
+"Fiat 128","auto","four",FALSE,4,66,19,2200,32
+"Honda Civic","auto","four",FALSE,4,52,19,1615,30
+"Toyota Corolla","auto","four",FALSE,4,65,20,1835,34
+"Toyota Corona","manual","three",FALSE,4,97,20,2465,22
+"Dodge Challenger","manual","three",FALSE,8,150,17,3520,16
+"AMC Javelin","manual","three",FALSE,8,150,17,3435,15
+"Camaro Z28","manual","three",TRUE,8,245,15,3840,13
+"Pontiac Firebird","manual","three",FALSE,8,175,17,3845,19
+"Fiat X1-9","auto","four",FALSE,4,66,19,1935,27
+"Porsche 914-2","auto","five",FALSE,4,91,17,2140,26
+"Lotus Europa","auto","five",FALSE,4,113,17,1513,30
+"Ford Pantera L","auto","five",TRUE,8,264,14,3170,16
+"Ferrari Dino","auto","five",FALSE,6,175,16,2770,20
+"Maserati Bora","auto","five",TRUE,8,335,15,3570,15
+"Volvo 142E","auto","four",FALSE,4,109,19,2780,21
