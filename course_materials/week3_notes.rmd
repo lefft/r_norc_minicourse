@@ -13,13 +13,13 @@ knitr::opts_chunk$set(message=FALSE, warning=FALSE, fig.align="center")
 
 <hr style="height:2px; background-color: gray; color:gray;">
 
-**[non-final draft -- official version will be up sometime monday]**
 
 <br>
 
-In these notes we'll be looking at some sample data from the General Social Survey (GSS), conducted bi-annually(?) by NORC for many years. Many thanks to Ben Schapiro for prepping this stuff! It's very cool data, and good for illustrating many common data wrangling tasks. After some planning, we start writing actual code to manipulate the data in Section 3 below. 
+In these notes we'll be looking at some sample data from the General Social Survey (GSS), a survey measuring American opinion on a variety of issues. The survey has been conducted bi-annually by NORC for many years. Many thanks to Ben Schapiro for prepping this stuff! It's very cool data, and quite good for illustrating many common data wrangling tasks. After some discussion about planning in Sections 1-2, we start writing actual code to manipulate the data in Section 3. Feel free to [skip directly to Section 3](#sec3) if you just want to practice coding.  
 
-We have sample data from three years: 2012, 2014, and 2016. Here we'll look just at the 2016 data, but there's so much more we could look at if we merged all three files. There are a couple of exercises below that will involve doing exactly that. 
+
+**note** on the datasets: we have sample data from three years: 2012, 2014, and 2016. You can find the corresponding datasets [here (2012)](http://lefft.xyz/r_minicourse/week3_materials/datasets/gss_2012_test.csv), [here (2014)](http://lefft.xyz/r_minicourse/week3_materials/datasets/gss_2014_test.csv), and [here (2016)](http://lefft.xyz/r_minicourse/week3_materials/datasets/gss_2016_test.csv). In these notes we'll look just at the 2016 data, but there's so much more we could look at if we merged all three files. There are a couple of exercises below that will involve doing exactly that. But in case you just want to practice with the combined data, here's [a link](http://lefft.xyz/r_minicourse/week3_materials/datasets/gss_complete_test.csv) to a file with all three years together. Or just get [everything as a .zip archive](http://lefft.xyz/r_minicourse/week3_materials.zip), including a partial codebook and a script.
 
 
 <br>
@@ -29,9 +29,9 @@ We have sample data from three years: 2012, 2014, and 2016. Here we'll look just
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
-Keep your dataset in mind when working through these notes. Then try to make a list of things you want to do to the data. For example: recode some variables, maybe reshape it with a `melt()` command, plot some variables in it, make a frequency table for a couple of variables, etc. 
+Keep your dataset in mind when working through these notes. Then try to make a list of things you want to do to the data. For example: recode or plot some of the variables, maybe reshape it with a `melt()` command, make a frequency table for a couple variables of interest, etc. 
 
-Try to make the list manageable -- maybe five operations total. Then next week, we'll implement those operations and build a nice lil output document from an R-Markdown file (which is just a fancy type of R script, basically). 
+Try to make the list manageable -- identify maybe five operations total. Then next week, we'll implement those operations and build a nice lil output document from an R-Markdown file (which is just a fancy type of R script, basically). 
 
 
 
@@ -73,9 +73,9 @@ We want to see if the wording of a question has an effect on how people (identif
 
 We have three questions with alternative wordings, which we'd like to investigate (manipulated between-subjects, across the levels of `form`). The questions of interest are:
 
-> We are faced with many problems in this country, none of which can be solved easily or inexpensively. I'm going to name some of these problems, and for each one I'd like you to tell me whether you think we're spending too much money on it, too little money, or about the right amount... [A]re we spending too much, too little, or about the right amount on (ITEM)?
+> We are faced with many problems in this country, none of which can be solved easily or inexpensively. I'm going to name some of these problems, and for each one I'd like you to tell me whether you think we're spending too much money on it, too little money, or about the right amount... <br><br>**[A]re we spending too much, too little, or about the right amount on (ITEM)?**
 
-where *(ITEM)* is one of the following: 
+where **(ITEM)** is one of the following: 
 
 - **`natcity`**: *[A]re we spending too much, too little, or about the right amount on...*
     + ...SOLVING PROBLEMS OF BIG CITIES (if `form==1`, response is in `natcity`)
@@ -87,13 +87,17 @@ where *(ITEM)* is one of the following:
     + ...WELFARE (if `form==1`, response is in `natfare`)
     + ...ASSISTANCE TO THE POOR (if `form==2`, response is in `natfarey`)
 
-*An important question*: should we be interested in variation across `form` for each individual questionnaire item, or can we consider each question an "item" in the sense that a "trial" instantiating it can appear in multiple "conditions" (here `form==1` or `form==2`)? 
+*An important question*: should we be interested in variation across `form` for each individual questionnaire item, or can we consider each question an "item" in the sense that a "trial" instantiating it can appear in multiple "conditions" (here `form==1` or `form==2`)? This really depends on our purpose, which here is to demonstrate how to manipulate data. In other words, the question is important if our goals are scientific, but not so much presently...
 
-Since the `form==2` questions for `nat*` all involve the same wording -- namely "assistance to ..." -- I'd say it makes sense to consider `form==1` an indication of a "variable" that we could call something like *non-uniform wording*. Viewed this way, instead of having $n=2867$ observations of three different outcome variables, we would now have $n=2867\times3=8601$  observations of a single outcome variable. 
+Since the `form==2` questions for `nat*` all involve the same wording -- namely "assistance to ..." -- maybe it makes sense to consider `form==1` an indication of a "variable" that we could call something like *non-uniform wording*. Or maybe a slightly better option would be to view `form` as encoding an abstract variable describable as (roughly!) "contains the word *assistance* in the questionnaire text." Viewed this way, instead of having $n=2867$ observations of three different outcome variables, we would now have $n=2867\times3=8601$  observations of a single outcome variable. 
 
-So what we want to do is to investigate relationships between item responses and other characteristics of the data that responses are "nested" inside of -- which of the three items it is; which wording the respondent got (form 1 or form 2); demographic characteristics of the respondents; etc. 
+So what we want to do is to investigate relationships between item responses and other characteristics of the data that responses are "nested" inside of: which of the three items it is; which wording the respondent got (form 1 or form 2); demographic characteristics of the respondents; etc. 
 
-**note on the importance of domain-specific knowledge**: One could certainly argue that the notion of a single, underlying "difference in wording" between the `nat*` and `nat*y` variables isn't very well motivated. It's not like the `nat*` versions all have more words than their `nat*t` counterparts, for example. Well, that might be. And this is where domain-specific knowledge is really important. Since I'm not super well-versed in the GSS, my strategy might not be the best one for the particular problem we're looking at (particularly if we're fitting statistical models to the data and making questionable assumptions about what the nature of `form` is). But nevertheless, doing things the way we're going to do them will illustrate a pretty decent sample of the types of data-munging and visualization tasks you'll likely have to deal with. This is all to say the following: hacking skills are very useful, but are *absolutely not a substitute* for nuanced understanding of the subject matter a dataset is "about." Ability to manipulate, transform, and model data is a *complementary* skill to the theorizing that makes up the foundation of all scientific fields...Okay, back to something concrete now. 
+
+**a note on the importance of domain-specific knowledge**: One could certainly argue that the notion of a single, underlying "difference in wording" between the `nat*` and `nat*y` variables (in our subset of the GSS) isn't very well motivated. It's not like the `nat*` versions all have more words than their `nat*t` counterparts, for example...These are the types of issues where domain-specific knowledge/expertise is really important. Since I'm not super well-versed in the GSS, my strategy might not be the best one for the particular problem we're looking at (particularly if we're fitting statistical models to the data and making questionable assumptions about what the nature of `form` is). But nevertheless, doing things the way we're going to do them will illustrate a pretty decent sample of the types of data-munging and visualization tasks you'll likely have to deal with. This is all to say the following: hacking skills are very useful, but are *absolutely not a substitute* for nuanced understanding of the subject matter a dataset is "about." Ability to manipulate, transform, and model data is a *complementary* skill to the theorizing that makes up the foundation of all scientific fields. (FWIW, I'd say it's questionable at best whether there is truly something both interesting and uniform being manipulated across the levels of `form`, at least if we look at just these three items. I don't think that the survey creator's intent was to manipulate the items in this way, but my background in psycholinguistic experimentation kind of forces me to think of everything as an experiment with some kind of factorial design...)
+
+
+Okay, back to something concrete now!
 
 
 <br>
@@ -132,22 +136,14 @@ After Step 2, we'll have erased all the rows with empty responses, so what we're
 
 Now our data is (are?!) *really really beautiful* and we're ready to start exploring it (although in the colloquial sense I'd say we've already explored it quite a bit!).
 
-**note**: the steps we mapped out above were motivated not just by intuition, but also by the concept of "tidy data," championed by Hadley Wickham et al. If you're interested, I'd **highly** recommend reading [this excellent paper](LINK), which is kind of a manifesto for a certain kind of "tidiness" through all phases of a data-related endeavor. 
+**note**: the steps we mapped out above were motivated not just by intuition, but also by the concept of "tidy data," championed by Hadley Wickham et al. If you're interested, I'd **highly** recommend reading [this excellent paper](https://www.jstatsoft.org/article/view/v059i10) (.pdf [here](http://lefft.xyz/r_minicourse/misc/wickham2014-jss_tidy_data.pdf)), which is kind of a manifesto for a certain (efficient) kind of "tidiness" through all phases of a data-related endeavor. 
 
-
-
-We also want to see if demographic variables modulate the effect of wording on response. The demographic variables we have are: 
-
-- `sex`
-- `age`
-
-These are all pretty self explanatory as far as what they represent goes, but other than `age` we don't really know the correspondence between the numeric codes and the real-world values they represent. To make the correspondence visible, we'll recode each of them to values we can look at and immediately understand.
-
+We also want to see if demographic variables modulate the effect of wording on response. To do this, we'll need to first clean up several columns, e.g. `age`, `sex`, and `INCOME16`. These are pretty self explanatory demographic concepts, but other than `age` we don't really know the correspondence between the numeric codes in the data and the real-world values they represent. To make the correspondence visible, we'll recode each of them to values we can look at and immediately understand.
 
 
 <br>
 
-### 3. reading and cleaning and transforming the data
+### 3. reading and cleaning and transforming the data {#sec3}
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
@@ -158,14 +154,15 @@ These are all pretty self explanatory as far as what they represent goes, but ot
 # read in the data and do some initial inspection
 dat <- read.csv("datasets/gss_2016_test.csv") 
 
-# check for na's (none, yay!...but are there *really* none?! to be continued...)
+# check for na's 
+# (none, yay!...but are there *really* none?! to be continued...)
 colSums(is.na(dat))
 
 str(dat)
 head(dat, n=5)
 ```
 
-**exercise**: use the commented code in the next chunk to make formatted tables, and compile an R-markdown document to print them nicely. Next week how to do this will be made completely explicit, so feel free to skip for now :)
+**exercise**: use the commented code in the next chunk to make formatted tables, and compile an R-markdown document to print them nicely. You'll need to do some googling -- start with "formatted tables R-Markdown knitr kable html". Next week how to do this will be made completely explicit, so feel free to skip for now :)
 
 ```{r}
 # to make nicer-looking tables:
@@ -187,7 +184,7 @@ dat$id <- paste0("resp", dat$id)
 table(dat$form)
 
 # so we can recode it with `ifelse()`
-dat$form <- ifelse(dat$form==1, "standard", "alternate_y")
+dat$form <- ifelse(dat$form==1, "standard", "assistance")
 
 # `sex` has just two levels
 table(dat$sex)
@@ -218,14 +215,18 @@ income <- read.csv(
   "datasets/lookup_income.csv", header=FALSE, col.names=c("num","val"), 
   stringsAsFactors=FALSE
 )
-# **note**: this won't feel intuitive, but try to break down what's happening.
-#           the following recoding method is very general and very useful.
+# **note**: 
+#   the following three lines won't feel intuitive right away, 
+#   but try to break down what's happening step by step. 
+#   this recoding method is very general and very useful.
 
-# make a vector with values equal to income$val, and names income$num
+# make a vector with values equal to income$val, the desired values 
 income_lkup        <- as.vector(income$val)
+
+# set the names of that vector to the current values, i.e. income$num
 names(income_lkup) <- income$num
 
-# recode the income column by matching vals w the lookup table names
+# now recode income by matching the current values w the lookup table names
 dat$income_range <- income_lkup[match(dat$INCOME16, names(income_lkup))]
 
 # remove the original income col
@@ -233,6 +234,9 @@ dat$INCOME16 <- NULL
 ```
 
 **note**: semicolons just "end" the current line -- they're used to put a small set of similar commands on a single line to save space and emphasize that they're all involved in a single operation. 
+
+
+**note**: notice that when recoding income, we assigning the new values to the new column `income_range`, instead of the existing one, `INCOME16`. This was deliberate: if we do it this way, then we'll (temporarily) have both columns to look at, so we can check our work by comparing the old column to the new one. 
 
 **exercise**: make a new column, derived from `income_range`, that contains the same information as `income_cat` (which was computed directly from `INCOME16`)
 
@@ -270,22 +274,31 @@ dat$hisp[dat$racecen2=="Hispanic"] <- "hispanic"
 dat$racecen1 <- NULL; dat$racecen2 <- NULL
 ```
 
+
+**exercise**: if we wanted to investigate the effect of "race" on responses, how would/should/could we represent "race"? In other words, how many columns, what is in each column, etc. etc. What would be some benefits and drawbacks of two competing approaches?
+
 #### 3.4 reorganize columns as desired, toss unused ones
 
 ```{r}
 # now we have everything except the outcome vars
 # reorganize the df the way we want it
+
+# vector of the demographic columns we want to keep around
 dem_cols  <- c("id", "year", "form", "sex", "age", "income_cat", "hisp")
+
+# vector of the questionnaire items 
 item_cols <- names(dat)[startsWith(names(dat), "nat")]
+
+# subsetting the data by columns, keeping just `dem_cols` and `item_cols`
 dat <- dat[, c(dem_cols, item_cols)]
 ```
 
 
 #### 3.5 creating the desired outcome variable with `reshape2::melt()`
 
-Now we'll implement our strategy for representing the responses summarized in section 2 above (see Steps 1-3). This involves a process called "melting" the dataset. The result is moving from the current "wide format" to a "long format" dataset. 
+Now we'll implement the strategy from Section 2 above for representing the responses. This involves a process called "melting" the dataset. The result is moving from the current "wide format" to a "long format" dataset. Google around and you'll find some nice explainers quickly.
 
-The terminology should become more clear as you see more instances of this (very common) transformation. 
+The terminology should become more clear as you see more instances of this very common transformation. 
 
 ```{r}
 # NATFARE/NATFAREY/NATCITY/NATCITYY/NATRACE/NATRACEY
@@ -296,6 +309,7 @@ The terminology should become more clear as you see more instances of this (very
 #    1        "Too little"
 #    0        "Not applicable"
 
+# `melt()` comes from the package `reshape2::`
 library("reshape2")
 
 # hold `dem_cols` (see above) constant, collapse the other columns
@@ -304,11 +318,11 @@ dat <- melt(dat, id.vars=dem_cols)
 # recode the new "column-column" as character (instead of factor)
 dat$variable <- as.character(dat$variable)
 
-# rename the two new columns
+# rename the column-column ("variable") and the response-column ("value")
 names(dat)[names(dat)=="variable"] <- "item"
 names(dat)[names(dat)=="value"]    <- "response"
 
-# let's check out what we have now:
+# check out what we have now:
 knitr::kable(head(dat, n=10))
 ```
 
@@ -385,7 +399,21 @@ xtabs( ~ response + sex + income_cat, data=dat)
 prop.table(xtabs( ~ response + income_cat, data=dat), margin=1)
 prop.table(table(dat$response, dat$income_cat), margin=1)
 
-# dplyr::summarize()/group_by() is my drug of choice:
+# can use formula interface with `aggregate()`
+aggregate(age ~ sex + income_cat, FUN="mean", data=dat)
+aggregate(age ~ sex + income_cat, FUN="sd", data=dat)
+aggregate(age ~ sex + income_cat, FUN=function(x) round(mean(x)), data=dat)
+
+# write a custom function for aggregating
+custom_summary <- function(x){
+  c(mean=round(mean(x)), sd=round(sd(x)), min=min(x), max=max(x))
+}
+aggregate(age ~ sex + income_cat, FUN=custom_summary, data=dat)
+
+# 
+
+
+# and finally, my drug of choice is dplyr::summarize()/group_by() 
 library("dplyr")
 dat %>% group_by(sex, income_cat) %>% summarize(
   num_obs = length(response),
@@ -408,17 +436,6 @@ dat %>% group_by(item, form) %>% summarize(
   prop_toomuch = num_toomuch / num_obs
 ) %>% mutate_if(is.numeric, round, digits=3) %>% data.frame()
 
-
-# can use formula interface with `aggregate()`
-aggregate(age ~ sex + income_cat, FUN="mean", data=dat)
-aggregate(age ~ sex + income_cat, FUN="sd", data=dat)
-aggregate(age ~ sex + income_cat, FUN=function(x) round(mean(x)), data=dat)
-
-# write a custom function for aggregating
-custom_summary <- function(x){
-  c(mean=round(mean(x)), sd=round(sd(x)), min=min(x), max=max(x))
-}
-aggregate(age ~ sex + income_cat, FUN=custom_summary, data=dat)
 ```
 
 
@@ -475,11 +492,32 @@ hist(dat$age)
 
 #### 4.3 plotting with `ggplot()`
 
-Alright, bringing out the big guns now. `ggplot2::` has its own syntax, because you interact with its plotting capabilities via a **domain-specific language** (DSL), which you can think of as kind of a mini-language that's very limited in scope because it's only meant to do one thing. For example the formula interface we saw with `aggregate()` can be considered a DSL. The same formula-language (with some extra capabilities) is also used for most of R's regression modeling functions, e.g. `lm()`, `glm()`, `lme4::lmer()`, and `lme4::glmer()`.
+Alright, bringing out the big guns now. `ggplot2::` has its own syntax, because you interact with its plotting capabilities via a (very small/limited) **domain-specific language** (DSL), which you can think of as kind of a mini-language that's very limited in scope because it's only meant to do one thing. For example the formula interface we saw with `aggregate()` can be considered a DSL. The same formula-language (with some extra capabilities) is also used for most of R's regression modeling functions, e.g. `lm()`, `glm()`, `lme4::lmer()`, and `lme4::glmer()`.
 
-Before plotting, we'll make a couple of summary datasets, which will make some aspects easier moving forward. (see week 2 appendix for background on pipe-chains with `%>%` if you want to understand what's going on here)
+Before plotting, we'll make a couple of summary datasets, which will make some aspects easier moving forward. There are many ways to do this.
+
+**exercise**: In the chunk below, I start to make a summary dataset using base functions like `aggregate()`.  This can be tedious but is *very* important to know how to do. I'm therefore leaving most of it as an exercise. Essentially, here's the goal: inspect the code that creates `pdat` (see week 2 appendix for background on pipe-chains with `%>%` if you want to understand what's going on here), figure out exactly what it does, and then finish writing the code at the beginning of the chunk, which is meant to create a summary data frame with the same information as `pdat` has. You can check your work by confirming that your summary data frame is identical to `pdat` (rounding aside!).
 
 ```{r}
+# for each group defined by the grouping vars, how many observations?
+num_obs  <- aggregate(response ~ sex + income_cat + item + form, data=dat, FUN="length")
+# and what's the mean age?
+mean_age <- aggregate(age ~ sex + income_cat + item + form, data=dat, FUN="mean")
+# how many of the 'response' vals are "too little"? in each group
+prop_toolittle <- aggregate(response=="too little" ~ sex + income_cat + item + form, data=dat, FUN="sum")
+# change the name of the column we calculated
+names(prop_toolittle)[5] <- "too_little"
+# now use it and mean_age to get the proportion of too_little responses
+prop_toolittle$too_little <- prop_toolittle$too_little / mean_age$age
+# ...
+# ...
+# ...
+```
+
+**hint to exercise:** you'll probably need to create some "intermediate" data frames like `mean_age` and `prop_toolittle`, then figure out how to put them together to get somethign that looks like `pdat` below:
+
+```{r}
+# a very nice, compact, and efficient way to build the summary data frame
 pdat <- dat %>% group_by(sex, income_cat, item, form) %>% summarize(
   num_obs = length(response),
   mean_age = mean(age, na.rm=TRUE),
@@ -490,10 +528,13 @@ pdat <- dat %>% group_by(sex, income_cat, item, form) %>% summarize(
   melt(measure.vars=c("prop_toolittle","prop_aboutright","prop_toomuch")) %>% 
   data.frame()
 
+
 # make sure income is ordered how we want it (the others dont matter)
 pdat$income_cat <- factor(pdat$income_cat, levels=c("lo","mid","hi"))
 
 ```
+
+**exercise**: rewrite the summary code by combining `aggregate()` with a function that you created (use the example with `custom_summary()` above as a starting point).
 
 
 The best way to learn ggplot is by example, so here we go. **note** that some of the plots below are more useful than others, but they're all valid examples of stuff you might have/want to do eventually.
@@ -592,29 +633,20 @@ ggplot(boosh, aes(x=variable, y=value, fill=variable)) +
 
 #### 4.4 styling and saving plots!
 
-Okay, here's the fun part. Here's a few of the things we went over in class:
+For notes on styling `ggplot2` plots, check out [the week3 script](http://lefft.xyz/r_minicourse/week3_materials/week3_script.r). Here's a few of the things we went over in class, all of which you'll find in that script:
 
-
-```{r}
-# control the color coding
-
-# move the legend position
-
-# label the axes and plot
-
-# add a caption
-
-# add labels for the values
-
-# axis limits and axis ticks
-
-# ...
-```
+- control the color coding
+- move the legend position
+- label the axes and plot
+- add a caption
+- add labels for the values
+- axis limits and axis ticks
+- ...
 
 Two basic ways to save a `ggplot2::` plot object are:
 
 1. via the "export" interface in R Studio
-2. via the function `ggsave()`
+2. via the function `ggsave()` (see [week3 script](http://lefft.xyz/r_minicourse/week3_materials/week3_script.r))
 
 You can specify the dimensions and filetype etc. with the "export" interface. You can do the same with `ggsave()`, *but* the latter has a few advantages: 
 
@@ -636,31 +668,13 @@ You can specify the dimensions and filetype etc. with the "export" interface. Yo
 
 - if time, *very* quick/incomplete intro to web-scraping in R 
 
-- if time, whatever else y'all want to talk about/do!
+- if time, whatever else yall want to talk about/do!
 
 
 <br>
 
 
-### appendix 1: the power of pipe-chains for data cleaning
-
-<hr style="height:1px; background-color:lightgray; color:lightgray;">
-
-if you don't think the word "power" quite applies here, try "concise", "clean", "pretty", "uniform", "simple", etc.
-
-```{r}
-library("dplyr")
-dat16 <- read.csv("datasets/gss_2016_test.csv") %>% mutate(
-  id = paste0("resp_", id),
-  form = ifelse(form==1, "standard", "alternate_y"),
-  sex = ifelse(sex==1, "male", "female")
-)
-
-```
-
-<br>
-
-### appendix 2: using `for`-loops to make animated gif plots!
+### Appendix: using `for`-loops to make animated gif plots!
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
