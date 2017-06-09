@@ -87,9 +87,11 @@ The point of markdown is that it's simultaneously easy for humans to use and eas
 #### 1.3 output formats for `.rmd` documents
 
 - html document
-- pdf document
+- pdf document (via $\LaTeX$)
 - MS Word document
 - slides (various output options)
+- "flexdashboards" (beyond scope of course)
+- Shiny apps (beyond scope of course)
 
 
 #### 1.4 making a "quick report" from an R script
@@ -104,17 +106,17 @@ The point of markdown is that it's simultaneously easy for humans to use and eas
 
 ##### the simplest one
 
-Here's the simplest R Markdown file that one could make:
+Here's the simplest R Markdown file that one could make, alongside its output:
 
-[PUT IMAGE HERE](LINK)
+![](img/week4_simplest-rmd-screencap.png)
 
 It's just a plain text file with a few weird lines at the top. But notice that on the right is what you get when you use `knitr::` on it (R Studio shortcut: **`cmd+shift+k`**). The output file has the same content as the source file, but it's in a viewer-friendly format. 
 
 ##### a more useful one
 
-Here's an example of an R Markdown file alongside its output:
+Here's an example of an R Markdown file with some more useful stuff in it, also  alongside its output:
 
-![](img/rmd-template-screencap.png)
+![](img/week4_rmd-template-screencap.png)
 
 The file itself is only 35 lines, but it illustrates a lot of useful things. See also the default R Studio `.Rmd` template, which you can view by going to "File" --> "New File" --> "R Markdown..." and then selecting your output format of choice. 
 
@@ -186,7 +188,7 @@ h1 {
   font-weight: bold;
 }
 
-h2 { 
+h5 { 
     font-size: 16px;
     color: green;
 }
