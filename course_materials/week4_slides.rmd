@@ -14,64 +14,47 @@ knitr::opts_chunk$set(echo=TRUE)
 ```
 
 
-## housekeeping
+## agenda for the day
 
-agenda for the day:
+1. markdown and R Markdown basics
+    - wha is "markdown" and wha is "R markdown"?!
+    - structure of an R markdown document
+    - output formats
 
-- planning the flow of our "analysis document"
-- wha is "markdown" and wha is "R markdown"?!
-- structure of an R markdown document
-- output formats
-- working through a quick example document
-- everyone builds a nice pretty document! (I won't leave until everyone has successfully compiled one)
-- drinks, anyone?! (thinking of going to Jimmy's aka Woodlawn Tap -- takers?)
+2. producing some R Markdown documents
+    - planning the flow of an "analysis document"
+    - working through a quick example document together
+    - everyone builds a nice pretty document! 
 
-<br><br>
+3. drinking
+    - thinking of going to Jimmy's aka Woodlawn Tap -- any takers?!
 
-all materials on the course website: 
+
+**all materials on the course website:**
 
 > [http://lefft.xyz/r_minicourse](http://lefft.xyz/r_minicourse)
 
 
 
-## a couple R Studio tips + tricks
+## 1. markdown and R Markdown basics
 
+### wha is markdown and wha is *R* markdown?!
 
-1. knitr dropdowns ("knit"; "gear"; "insert"; "run")
-2. keyboard shortcuts!!!
+### structure of an R markdown document
 
+### output formats
 
-## knitr dropdown menus
+## 2. producing some R Markdown documents
 
-"knit"
+### planning the flow of an "analysis document"
 
-"gear"
+### working through a quick example document together
 
-"insert"
+### everyone builds a nice pretty document! 
 
-"run"
+## 3. drinking
 
-
-
-## more keyboard shortcuts!
-
-- ctrl+f ~~> search document for string (same as e.g. a browser)
-- alt+enter (from search box) ~~> highlight all occurrences of term, with a cursor for each
-- ctrl+shift+k ~~> knit
-- ctrl+shift+enter ~~> run current chunk
-- ctrl+shift+F10 ~~> restart R session
-- ctrl+1 ~~> cursor goes to script editor
-- ctrl+2 ~~> cursor goes to console
-- F1 (while completion being offered) ~~> view help page for completion
-
-
-## planning our "analysis document"
-
-
-## the idea behind markdown formatting
-
-
-## R markdown syntax 
+thinking of going to Jimmy's aka Woodlawn Tap -- any takers?!
 
 
 
@@ -98,20 +81,22 @@ all materials on the course website:
 - slides (various output options)
 
 
-## an example document
+## 
 
-[FIT AN ACTUAL ENTIRE RMD DOC SOURCE ON HERE -- SHOW SIMPLICITY]
+an example document
+
+![](img/rmd-template-screencap.png)
 
 
 ## 
 
 now everyone build their own!
 
-if desired, start with this template: 
+here's a template to get you started:
 
         http://lefft.xyz/r_minicourse/week4_materials/simple_template.rmd
 
-to get fancy, try this template:
+and here's the `.rmd` source for the week 4 notes:
 
         http://lefft.xyz/r_minicourse/week4_materials/fancy_norc_template.rmd
 
@@ -125,20 +110,8 @@ ideas for things to include in document:
 - tables for a few variables, with or without `kable()` 
 - scatterplots or barplots or histograms with `plot(x, y)`, `barplot(table(df$x)))`, and `hist(df$x)`
 - fancy visualizations with `ggplot()`
-
-
-<br><br><br><br><br><br><br><br>
-
-(some combinations make more sense than others...)
-
-## next week...
-
-
-- we look through everyone's datasets and discuss any issues that came up
-- wide- vs long-format data, reshaping data, the concept of "tidy data"
-- visualizing a dataset as a class (type-along)
-- visualizing your own dataset with base graphics and `ggplot2::`
-
+- ggplotly exx
+- you can't use current vars in an rmd -- must be "modular"
 
 
 

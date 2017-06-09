@@ -9,3 +9,37 @@ topics to hit:
 	- how to ask a stack overflow question
 	- "dialects" of R in modern usage
 	- DSL's (formulas, dplyr, ggplot2, etc.)
+
+
+
+
+## a couple R Studio tips + tricks
+
+
+1. knitr dropdowns ("knit"; "gear"; "insert"; "run")
+2. keyboard shortcuts!!!
+
+
+## knitr dropdown menus
+
+"knit"
+
+"gear"
+
+"insert"
+
+"run"
+
+
+
+## more keyboard shortcuts!
+
+- ctrl+f ~~> search document for string (same as e.g. a browser)
+- alt+enter (from search box) ~~> highlight all occurrences of term, with a cursor for each
+- ctrl+shift+k ~~> knit
+- ctrl+shift+enter ~~> run current chunk
+- ctrl+shift+F10 ~~> restart R session
+- ctrl+1 ~~> cursor goes to script editor
+- ctrl+2 ~~> cursor goes to console
+- F1 (while completion being offered) ~~> view help page for completion
+
