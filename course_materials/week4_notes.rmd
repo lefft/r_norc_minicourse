@@ -13,43 +13,29 @@ knitr::opts_chunk$set(results="hold")
 Here's the agenda for today:
 
 1. [markdown and R Markdown basics](#sec1)
-    - 1.1 [wha is "markdown" and wha is "R markdown"?!](#sec11)
+    - 1.1 [what is "markdown" and what is "R markdown"?!](#sec11)
     - 1.2 [structure of an R markdown document](#sec12)
     - 1.3 [output formats](#sec13)
     - 1.4 ["quick report" from an R script](#sec14)
 
 2. [producing some R Markdown documents](#sec2)
-    - 2.1 [planning the flow of an "analysis document"](#sec21)
-    - 2.2 [working through a quick example document together](#sec22)
+    - 2.1 [quick example documents](#sec21)
+    - 2.2 [working through an example together](#sec22)
     - 2.3 [everyone builds their own nice pretty document!](#sec23)
 
 3. [concluding...](#sec3)
-    - ...and drinking?! I'm thinking of going to [Jimmy's (aka Woodlawn Tap)](https://goo.gl/maps/oD9JLEWPvv62) -- any takers??
-
-
+    - ...and happy-houring?! I'm thinking of going to [Jimmy's/Woodlawn Tap](https://goo.gl/maps/oD9JLEWPvv62) -- any takers??
 
 
 <br><br>
 
-ideas for things to hit in this class:
-
-- remember to load your packages!
-- read in your dataset and print a summary or the `head()`/`tail()`
-- tables for a few variables, with or without `kable()` 
-- scatterplots or barplots or histograms with `plot(x, y)`, `barplot(table(df$x)))`, and `hist(df$x)`
-- fancy visualizations with `ggplot()`
-- ggplotly exx
-- you can't use current vars in an rmd -- must be "modular"
-
-<br><br>
-
-### 1. markdown and R Markdown basics
+### 1. markdown and R Markdown basics {#sec1}
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 
 
-#### 1.1 wha is markdown and wha is *R* markdown?!
+#### 1.1 what is markdown and what is *R* markdown?! {#sec11}
 
 **Markdown** is a format for writing in plain text. There are many "flavors" of markdown, but they're all fairly similar. For example there's wordpress-flavored markdown, wikipedia-flavored markdown, and stack overflow-flavored markdown. There's also something like "R-flavored markdown", which is typed directly into a plain-text document with extension `.Rmd` (like this one). 
 
@@ -60,7 +46,7 @@ Markdown documents usually end up getting **compiled** by some system or another
 When you're actually writing, special formatting makes the structure of the document visible (e.g. with ###'s for section headings). And when you actually compile the document, those same structural components will still be there -- they'll just be prettified and adapted to whatever the output format it (e.g. html, pdf, or docx). 
 
 
-The point of markdown is that it's simultaneously easy for humans to use and easy for computers to understand. Writing in markdown is much, much simpler than writing in e.g. Microsoft Word. There's no dropdowns and no options relating to indentation, page-margins, etc.: you're just typing whatever you want to type into a text editor. All the formatting is done *externally*, e.g. by some css rules that you have somewhere else, or by the engine that's making your output document (which will be [knitr](LINK) in our case). 
+The point of markdown is that it's simultaneously easy for humans to use and easy for computers to understand. Writing in markdown is much, much simpler than writing in e.g. Microsoft Word or $\LaTeX$. There's no dropdowns and no options or commands relating to indentation, fonts, etc.: you're just typing whatever you want to type into a text editor. All the formatting is done *externally*, e.g. by some css rules that you have somewhere else, or by the engine that's making your output document (which will be [knitr](https://yihui.name/knitr/) in our case). 
 
 
 **note**: key to markdown is the idea that content is specified separate from style. This principle also drives the internet, and (I'd say) is directly reflected in the recent move away from older html protocols and towards the complete integration of HTML5 and CSS. 
@@ -68,7 +54,7 @@ The point of markdown is that it's simultaneously easy for humans to use and eas
 
 
 
-#### 1.2 structure of an R markdown document
+#### 1.2 structure of an R markdown source document (`.rmd` file) {#sec12}
 
 + header ("YAML header")
 + text 
@@ -80,29 +66,32 @@ The point of markdown is that it's simultaneously easy for humans to use and eas
 + inline R code
     - to evaluate and format as text: `r cat("\x60r ... \x60")`
     - to display as code: `r cat("\x60 ... \x60")`
-+ css (*optional*) <!-- , as html or external style file -->
++ html/css (*optional*) 
 
 
 
-#### 1.3 output formats for `.rmd` documents
+#### 1.3 output formats you can create from `.rmd` files {#sec13}
 
 - html document
 - pdf document (via $\LaTeX$)
 - MS Word document
-- slides (various output options)
+- slides (various output options, but beyond scope of course)
 - "flexdashboards" (beyond scope of course)
 - Shiny apps (beyond scope of course)
 
 
-#### 1.4 making a "quick report" from an R script
+#### 1.4 making a "quick report" from an R script {#sec14}
+
+You can use the shortcut **`ctrl+shift+k`** to build an output document, even on a normal R script. This will cause knitr to build a "quick report" -- basically, a visually nice version of your R script. 
+
 
 <br>
 
-### 2. producing some R Markdown documents
+### 2. producing some R Markdown documents {#sec2}
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
-#### 2.1 example documents
+#### 2.1 quick example documents {#sec21}
 
 ##### the simplest one
 
@@ -122,44 +111,46 @@ The file itself is only 35 lines, but it illustrates a lot of useful things. See
 
 
 
-#### 2.2 planning the flow of an "analysis document"
+#### 2.2 working through an example together {#sec22}
 
-#### 2.3 working through a quick example document together
+**exercise**: go through the file `template.rmd` line-by-line, and compare it to the output file `template.html` to get an idea of how different kinds of things get rendered. 
+
+**exercise**: do the same for `week4_skeleton.rmd`, comparing it to `week4_skeleton.html` 
 
 
-
-
-#### 2.4 everyone builds a nice pretty document! 
+#### 2.3 everyone builds a nice pretty document!  {#sec23}
 
 Now here's the task, which simultaneously functions as an in-class activity, as the exercises for the fourth and final week, and as a "final project": 
 
-**exercise**: create an R Markdown document that...
+**exercise**: using `week4_skeleton.rmd` as a starting point, create an R Markdown document that...
 
 1. reads in the dataset you obtained last week; 
 2. prints the first few rows of the dataset (try wrapping with `knitr::kable()` for nicer output); 
-3. prints some summary statistics for a few columns of interest (however feels most do-able and comfortable -- maybe some `table()`s or an `aggregate()`; or, use `group_by()` and `summarize()` from `dplyr::` if you want to get fancy); 
+3. prints some summary statistics and/or tables of a few columns of interest (whatever feels most do-able and comfortable -- maybe some `table()`s or an `aggregate()`; or, use `group_by()` and `summarize()` from `dplyr::` if you want to get fancy); 
 4. displays a plot using one of the base functions `plot()`, `barplot()`, or `hist()`; and
-5. displays a plot using the `qplot()` function from `ggplot2::` (a nice quick way to visualize info -- forgot to touch on that last week!)
-6. displays a plot using `ggplot()`.
+5. displays a plot using `ggplot()`, or using the `qplot()` function from `ggplot2::` (a nice quick way to visualize info -- forgot to touch on that last week!)
 
-If you can make a document with all of these components, you have learned quite a lot. If you can make such a document *and understand how everything works*, then...you've learned quite a lot plus some more(?)
+If you can make a document with all of these components, then you have learned quite a lot. If you can make such a document *and understand how everything works*, then...you've learned quite a lot plus even more.  
 
+<br>
 
-### 3. concluding remarks
+### 3. concluding remarks {#sec3}
 
 <hr style="height:1px; background-color:lightgray; color:lightgray;">
 
 Anyway, final thought: 
 
-> **PRACTICE MAKES PERFECT**[^7]
+> **PRACTICE MAKES PERFECT**$^***$
 
-[^7]: I mean of course nothing is ever *perfect*. But I do think that practice is both a necessary and a sufficient condition for becoming proficient. 
+$^***$ I mean of course nothing is ever *perfect*. But I do think that practice is both a necessary and a sufficient condition for becoming proficient. 
 
-If you put the hours in, you will be rewarded more than you think. With all the resources the internet has to offer, it is totally possible to become a proficient R user with a year or less of consistent practice. 
+<br>
 
-*Most importantly of all*, try to stay calm when you get stuck. And you will get stuck. Many times. Getting stuck is perfectly fine and perfectly normal. No one learning to code *doesn't* get stuck many times. Use google, and use it often. Use stack overflow, and use it often. If you get sidetracked when googling one thing and find yourself reading about some other R-related thing, *good*. The more you expose yourself to anything R-related, the faster you'll learn. 
+If you put the hours in, you will be rewarded more than you might expect. With all the resources the internet has to offer, it is totally possible to become a proficient R user with a year or less of consistent practice. 
 
-On the course page there's a list of [interesting links](LINK) that I've been gathering the last few weeks. Some of them are as entertaining as they are instructive, so check them out if you want to.
+*Most importantly of all*, try to stay calm when you get stuck. And you will get stuck. Many times. Getting stuck is perfectly fine and perfectly normal. No one learning to code *doesn't* get stuck many, many times. Use google, and use it often. Use stack overflow, and use it often. If you get sidetracked when googling one thing and find yourself reading about some other R-related thing, *that is actually a good thing*. The more you expose yourself to *anything* R-related, the faster you'll learn. 
+
+On the course page there's a list of [interesting links](http://lefft.xyz/r_minicourse/index.html#linxe) that I've been gathering the last few weeks. Some of them are as entertaining as they are instructive, so check them out if you want to.
 
 
 Okay that's it. Happy hacking yalls!
